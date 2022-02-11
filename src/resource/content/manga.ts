@@ -79,7 +79,10 @@ export class Manga extends Content {
   public readonly publishInfo: MangaPublishInformation
   public readonly authors: Array<PersonMeta>
   public readonly serializations: Array<MagazineMeta>
-  public readonly genres: Array<MangaGenreMeta>
+  public readonly genres: Array<MangaGenreMeta<'Genre'>>
+  public readonly explicitGenres: Array<MangaGenreMeta<'Explicit'>>
+  public readonly themes: Array<MangaGenreMeta<'Theme'>>
+  public readonly demographics: Array<MangaGenreMeta<'Demographic'>>
 
   public get isExplicit (): boolean {
     return !!(this.genres.find((genre) => !!mangaExplicitGenres.find((genreEntry) => genreEntry[0] === genre.ID)))
@@ -130,7 +133,10 @@ export class Manga extends Content {
     this.publishInfo = new MangaPublishInformation(client, data)
     this.authors = data.authors.map((author: any) => new PersonMeta(this.client, author))
     this.serializations = data.serializations.map((serialization: any) => new MagazineMeta(this.client, serialization))
-    this.genres = data.genres.map((genre: any) => new MangaGenreMeta(this.client, genre))
+    this.genres = data.genres.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Genre'))
+    this.explicitGenres = data.explicit_genres.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Explicit'))
+    this.demographics = data.demographics.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Demographic'))
+    this.themes = data.themes.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Theme'))
   }
 }
 

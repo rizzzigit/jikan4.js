@@ -12,7 +12,7 @@ import {
 } from '../resource/content/manga'
 import { Image } from '../resource/misc'
 import { translateObject } from '../utils'
-import { MangaGenreMeta, MagazineMeta } from '../resource/meta'
+import { MangaGenreMeta, MagazineMeta, GenreType } from '../resource/meta'
 
 export interface MangaSearchFilter {
   type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'manhua'
@@ -21,8 +21,8 @@ export interface MangaSearchFilter {
   maxScore: number
   status: 'publishing' | 'complete' | 'hiatus' | 'discontinued' | 'upcoming'
   sfw: boolean
-  genres: Array<number | MangaGenreMeta>
-  excludeGenres: Array<number | MangaGenreMeta>
+  genres: Array<number | MangaGenreMeta<GenreType>>
+  excludeGenres: Array<number | MangaGenreMeta<GenreType>>
   magazines: Array<number | MagazineMeta>
   orderBy:
     | 'mal_id'

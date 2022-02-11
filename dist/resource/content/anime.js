@@ -44,8 +44,10 @@ class Anime extends base_1.Content {
         this.producers = data.producers.map((producer) => new meta_1.ProducerMeta(this.client, producer));
         this.licensors = data.licensors.map((licensor) => new meta_1.ProducerMeta(this.client, licensor));
         this.studios = data.studios.map((studio) => new meta_1.ProducerMeta(this.client, studio));
-        this.genres = data.genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre));
-        this.genres = this.genres.concat(data.explicit_genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre)));
+        this.genres = data.genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'));
+        this.explicitGenres = data.explicit_genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'));
+        this.demographics = data.demographics.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'));
+        this.themes = data.themes.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'));
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */

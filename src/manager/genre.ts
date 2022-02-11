@@ -1,4 +1,4 @@
-import { AnimeGenreMeta, MangaGenreMeta } from '../resource/meta'
+import { AnimeGenreMeta, MangaGenreMeta, GenreType } from '../resource/meta'
 import { BaseManager } from './base'
 
 export const animeGenres: Array<[number, string]> = [
@@ -56,9 +56,9 @@ export const mangaDemographics: Array<[number, string]> = [
 export class GenreManager extends BaseManager {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  private generateGenre <T extends 'anime' | 'manga'> (type: T, ID: number, name: string):
-    T extends 'anime' ? AnimeGenreMeta :
-    T extends 'manga' ? MangaGenreMeta : never {
+  private generateGenre <T extends 'anime' | 'manga', E extends GenreType> (type: T, ID: number, name: string, genreType: E):
+    T extends 'anime' ? AnimeGenreMeta<E> :
+    T extends 'manga' ? MangaGenreMeta<E> : never {
     const data = {
       mal_id: ID,
       url: `https://myanimelist.net/anime/genre/${ID}/${name.split(' ').join('_')}`,
@@ -66,8 +66,8 @@ export class GenreManager extends BaseManager {
     }
 
     switch (type) {
-      case 'anime': return <any> new AnimeGenreMeta(this.client, data)
-      case 'manga': return <any> new MangaGenreMeta(this.client, data)
+      case 'anime': return <any> new AnimeGenreMeta(this.client, data, genreType)
+      case 'manga': return <any> new MangaGenreMeta(this.client, data, genreType)
 
       default:
         throw new Error(`Unkonwn type: ${type}`)
@@ -75,56 +75,44 @@ export class GenreManager extends BaseManager {
   }
 
   public listAnime (filter?: 'Genres' | 'ExplicitGenres' | 'Demographics' | 'Themes') {
-    const list: Array<AnimeGenreMeta> = []
+    const list: Array<AnimeGenreMeta<GenreType>> = []
 
-    switch (filter) {
-      case 'Demographics':
-        list.push(...animeDemographics.map((entry) => this.generateGenre('anime', ...entry)))
-        break
+    if ((filter === 'Demographics') || !filter) {
+      list.push(...animeDemographics.map((entry) => this.generateGenre('anime', ...entry, 'Demographic')))
+    }
 
-      case 'ExplicitGenres':
-        list.push(...animeExplicitGenres.map((entry) => this.generateGenre('anime', ...entry)))
-        break
+    if ((filter === 'ExplicitGenres') || !filter) {
+      list.push(...animeExplicitGenres.map((entry) => this.generateGenre('anime', ...entry, 'Explicit')))
+    }
 
-      case 'Genres':
-        list.push(...animeGenres.map((entry) => this.generateGenre('anime', ...entry)))
-        break
+    if ((filter === 'Genres') || !filter) {
+      list.push(...animeGenres.map((entry) => this.generateGenre('anime', ...entry, 'Genre')))
+    }
 
-      case 'Themes':
-        list.push(...animeThemes.map((entry) => this.generateGenre('anime', ...entry)))
-        break
-
-      case undefined:
-        list.push(...[...animeDemographics, ...animeExplicitGenres, ...animeGenres, ...animeThemes].map((entry) => this.generateGenre('anime', ...entry)))
-        break
+    if ((filter === 'Themes') || !filter) {
+      list.push(...animeThemes.map((entry) => this.generateGenre('anime', ...entry, 'Theme')))
     }
 
     return list
   }
 
   public listManga (filter?: 'Genres' | 'ExplicitGenres' | 'Demographics' | 'Themes') {
-    const list: Array<MangaGenreMeta> = []
+    const list: Array<MangaGenreMeta<GenreType>> = []
 
-    switch (filter) {
-      case 'Demographics':
-        list.push(...mangaDemographics.map((entry) => this.generateGenre('manga', ...entry)))
-        break
+    if ((filter === 'Demographics') || !filter) {
+      list.push(...mangaDemographics.map((entry) => this.generateGenre('manga', ...entry, 'Demographic')))
+    }
 
-      case 'ExplicitGenres':
-        list.push(...mangaExplicitGenres.map((entry) => this.generateGenre('manga', ...entry)))
-        break
+    if ((filter === 'ExplicitGenres') || !filter) {
+      list.push(...mangaExplicitGenres.map((entry) => this.generateGenre('manga', ...entry, 'Explicit')))
+    }
 
-      case 'Genres':
-        list.push(...mangaGenres.map((entry) => this.generateGenre('manga', ...entry)))
-        break
+    if ((filter === 'Genres') || !filter) {
+      list.push(...mangaGenres.map((entry) => this.generateGenre('manga', ...entry, 'Genre')))
+    }
 
-      case 'Themes':
-        list.push(...mangaThemes.map((entry) => this.generateGenre('manga', ...entry)))
-        break
-
-      case undefined:
-        list.push(...[...mangaDemographics, ...mangaExplicitGenres, ...mangaGenres, ...mangaThemes].map((entry) => this.generateGenre('manga', ...entry)))
-        break
+    if ((filter === 'Themes') || !filter) {
+      list.push(...mangaThemes.map((entry) => this.generateGenre('manga', ...entry, 'Theme')))
     }
 
     return list

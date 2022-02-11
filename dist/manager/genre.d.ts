@@ -1,4 +1,4 @@
-import { AnimeGenreMeta, MangaGenreMeta } from '../resource/meta';
+import { AnimeGenreMeta, MangaGenreMeta, GenreType } from '../resource/meta';
 import { BaseManager } from './base';
 export declare const animeGenres: Array<[number, string]>;
 export declare const animeExplicitGenres: Array<[number, string]>;
@@ -11,10 +11,10 @@ export declare const mangaDemographics: Array<[number, string]>;
 export declare class GenreManager extends BaseManager {
     /** @hidden */
     private generateGenre;
-    listAnime(filter?: 'Genres' | 'ExplicitGenres' | 'Demographics' | 'Themes'): AnimeGenreMeta[];
-    listManga(filter?: 'Genres' | 'ExplicitGenres' | 'Demographics' | 'Themes'): MangaGenreMeta[];
-    getAnime(ID: number): AnimeGenreMeta | undefined;
-    getAnimeByName(name: string): AnimeGenreMeta | undefined;
-    getManga(ID: number): MangaGenreMeta | undefined;
-    getMangaByName(name: string): MangaGenreMeta | undefined;
+    listAnime(filter?: 'Genres' | 'ExplicitGenres' | 'Demographics' | 'Themes'): AnimeGenreMeta<GenreType>[];
+    listManga(filter?: 'Genres' | 'ExplicitGenres' | 'Demographics' | 'Themes'): MangaGenreMeta<GenreType>[];
+    getAnime(ID: number): AnimeGenreMeta<GenreType> | undefined;
+    getAnimeByName(name: string): AnimeGenreMeta<GenreType> | undefined;
+    getManga(ID: number): MangaGenreMeta<GenreType> | undefined;
+    getMangaByName(name: string): MangaGenreMeta<GenreType> | undefined;
 }

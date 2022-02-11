@@ -2,7 +2,7 @@ import { BaseManager } from '../manager/base';
 import { ContentRelationType } from '../resource/content/base';
 import { Anime, AnimeCharacterReference, AnimeStaffReference, AnimePartialEpisode, AnimeEpisode, AnimeTopic, AnimeVideo, AnimeStatistics, AnimeRecommendation, AnimeUserUpdate, AnimeReview, AnimeRelationGroup } from '../resource/content/anime';
 import { Image } from '../resource/misc';
-import { AnimeGenreMeta, ProducerMeta } from '../resource/meta';
+import { AnimeGenreMeta, ProducerMeta, GenreType } from '../resource/meta';
 export interface AnimeSearchFilter {
     type: 'tv' | 'movie' | 'ova' | 'special' | 'ona' | 'music';
     score: number;
@@ -12,8 +12,8 @@ export interface AnimeSearchFilter {
     status: 'airing' | 'complete' | 'upcoming';
     rating: 'g' | 'pg' | 'pg13' | 'r17' | 'r' | 'rx';
     sfw: boolean;
-    genres: Array<number | AnimeGenreMeta>;
-    excludeGenres: Array<number | AnimeGenreMeta>;
+    genres: Array<number | AnimeGenreMeta<GenreType>>;
+    excludeGenres: Array<number | AnimeGenreMeta<GenreType>>;
     producers: Array<number | ProducerMeta>;
     orderBy: 'mal_id' | 'title' | 'type' | 'rating' | 'start_date' | 'end_date' | 'episodes' | 'score' | 'scored_by' | 'rank' | 'popularity' | 'members' | 'favorites';
     sort: 'desc' | 'asc';

@@ -17,7 +17,7 @@ import {
 } from '../resource/content/anime'
 import { Image } from '../resource/misc'
 import { translateObject } from '../utils'
-import { AnimeGenreMeta, ProducerMeta } from '../resource/meta'
+import { AnimeGenreMeta, ProducerMeta, GenreType } from '../resource/meta'
 
 export interface AnimeSearchFilter {
   type: 'tv' | 'movie' | 'ova' | 'special' | 'ona' | 'music'
@@ -28,8 +28,8 @@ export interface AnimeSearchFilter {
   status: 'airing' | 'complete' | 'upcoming'
   rating: 'g' | 'pg' | 'pg13' | 'r17' | 'r' | 'rx'
   sfw: boolean
-  genres: Array<number | AnimeGenreMeta>
-  excludeGenres: Array<number | AnimeGenreMeta>
+  genres: Array<number | AnimeGenreMeta<GenreType>>
+  excludeGenres: Array<number | AnimeGenreMeta<GenreType>>
   producers: Array<number | ProducerMeta>
   orderBy:
     | 'mal_id'

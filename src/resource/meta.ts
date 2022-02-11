@@ -49,16 +49,26 @@ export class ProducerMeta extends Meta<'Producer'> {
   }
 }
 
-export class AnimeGenreMeta extends Meta<'AnimeGenre'> {
-  public constructor (client: Client, data: any) {
+export type GenreType = 'Genre' | 'Explicit' | 'Theme' | 'Demographic'
+
+export class AnimeGenreMeta<T extends GenreType> extends Meta<'AnimeGenre'> {
+  public constructor (client: Client, data: any, type: T) {
     super(client, data, 'AnimeGenre')
+
+    this.genreType = type
   }
+
+  public readonly genreType: T
 }
 
-export class MangaGenreMeta extends Meta<'MangaGenre'> {
-  public constructor (client: Client, data: any) {
+export class MangaGenreMeta<T extends GenreType> extends Meta<'MangaGenre'> {
+  public constructor (client: Client, data: any, type: T) {
     super(client, data, 'MangaGenre')
+
+    this.genreType = type
   }
+
+  public readonly genreType: T
 }
 
 export class PersonMeta extends Meta<'Person'> {

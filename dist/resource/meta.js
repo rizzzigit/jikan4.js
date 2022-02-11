@@ -34,14 +34,16 @@ class ProducerMeta extends Meta {
 }
 exports.ProducerMeta = ProducerMeta;
 class AnimeGenreMeta extends Meta {
-    constructor(client, data) {
+    constructor(client, data, type) {
         super(client, data, 'AnimeGenre');
+        this.genreType = type;
     }
 }
 exports.AnimeGenreMeta = AnimeGenreMeta;
 class MangaGenreMeta extends Meta {
-    constructor(client, data) {
+    constructor(client, data, type) {
         super(client, data, 'MangaGenre');
+        this.genreType = type;
     }
 }
 exports.MangaGenreMeta = MangaGenreMeta;

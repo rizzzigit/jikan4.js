@@ -36,7 +36,10 @@ class Manga extends base_2.Content {
         this.publishInfo = new MangaPublishInformation(client, data);
         this.authors = data.authors.map((author) => new meta_1.PersonMeta(this.client, author));
         this.serializations = data.serializations.map((serialization) => new meta_1.MagazineMeta(this.client, serialization));
-        this.genres = data.genres.map((genre) => new meta_1.MangaGenreMeta(this.client, genre));
+        this.genres = data.genres.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Genre'));
+        this.explicitGenres = data.explicit_genres.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Explicit'));
+        this.demographics = data.demographics.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Demographic'));
+        this.themes = data.themes.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Theme'));
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */

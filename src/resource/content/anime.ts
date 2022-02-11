@@ -127,7 +127,10 @@ export class Anime extends Content {
   public readonly producers: Array<ProducerMeta>
   public readonly licensors: Array<ProducerMeta>
   public readonly studios: Array<ProducerMeta>
-  public readonly genres: Array<AnimeGenreMeta>
+  public readonly genres: Array<AnimeGenreMeta<'Genre'>>
+  public readonly explicitGenres: Array<AnimeGenreMeta<'Explicit'>>
+  public readonly themes: Array<AnimeGenreMeta<'Theme'>>
+  public readonly demographics: Array<AnimeGenreMeta<'Demographic'>>
 
   public get isExplicit (): boolean {
     return !!(
@@ -211,8 +214,10 @@ export class Anime extends Content {
     this.producers = data.producers.map((producer: any) => new ProducerMeta(this.client, producer))
     this.licensors = data.licensors.map((licensor: any) => new ProducerMeta(this.client, licensor))
     this.studios = data.studios.map((studio: any) => new ProducerMeta(this.client, studio))
-    this.genres = data.genres.map((genre: any) => new AnimeGenreMeta(this.client, genre))
-    this.genres = this.genres.concat(data.explicit_genres.map((genre: any) => new AnimeGenreMeta(this.client, genre)))
+    this.genres = data.genres.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Genre'))
+    this.explicitGenres = data.explicit_genres.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Explicit'))
+    this.demographics = data.demographics.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Demographic'))
+    this.themes = data.themes.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Theme'))
   }
 }
 

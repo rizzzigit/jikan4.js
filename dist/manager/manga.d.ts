@@ -2,7 +2,7 @@ import { BaseManager } from './base';
 import { ContentRelationType } from '../resource/content/base';
 import { Manga, MangaCharacterReference, MangaNews, MangaTopic, MangaStatistics, MangaUserUpdate, MangaReview, MangaRelationGroup } from '../resource/content/manga';
 import { Image } from '../resource/misc';
-import { MangaGenreMeta, MagazineMeta } from '../resource/meta';
+import { MangaGenreMeta, MagazineMeta, GenreType } from '../resource/meta';
 export interface MangaSearchFilter {
     type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'manhua';
     score: number;
@@ -10,8 +10,8 @@ export interface MangaSearchFilter {
     maxScore: number;
     status: 'publishing' | 'complete' | 'hiatus' | 'discontinued' | 'upcoming';
     sfw: boolean;
-    genres: Array<number | MangaGenreMeta>;
-    excludeGenres: Array<number | MangaGenreMeta>;
+    genres: Array<number | MangaGenreMeta<GenreType>>;
+    excludeGenres: Array<number | MangaGenreMeta<GenreType>>;
     magazines: Array<number | MagazineMeta>;
     orderBy: 'mal_id' | 'title' | 'start_date' | 'end_date' | 'chapters' | 'volumes' | 'score' | 'scored_by' | 'rank' | 'popularity' | 'members' | 'favorites';
     sort: 'desc' | 'asc';

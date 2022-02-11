@@ -39,7 +39,10 @@ export declare class Anime extends Content {
     readonly producers: Array<ProducerMeta>;
     readonly licensors: Array<ProducerMeta>;
     readonly studios: Array<ProducerMeta>;
-    readonly genres: Array<AnimeGenreMeta>;
+    readonly genres: Array<AnimeGenreMeta<'Genre'>>;
+    readonly explicitGenres: Array<AnimeGenreMeta<'Explicit'>>;
+    readonly themes: Array<AnimeGenreMeta<'Theme'>>;
+    readonly demographics: Array<AnimeGenreMeta<'Demographic'>>;
     get isExplicit(): boolean;
     getCharacters(): Promise<AnimeCharacterReference[]>;
     getStaff(): Promise<AnimeStaffReference[]>;

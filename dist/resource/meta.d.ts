@@ -24,11 +24,14 @@ export declare class MagazineMeta extends Meta<'Magazine'> {
 export declare class ProducerMeta extends Meta<'Producer'> {
     constructor(client: Client, data: any);
 }
-export declare class AnimeGenreMeta extends Meta<'AnimeGenre'> {
-    constructor(client: Client, data: any);
+export declare type GenreType = 'Genre' | 'Explicit' | 'Theme' | 'Demographic';
+export declare class AnimeGenreMeta<T extends GenreType> extends Meta<'AnimeGenre'> {
+    constructor(client: Client, data: any, type: T);
+    readonly genreType: T;
 }
-export declare class MangaGenreMeta extends Meta<'MangaGenre'> {
-    constructor(client: Client, data: any);
+export declare class MangaGenreMeta<T extends GenreType> extends Meta<'MangaGenre'> {
+    constructor(client: Client, data: any, type: T);
+    readonly genreType: T;
 }
 export declare class PersonMeta extends Meta<'Person'> {
     getFull(): Promise<Person>;

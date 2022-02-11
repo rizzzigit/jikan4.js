@@ -25,7 +25,10 @@ export declare class Manga extends Content {
     readonly publishInfo: MangaPublishInformation;
     readonly authors: Array<PersonMeta>;
     readonly serializations: Array<MagazineMeta>;
-    readonly genres: Array<MangaGenreMeta>;
+    readonly genres: Array<MangaGenreMeta<'Genre'>>;
+    readonly explicitGenres: Array<MangaGenreMeta<'Explicit'>>;
+    readonly themes: Array<MangaGenreMeta<'Theme'>>;
+    readonly demographics: Array<MangaGenreMeta<'Demographic'>>;
     get isExplicit(): boolean;
     getCharacters(): Promise<MangaCharacterReference[]>;
     getNews(offset?: number, maxCount?: number): Promise<MangaNews[]>;

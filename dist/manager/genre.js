@@ -50,58 +50,48 @@ exports.mangaDemographics = [
 class GenreManager extends base_1.BaseManager {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
-    generateGenre(type, ID, name) {
+    generateGenre(type, ID, name, genreType) {
         const data = {
             mal_id: ID,
             url: `https://myanimelist.net/anime/genre/${ID}/${name.split(' ').join('_')}`,
             name
         };
         switch (type) {
-            case 'anime': return new meta_1.AnimeGenreMeta(this.client, data);
-            case 'manga': return new meta_1.MangaGenreMeta(this.client, data);
+            case 'anime': return new meta_1.AnimeGenreMeta(this.client, data, genreType);
+            case 'manga': return new meta_1.MangaGenreMeta(this.client, data, genreType);
             default:
                 throw new Error(`Unkonwn type: ${type}`);
         }
     }
     listAnime(filter) {
         const list = [];
-        switch (filter) {
-            case 'Demographics':
-                list.push(...exports.animeDemographics.map((entry) => this.generateGenre('anime', ...entry)));
-                break;
-            case 'ExplicitGenres':
-                list.push(...exports.animeExplicitGenres.map((entry) => this.generateGenre('anime', ...entry)));
-                break;
-            case 'Genres':
-                list.push(...exports.animeGenres.map((entry) => this.generateGenre('anime', ...entry)));
-                break;
-            case 'Themes':
-                list.push(...exports.animeThemes.map((entry) => this.generateGenre('anime', ...entry)));
-                break;
-            case undefined:
-                list.push(...[...exports.animeDemographics, ...exports.animeExplicitGenres, ...exports.animeGenres, ...exports.animeThemes].map((entry) => this.generateGenre('anime', ...entry)));
-                break;
+        if ((filter === 'Demographics') || !filter) {
+            list.push(...exports.animeDemographics.map((entry) => this.generateGenre('anime', ...entry, 'Demographic')));
+        }
+        if ((filter === 'ExplicitGenres') || !filter) {
+            list.push(...exports.animeExplicitGenres.map((entry) => this.generateGenre('anime', ...entry, 'Explicit')));
+        }
+        if ((filter === 'Genres') || !filter) {
+            list.push(...exports.animeGenres.map((entry) => this.generateGenre('anime', ...entry, 'Genre')));
+        }
+        if ((filter === 'Themes') || !filter) {
+            list.push(...exports.animeThemes.map((entry) => this.generateGenre('anime', ...entry, 'Theme')));
         }
         return list;
     }
     listManga(filter) {
         const list = [];
-        switch (filter) {
-            case 'Demographics':
-                list.push(...exports.mangaDemographics.map((entry) => this.generateGenre('manga', ...entry)));
-                break;
-            case 'ExplicitGenres':
-                list.push(...exports.mangaExplicitGenres.map((entry) => this.generateGenre('manga', ...entry)));
-                break;
-            case 'Genres':
-                list.push(...exports.mangaGenres.map((entry) => this.generateGenre('manga', ...entry)));
-                break;
-            case 'Themes':
-                list.push(...exports.mangaThemes.map((entry) => this.generateGenre('manga', ...entry)));
-                break;
-            case undefined:
-                list.push(...[...exports.mangaDemographics, ...exports.mangaExplicitGenres, ...exports.mangaGenres, ...exports.mangaThemes].map((entry) => this.generateGenre('manga', ...entry)));
-                break;
+        if ((filter === 'Demographics') || !filter) {
+            list.push(...exports.mangaDemographics.map((entry) => this.generateGenre('manga', ...entry, 'Demographic')));
+        }
+        if ((filter === 'ExplicitGenres') || !filter) {
+            list.push(...exports.mangaExplicitGenres.map((entry) => this.generateGenre('manga', ...entry, 'Explicit')));
+        }
+        if ((filter === 'Genres') || !filter) {
+            list.push(...exports.mangaGenres.map((entry) => this.generateGenre('manga', ...entry, 'Genre')));
+        }
+        if ((filter === 'Themes') || !filter) {
+            list.push(...exports.mangaThemes.map((entry) => this.generateGenre('manga', ...entry, 'Theme')));
         }
         return list;
     }

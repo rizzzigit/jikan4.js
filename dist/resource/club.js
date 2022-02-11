@@ -32,8 +32,7 @@ class Club extends base_1.BaseResource {
             case 'others': return 'Others';
             case 'schools': return 'Schools';
             case 'none': return 'None';
-            default:
-                throw new Error(`Unknown club category: ${input}`);
+            default: return 'Unknown';
         }
     }
     // eslint-disable-next-line tsdoc/syntax
@@ -43,8 +42,7 @@ class Club extends base_1.BaseResource {
             case 'public': return 'Public';
             case 'private': return 'Private';
             case 'secret': return 'Secret';
-            default:
-                throw new Error(`Unknown club type: ${input}`);
+            default: return 'Unknown';
         }
     }
     getMembers() {

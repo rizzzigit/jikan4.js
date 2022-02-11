@@ -24,8 +24,7 @@ class AnimeAirInformation extends base_2.BaseClass {
             case 'finished airing': return 'FinishedAiring';
             case 'currently airing': return 'Airing';
             case 'not yet aired': return 'NotYetAired';
-            default:
-                throw new Error(`Unknown status: ${status}`);
+            default: return 'Unknown';
         }
     }
 }
@@ -46,7 +45,7 @@ class Anime extends base_1.Content {
         this.licensors = data.licensors.map((licensor) => new meta_1.ProducerMeta(this.client, licensor));
         this.studios = data.studios.map((studio) => new meta_1.ProducerMeta(this.client, studio));
         this.genres = data.genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre));
-        this.genres = this.genres.concat(data.genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre)));
+        this.genres = this.genres.concat(data.explicit_genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre)));
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
@@ -66,9 +65,8 @@ class Anime extends base_1.Content {
             case 'music': return 'Music';
             case 'unknow':
             case 'unknown':
-            case '-': return 'Unknown';
-            default:
-                throw new Error(`Unknown type: ${input}`);
+            case '-':
+            default: return 'Unknown';
         }
     }
     // eslint-disable-next-line tsdoc/syntax
@@ -83,20 +81,18 @@ class Anime extends base_1.Content {
             case 'r - 17+ (violence & profanity)': return 'R-17+';
             case 'r+ - mild nudity': return 'R+';
             case 'rx - hentai': return 'Rx';
-            default:
-                throw new Error(`Unknown rating: ${input}`);
+            default: return 'Unknown';
         }
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseSeason(input) {
         switch (input) {
-            case 'summer': return 'summer';
-            case 'winter': return 'winter';
-            case 'spring': return 'spring';
-            case 'fall': return 'fall';
-            default:
-                return null;
+            case 'summer': return 'Summer';
+            case 'winter': return 'Winter';
+            case 'spring': return 'Spring';
+            case 'fall': return 'Fall';
+            default: return 'Unknown';
         }
     }
     get isExplicit() {

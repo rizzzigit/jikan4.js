@@ -139,8 +139,7 @@ class ContentRelationGroup extends base_1.BaseClass {
             case 'spin-off': return 'SpinOff';
             case 'full story': return 'FullStory';
             case 'parent story': return 'ParentStory';
-            default:
-                throw new Error(`Unknown relation: ${data}`);
+            default: return 'Unknown';
         }
     }
 }

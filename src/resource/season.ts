@@ -6,6 +6,7 @@ export type SeasonType =
   | 'Spring'
   | 'Summer'
   | 'Fall'
+  | 'Unknown'
 
 export class Season extends BaseClass {
   // eslint-disable-next-line tsdoc/syntax
@@ -17,8 +18,7 @@ export class Season extends BaseClass {
       case 'summer': return 'Summer'
       case 'fall': return 'Fall'
 
-      default:
-        throw new Error(`Unknown season type: ${input}`)
+      default: return 'Unknown'
     }
   }
 

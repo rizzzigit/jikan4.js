@@ -24,9 +24,9 @@ import ParseDuration from 'parse-duration'
 import { animeExplicitGenres } from '../../manager/genre'
 
 export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown'
-export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired'
-export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx'
-export type AnimeSeason = 'summer' | 'winter' | 'spring' | 'fall'
+export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown'
+export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown'
+export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown'
 
 export class AnimeAirInformation extends BaseClass {
   // eslint-disable-next-line tsdoc/syntax
@@ -39,8 +39,7 @@ export class AnimeAirInformation extends BaseClass {
       case 'currently airing': return 'Airing'
       case 'not yet aired': return 'NotYetAired'
 
-      default:
-        throw new Error(`Unknown status: ${status}`)
+      default: return 'Unknown'
     }
   }
 
@@ -78,12 +77,11 @@ export class Anime extends Content {
       case 'special': return 'Special'
       case 'ona': return 'ONA'
       case 'music': return 'Music'
+
       case 'unknow':
       case 'unknown':
-      case '-': return 'Unknown'
-
-      default:
-        throw new Error(`Unknown type: ${input}`)
+      case '-':
+      default: return 'Unknown'
     }
   }
 
@@ -100,8 +98,7 @@ export class Anime extends Content {
       case 'r+ - mild nudity': return 'R+'
       case 'rx - hentai': return 'Rx'
 
-      default:
-        throw new Error(`Unknown rating: ${input}`)
+      default: return 'Unknown'
     }
   }
 
@@ -109,13 +106,12 @@ export class Anime extends Content {
   /** @hidden */
   public static parseSeason (input: any): AnimeSeason | null {
     switch (input) {
-      case 'summer': return 'summer'
-      case 'winter': return 'winter'
-      case 'spring': return 'spring'
-      case 'fall': return 'fall'
+      case 'summer': return 'Summer'
+      case 'winter': return 'Winter'
+      case 'spring': return 'Spring'
+      case 'fall': return 'Fall'
 
-      default:
-        return null
+      default: return 'Unknown'
     }
   }
 
@@ -216,7 +212,7 @@ export class Anime extends Content {
     this.licensors = data.licensors.map((licensor: any) => new ProducerMeta(this.client, licensor))
     this.studios = data.studios.map((studio: any) => new ProducerMeta(this.client, studio))
     this.genres = data.genres.map((genre: any) => new AnimeGenreMeta(this.client, genre))
-    this.genres = this.genres.concat(data.genres.map((genre: any) => new AnimeGenreMeta(this.client, genre)))
+    this.genres = this.genres.concat(data.explicit_genres.map((genre: any) => new AnimeGenreMeta(this.client, genre)))
   }
 }
 

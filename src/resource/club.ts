@@ -16,11 +16,13 @@ export type ClubCategory =
   | 'Others'
   | 'Schools'
   | 'None'
+  | 'Unknown'
 
 export type ClubType =
   | 'Public'
   | 'Private'
   | 'Secret'
+  | 'Unknown'
 
 export class Club extends BaseResource {
   // eslint-disable-next-line tsdoc/syntax
@@ -42,8 +44,7 @@ export class Club extends BaseResource {
       case 'schools': return 'Schools'
       case 'none': return 'None'
 
-      default:
-        throw new Error(`Unknown club category: ${input}`)
+      default: return 'Unknown'
     }
   }
 
@@ -55,8 +56,7 @@ export class Club extends BaseResource {
       case 'private': return 'Private'
       case 'secret': return 'Secret'
 
-      default:
-        throw new Error(`Unknown club type: ${input}`)
+      default: return 'Unknown'
     }
   }
 

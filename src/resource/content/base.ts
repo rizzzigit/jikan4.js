@@ -187,7 +187,7 @@ export class ContentUserUpdate extends BaseClass {
 
 export type ContentRelationType =
   'Adaptation' | 'SideStory' | 'Summary' | 'Sequel' | 'Prequel' | 'Character' | 'Other' |
-  'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory'
+  'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory' | 'Unknown'
 
 export class ContentRelationGroup <T extends ContentRelationType> extends BaseClass {
   // eslint-disable-next-line tsdoc/syntax
@@ -207,8 +207,7 @@ export class ContentRelationGroup <T extends ContentRelationType> extends BaseCl
       case 'full story': return 'FullStory'
       case 'parent story': return 'ParentStory'
 
-      default:
-        throw new Error(`Unknown relation: ${data}`)
+      default: return 'Unknown'
     }
   }
 

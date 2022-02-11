@@ -22,8 +22,7 @@ class MangaPublishInformation extends base_1.BaseClass {
             case 'on hiatus': return 'OnHiatus';
             case 'discontinued': return 'Discontinued';
             case 'not yet published': return 'NotYetPublished';
-            default:
-                throw new Error(`Unknown status: ${input}`);
+            default: return 'Unknown';
         }
     }
 }
@@ -51,8 +50,7 @@ class Manga extends base_2.Content {
             case 'manhua': return 'Manhua';
             case 'manhwa': return 'Manhwa';
             case 'oel': return 'OEL';
-            default:
-                throw new Error(`Unkonwn type: ${input}`);
+            default: return 'Unknown';
         }
     }
     get isExplicit() {

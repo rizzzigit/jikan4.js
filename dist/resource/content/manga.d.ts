@@ -5,8 +5,8 @@ import { Content, ContentRelationType, ContentRelationGroup, ContentNews, Conten
 import { PersonMeta, MagazineMeta, MangaGenreMeta, CharacterMeta, MangaMeta, AnimeMeta } from '../meta';
 import { Image } from '../misc';
 import { URL } from 'url';
-export declare type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL';
-export declare type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished';
+export declare type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown';
+export declare type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished' | 'Unknown';
 export declare class MangaPublishInformation extends BaseClass {
     /** @hidden */
     static parseStatus(input: any): MangaPublishStatus;

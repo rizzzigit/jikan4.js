@@ -22,8 +22,8 @@ import { Image } from '../misc'
 import { URL } from 'url'
 import { mangaExplicitGenres } from '../../manager/genre'
 
-export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL'
-export type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished'
+export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown'
+export type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished' | 'Unknown'
 
 export class MangaPublishInformation extends BaseClass {
   // eslint-disable-next-line tsdoc/syntax
@@ -36,8 +36,7 @@ export class MangaPublishInformation extends BaseClass {
       case 'discontinued': return 'Discontinued'
       case 'not yet published': return 'NotYetPublished'
 
-      default:
-        throw new Error(`Unknown status: ${input}`)
+      default: return 'Unknown'
     }
   }
 
@@ -70,8 +69,7 @@ export class Manga extends Content {
       case 'manhwa': return 'Manhwa'
       case 'oel': return 'OEL'
 
-      default:
-        throw new Error(`Unkonwn type: ${input}`)
+      default: return 'Unknown'
     }
   }
 

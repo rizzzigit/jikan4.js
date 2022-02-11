@@ -83,7 +83,7 @@ export declare class ContentUserUpdate extends BaseClass {
     readonly date: Date;
     constructor(client: Client, data: any);
 }
-export declare type ContentRelationType = 'Adaptation' | 'SideStory' | 'Summary' | 'Sequel' | 'Prequel' | 'Character' | 'Other' | 'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory';
+export declare type ContentRelationType = 'Adaptation' | 'SideStory' | 'Summary' | 'Sequel' | 'Prequel' | 'Character' | 'Other' | 'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory' | 'Unknown';
 export declare class ContentRelationGroup<T extends ContentRelationType> extends BaseClass {
     /** @hidden */
     static parseRelation(data: any): ContentRelationType;

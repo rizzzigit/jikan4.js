@@ -16,8 +16,7 @@ class Season extends base_1.BaseClass {
             case 'spring': return 'Spring';
             case 'summer': return 'Summer';
             case 'fall': return 'Fall';
-            default:
-                throw new Error(`Unknown season type: ${input}`);
+            default: return 'Unknown';
         }
     }
 }

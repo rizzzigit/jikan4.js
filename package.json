@@ -1,0 +1,58 @@
+{
+  "name": "jikan4.js",
+  "version": "0.1.4",
+  "description": "A Node.js wrapper for Jikan API v4.",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "esm/Jikan.mjs",
+  "type": "commonjs",
+  "exports": {
+    ".": [
+      {
+        "require": "./dist/index.js",
+        "import": "./esm/Jikan.mjs",
+        "default": "./dist/index.js"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "typedoc ./src/index.ts; rm -rf ./dist; tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rizzzigit/jikan4.js.git"
+  },
+  "keywords": [
+    "Anime",
+    "Manga",
+    "API",
+    "Wrapper"
+  ],
+  "author": "rizzzigit",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rizzzigit/jikan4.js/issues"
+  },
+  "homepage": "https://rizzzigit.github.io/jikan4.js/",
+  "devDependencies": {
+    "@types/node": "^15.12.4",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "eslint": "^7.29.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "typescript": "^4.3.4"
+  },
+  "dependencies": {
+    "parse-duration": "^1.0.0",
+    "tslib": "^1.14.1"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=12.0.0",
+    "vscode": "^1.22.0"
+  }
+}

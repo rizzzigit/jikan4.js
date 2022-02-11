@@ -1,0 +1,93 @@
+import { Client } from '../core/client'
+import { BaseClass, BaseResource } from './base'
+import { ContentImage } from './content/base'
+import { MangaMeta, PersonMeta, AnimeMeta } from './meta'
+import { Image } from './misc'
+
+export class Character extends BaseResource {
+  public readonly image: ContentImage
+  public readonly name: string
+  public readonly nicknames: Array<string>
+  public readonly favorites: number
+  public readonly about: string | null
+
+  public getAnime () {
+    return <Promise<Array<CharacterAnimeReference>>> this.client.characters.getAnime(this.ID)
+  }
+
+  public getManga () {
+    return <Promise<Array<CharacterMangaReference>>> this.client.characters.getManga(this.ID)
+  }
+
+  public getVoiceActors () {
+    return <Promise<Array<CharacterVoiceActorReference>>> this.client.characters.getVoiceActors(this.ID)
+  }
+
+  public getPictures () {
+    return <Promise<Array<Image>>> this.client.characters.getPictures(this.ID)
+  }
+
+  public constructor (client: Client, data: any) {
+    super(client, data)
+
+    this.image = new ContentImage(client, data.images)
+    this.name = Character.parseString(data.name)
+    this.nicknames = data.nicknames.map((nickname: any) => Character.parseString(nickname, true)).filter((nickname: any) => !!nickname)
+    this.favorites = Character.parseNumber(data.favorites)
+    this.about = Character.parseString(data.about, true)
+  }
+}
+
+export class CharacterAnimeReference extends BaseClass {
+  public readonly characterID: number
+  public readonly role: string
+  public readonly anime: AnimeMeta
+
+  public getCharacter () {
+    return <Promise<Character>> this.client.characters.get(this.characterID)
+  }
+
+  public constructor (client: Client, characterID: number, data: any) {
+    super(client)
+
+    this.characterID = characterID
+    this.role = CharacterAnimeReference.parseString(data.role)
+    this.anime = new AnimeMeta(client, data.anime)
+  }
+}
+
+export class CharacterMangaReference extends BaseClass {
+  public readonly characterID: number
+  public readonly role: string
+  public readonly manga: MangaMeta
+
+  public getCharacter () {
+    return <Promise<Character>> this.client.characters.get(this.characterID)
+  }
+
+  public constructor (client: Client, characterID: number, data: any) {
+    super(client)
+
+    this.characterID = characterID
+    this.role = CharacterMangaReference.parseString(data.role)
+    this.manga = new MangaMeta(client, data)
+  }
+}
+
+export class CharacterVoiceActorReference extends BaseClass {
+  public readonly characterID: number
+  public readonly language: string
+  public readonly person: PersonMeta
+
+  public getCharacter () {
+    return <Promise<Character>> this.client.characters.get(this.characterID)
+  }
+
+  public constructor (client: Client, characterID: number, data: any) {
+    super(client)
+
+    this.characterID = characterID
+    this.language = CharacterVoiceActorReference.parseString(data.language)
+    this.person = new PersonMeta(client, data.person)
+  }
+}

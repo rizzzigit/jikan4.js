@@ -1,0 +1,9 @@
+.Jikan
+src
+Banner.png
+docs
+tsconfig.json
+.eslintignore
+.eslintrc.json
+.gitignore
+.npmignore

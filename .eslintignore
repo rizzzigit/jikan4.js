@@ -1,0 +1,6 @@
+.Jikan
+node_modules
+*.js
+*.d.ts
+dist
+docs

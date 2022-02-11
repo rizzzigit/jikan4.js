@@ -151,7 +151,7 @@ export class APIClient {
       path = ''
     }
 
-    const parsedURL = new URL(`http${options.secure ? 's' : ''}://${options.host}/${options.baseURI}${path.length ? '/' : ''}${path}`)
+    const parsedURL = new URL(`http${options.secure ? 's' : ''}://${options.host}/${options.baseUri}${path.length ? '/' : ''}${path}`)
 
     if (query) {
       const params = parsedURL.searchParams

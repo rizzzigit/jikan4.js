@@ -10,6 +10,6 @@ export declare class ClubManager extends BaseManager {
     /** @hidden */
     storeCache(data: any): any;
     search(searchString: string, filter?: Partial<ClubSearchFilter>, offset?: number, maxCount?: number): Promise<Club[]>;
-    get(clubID: number): Promise<Club | null | undefined>;
-    getMembers(clubID: number): Promise<Array<ClubMember> | undefined>;
+    get(clubId: number): Promise<Club | null | undefined>;
+    getMembers(clubId: number): Promise<Array<ClubMember> | undefined>;
 }

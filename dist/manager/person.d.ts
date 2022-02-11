@@ -12,9 +12,9 @@ export declare class PersonManager extends BaseManager {
     list(offset?: number, maxCount?: number): Promise<Array<Person>>;
     listTop(offset?: number, maxCount?: number): Promise<Person[]>;
     random(): Promise<Person>;
-    get(personID: number): Promise<Person | undefined>;
-    getAnime(personID: number): Promise<Array<PersonAnimeReference> | undefined>;
-    getVoiceActors(personID: number): Promise<Array<PersonVoiceActorReference> | undefined>;
-    getManga(personID: number): Promise<Array<PersonMangaReference> | undefined>;
+    get(personId: number): Promise<Person | undefined>;
+    getAnime(personId: number): Promise<Array<PersonAnimeReference> | undefined>;
+    getVoiceActors(personId: number): Promise<Array<PersonVoiceActorReference> | undefined>;
+    getManga(personId: number): Promise<Array<PersonMangaReference> | undefined>;
     getPictures(personID: number): Promise<Array<Image> | undefined>;
 }

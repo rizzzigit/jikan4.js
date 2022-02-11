@@ -48,8 +48,8 @@ export class ClubManager extends BaseManager {
     return rawData.map((data) => this.storeCache(data)).map((club) => new Club(this.client, club))
   }
 
-  public async get (clubID: number): Promise<Club | null | undefined> {
-    const rawData = await this.requestResource(`clubs/${clubID}`)
+  public async get (clubId: number): Promise<Club | null | undefined> {
+    const rawData = await this.requestResource(`clubs/${clubId}`)
 
     if (rawData) {
       return new Club(this.client, rawData)
@@ -58,9 +58,9 @@ export class ClubManager extends BaseManager {
     }
   }
 
-  public async getMembers (clubID: number): Promise<Array<ClubMember> | undefined> {
-    const rawData = await this.requestPaginatedResource(`clubs/${clubID}/members`)
+  public async getMembers (clubId: number): Promise<Array<ClubMember> | undefined> {
+    const rawData = await this.requestPaginatedResource(`clubs/${clubId}/members`)
 
-    return rawData ? rawData.map((member: any) => new ClubMember(this.client, clubID, member)) : undefined
+    return rawData ? rawData.map((member: any) => new ClubMember(this.client, clubId, member)) : undefined
   }
 }

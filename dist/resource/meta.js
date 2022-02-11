@@ -49,7 +49,7 @@ class MangaGenreMeta extends Meta {
 exports.MangaGenreMeta = MangaGenreMeta;
 class PersonMeta extends Meta {
     getFull() {
-        return this.client.people.get(this.ID);
+        return this.client.people.get(this.id);
     }
     constructor(client, data) {
         super(client, data, 'Person');
@@ -58,7 +58,7 @@ class PersonMeta extends Meta {
 exports.PersonMeta = PersonMeta;
 class CharacterMeta extends Meta {
     getFull() {
-        return this.client.characters.get(this.ID);
+        return this.client.characters.get(this.id);
     }
     constructor(client, data) {
         super(client, data, 'Character');
@@ -67,7 +67,7 @@ class CharacterMeta extends Meta {
 exports.CharacterMeta = CharacterMeta;
 class AnimeMeta extends ContentMeta {
     getFull() {
-        return this.client.anime.get(this.ID);
+        return this.client.anime.get(this.id);
     }
     constructor(client, data) {
         super(client, data, 'Anime');
@@ -76,7 +76,7 @@ class AnimeMeta extends ContentMeta {
 exports.AnimeMeta = AnimeMeta;
 class MangaMeta extends ContentMeta {
     getFull() {
-        return this.client.manga.get(this.ID);
+        return this.client.manga.get(this.id);
     }
     constructor(client, data) {
         super(client, data, 'Manga');

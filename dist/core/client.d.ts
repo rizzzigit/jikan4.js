@@ -28,7 +28,7 @@ export interface ClientOptions {
      *
      * Default value: `v4`
     */
-    baseURI: string;
+    baseUri: string;
     /**
      * Whether to use HTTPS protocol instead of HTTP.
      *

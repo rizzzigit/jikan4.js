@@ -14,7 +14,7 @@ export declare class BaseClass {
     constructor(client: Client);
 }
 export declare class BaseResource extends BaseClass {
-    readonly ID: number;
-    readonly URL: URL;
+    readonly id: number;
+    readonly url: URL;
     constructor(client: Client, data: any);
 }

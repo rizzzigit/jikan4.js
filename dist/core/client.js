@@ -59,7 +59,7 @@ class Client {
         const defaultOptions = {
             dataPath: (0, path_1.join)(__dirname, '..', '..', '.Jikan'),
             host: 'api.jikan.moe',
-            baseURI: 'v4',
+            baseUri: 'v4',
             secure: true,
             dataRateLimit: 1200,
             dataExpiry: 1000 * 60 * 60 * 24,

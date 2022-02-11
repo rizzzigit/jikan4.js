@@ -118,16 +118,16 @@ export class GenreManager extends BaseManager {
     return list
   }
 
-  public getAnime (ID: number) {
-    return this.listAnime().find((genre) => genre.ID === ID)
+  public getAnime (id: number) {
+    return this.listAnime().find((genre) => genre.id === id)
   }
 
   public getAnimeByName (name: string) {
     return this.listAnime().find((genre) => genre.name === name)
   }
 
-  public getManga (ID: number) {
-    return this.listManga().find((genre) => genre.ID === ID)
+  public getManga (id: number) {
+    return this.listManga().find((genre) => genre.id === id)
   }
 
   public getMangaByName (name: string) {

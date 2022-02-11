@@ -60,7 +60,7 @@ export class Club extends BaseResource {
     }
   }
 
-  public readonly imageURL: URL | null
+  public readonly imageUrl: URL | null
   public readonly memberCount: number
   public readonly pictureCount: number
   public readonly category: ClubCategory
@@ -69,54 +69,54 @@ export class Club extends BaseResource {
   public readonly staff: Array<ClubStaff>
 
   public getMembers () {
-    return <Promise<Array<ClubMember>>> this.client.clubs.getMembers(this.ID)
+    return <Promise<Array<ClubMember>>> this.client.clubs.getMembers(this.id)
   }
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.imageURL = Club.parseURL(data.images?.jpg?.image_url, true)
+    this.imageUrl = Club.parseURL(data.images?.jpg?.image_url, true)
     this.memberCount = Club.parseNumber(data.members_count)
     this.pictureCount = Club.parseNumber(data.pictures_count)
     this.category = Club.parseCategory(data.category)
     this.created = Club.parseDate(data.created)
     this.type = Club.parseType(data.type)
-    this.staff = data.staff.map((staff: any) => new ClubStaff(client, this.ID, staff))
+    this.staff = data.staff.map((staff: any) => new ClubStaff(client, this.id, staff))
   }
 }
 
 export class ClubStaff extends BaseClass {
-  public readonly clubID: number
-  public readonly URL: URL
+  public readonly clubId: number
+  public readonly url: URL
   public readonly username: string
 
   public getClub () {
-    return <Promise<Club>> this.client.clubs.get(this.clubID)
+    return <Promise<Club>> this.client.clubs.get(this.clubId)
   }
 
-  public constructor (client: Client, clubID: number, data: any) {
+  public constructor (client: Client, clubId: number, data: any) {
     super(client)
 
-    this.clubID = clubID
-    this.URL = ClubStaff.parseURL(data.url)
+    this.clubId = clubId
+    this.url = ClubStaff.parseURL(data.url)
     this.username = ClubStaff.parseString(data.username)
   }
 }
 
 export class ClubMember extends BaseClass {
-  public readonly clubID: number
+  public readonly clubId: number
   public readonly URL: URL
   public readonly username: string
   public readonly imageURL: URL | null
 
   public getClub () {
-    return <Promise<Club>> this.client.clubs.get(this.clubID)
+    return <Promise<Club>> this.client.clubs.get(this.clubId)
   }
 
-  public constructor (client: Client, clubID: number, data: any) {
+  public constructor (client: Client, clubId: number, data: any) {
     super(client)
 
-    this.clubID = clubID
+    this.clubId = clubId
     this.URL = ClubMember.parseURL(data.url)
     this.username = ClubMember.parseString(data.username)
     this.imageURL = ClubMember.parseURL(data.image_url, true)

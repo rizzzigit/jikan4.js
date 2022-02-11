@@ -21,7 +21,7 @@ export class PersonName extends BaseClass {
 }
 
 export class Person extends BaseResource {
-  public readonly websiteURL: URL | null
+  public readonly websiteUrl: URL | null
   public readonly image: Image
   public readonly name: PersonName
   public readonly birth: Date
@@ -29,25 +29,25 @@ export class Person extends BaseResource {
   public readonly about: string | null
 
   public getAnime () {
-    return <Promise<PersonAnimeReference[]>> this.client.people.getAnime(this.ID)
+    return <Promise<PersonAnimeReference[]>> this.client.people.getAnime(this.id)
   }
 
   public getVoiceActors () {
-    return <Promise<PersonVoiceActorReference[]>> this.client.people.getVoiceActors(this.ID)
+    return <Promise<PersonVoiceActorReference[]>> this.client.people.getVoiceActors(this.id)
   }
 
   public getManga () {
-    return <Promise<PersonMangaReference[]>> this.client.people.getManga(this.ID)
+    return <Promise<PersonMangaReference[]>> this.client.people.getManga(this.id)
   }
 
   public getPictures () {
-    return <Promise<Image[]>> this.client.people.getPictures(this.ID)
+    return <Promise<Image[]>> this.client.people.getPictures(this.id)
   }
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.websiteURL = Person.parseURL(data.website_url, true)
+    this.websiteUrl = Person.parseURL(data.website_url, true)
     this.image = new Image(client, data.images?.jpg)
     this.name = new PersonName(client, data)
     this.birth = Person.parseDate(data.birthday)
@@ -57,37 +57,37 @@ export class Person extends BaseResource {
 }
 
 export class PersonAnimeReference extends BaseClass {
-  public readonly personID: number
+  public readonly personId: number
   public readonly position: string
   public readonly anime: AnimeMeta
 
   public getPerson () {
-    return <Promise<Person>> this.client.people.get(this.personID)
+    return <Promise<Person>> this.client.people.get(this.personId)
   }
 
-  public constructor (client: Client, personID: number, data: any) {
+  public constructor (client: Client, personId: number, data: any) {
     super(client)
 
-    this.personID = personID
+    this.personId = personId
     this.position = PersonAnimeReference.parseString(data.position)
     this.anime = new AnimeMeta(client, data.anime)
   }
 }
 
 export class PersonVoiceActorReference extends BaseClass {
-  public readonly personID: number
+  public readonly personId: number
   public readonly role: string
   public readonly anime: AnimeMeta
   public readonly character: CharacterMeta
 
   public getPerson () {
-    return <Promise<Person>> this.client.people.get(this.personID)
+    return <Promise<Person>> this.client.people.get(this.personId)
   }
 
-  public constructor (client: Client, personID: number, data: any) {
+  public constructor (client: Client, personId: number, data: any) {
     super(client)
 
-    this.personID = personID
+    this.personId = personId
     this.role = PersonVoiceActorReference.parseString(data.role)
     this.anime = new AnimeMeta(client, data.anime)
     this.character = new CharacterMeta(client, data.character)
@@ -95,18 +95,18 @@ export class PersonVoiceActorReference extends BaseClass {
 }
 
 export class PersonMangaReference extends BaseClass {
-  public readonly personID: number
+  public readonly personId: number
   public readonly position: string
   public readonly manga: MangaMeta
 
   public getPerson () {
-    return <Promise<Person>> this.client.people.get(this.personID)
+    return <Promise<Person>> this.client.people.get(this.personId)
   }
 
-  public constructor (client: Client, personID: number, data: any) {
+  public constructor (client: Client, personId: number, data: any) {
     super(client)
 
-    this.personID = personID
+    this.personId = personId
     this.position = PersonMangaReference.parseString(data.position)
     this.manga = new MangaMeta(client, data.manga)
   }

@@ -56,8 +56,8 @@ export declare class ContentNews extends BaseResource {
 }
 export declare class ContentUser extends BaseClass {
     readonly username: string;
-    readonly URL: URL;
-    readonly imageURL: URL | null;
+    readonly url: URL;
+    readonly imageUrl: URL | null;
     constructor(client: Client, data: any);
 }
 export declare class ContentReviewScores extends BaseClass {

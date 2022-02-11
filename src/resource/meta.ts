@@ -12,7 +12,6 @@ export type ContentMetaType = 'Anime' | 'Manga'
 
 export class Meta<T extends MetaType> extends BaseResource {
   public readonly type: T
-
   public readonly name: string
 
   public constructor (client: Client, data: any, type: T) {
@@ -73,7 +72,7 @@ export class MangaGenreMeta<T extends GenreType> extends Meta<'MangaGenre'> {
 
 export class PersonMeta extends Meta<'Person'> {
   public getFull () {
-    return <Promise<Person>> this.client.people.get(this.ID)
+    return <Promise<Person>> this.client.people.get(this.id)
   }
 
   public constructor (client: Client, data: any) {
@@ -83,7 +82,7 @@ export class PersonMeta extends Meta<'Person'> {
 
 export class CharacterMeta extends Meta<'Character'> {
   public getFull () {
-    return <Promise<Character>> this.client.characters.get(this.ID)
+    return <Promise<Character>> this.client.characters.get(this.id)
   }
 
   public constructor (client: Client, data: any) {
@@ -93,7 +92,7 @@ export class CharacterMeta extends Meta<'Character'> {
 
 export class AnimeMeta extends ContentMeta<'Anime'> {
   public getFull () {
-    return <Promise<Anime>> this.client.anime.get(this.ID)
+    return <Promise<Anime>> this.client.anime.get(this.id)
   }
 
   public constructor (client: Client, data: any) {
@@ -103,7 +102,7 @@ export class AnimeMeta extends ContentMeta<'Anime'> {
 
 export class MangaMeta extends ContentMeta<'Manga'> {
   public getFull () {
-    return <Promise<Manga>> this.client.manga.get(this.ID)
+    return <Promise<Manga>> this.client.manga.get(this.id)
   }
 
   public constructor (client: Client, data: any) {

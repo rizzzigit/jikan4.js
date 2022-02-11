@@ -12,7 +12,7 @@ export declare class PersonName extends BaseClass {
     constructor(client: Client, data: any);
 }
 export declare class Person extends BaseResource {
-    readonly websiteURL: URL | null;
+    readonly websiteUrl: URL | null;
     readonly image: Image;
     readonly name: PersonName;
     readonly birth: Date;
@@ -25,24 +25,24 @@ export declare class Person extends BaseResource {
     constructor(client: Client, data: any);
 }
 export declare class PersonAnimeReference extends BaseClass {
-    readonly personID: number;
+    readonly personId: number;
     readonly position: string;
     readonly anime: AnimeMeta;
     getPerson(): Promise<Person>;
-    constructor(client: Client, personID: number, data: any);
+    constructor(client: Client, personId: number, data: any);
 }
 export declare class PersonVoiceActorReference extends BaseClass {
-    readonly personID: number;
+    readonly personId: number;
     readonly role: string;
     readonly anime: AnimeMeta;
     readonly character: CharacterMeta;
     getPerson(): Promise<Person>;
-    constructor(client: Client, personID: number, data: any);
+    constructor(client: Client, personId: number, data: any);
 }
 export declare class PersonMangaReference extends BaseClass {
-    readonly personID: number;
+    readonly personId: number;
     readonly position: string;
     readonly manga: MangaMeta;
     getPerson(): Promise<Person>;
-    constructor(client: Client, personID: number, data: any);
+    constructor(client: Client, personId: number, data: any);
 }

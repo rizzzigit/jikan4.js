@@ -42,63 +42,63 @@ export declare class Manga extends Content {
     constructor(client: Client, data: any);
 }
 export declare class MangaCharacterReference extends BaseClass {
-    readonly mangaID: number;
+    readonly mangaId: number;
     readonly character: CharacterMeta;
     readonly role: string;
     getManga(): Promise<Manga>;
-    constructor(client: Client, mangaID: number, data: any);
+    constructor(client: Client, mangaId: number, data: any);
 }
 export declare class MangaNews extends ContentNews {
-    readonly mangaID: number;
+    readonly mangaId: number;
     getManga(): Promise<Manga>;
-    constructor(client: Client, mangaID: number, data: any);
+    constructor(client: Client, mangaId: number, data: any);
 }
 export declare class MangaTopic extends BaseResource {
-    readonly mangaID: number;
+    readonly mangaId: number;
     readonly title: string;
     readonly date: Date;
     readonly authorUsername: string;
     readonly authorURL: URL;
     readonly comments: number;
-    constructor(client: Client, mangaID: number, data: any);
+    constructor(client: Client, mangaId: number, data: any);
 }
 export declare class MangaStatistics extends ContentStatistics {
-    readonly mangaID: number;
+    readonly mangaId: number;
     readonly reading: number;
     readonly planToRead: number;
-    constructor(client: Client, mangaID: number, data: any);
+    constructor(client: Client, mangaId: number, data: any);
 }
 export declare class MangaRecommendation extends BaseClass {
-    readonly mangaID: number;
+    readonly mangaId: number;
     readonly entry: MangaMeta;
     readonly URL: URL;
     readonly votes: number;
     getManga(): Promise<Manga>;
-    constructor(client: Client, mangaID: number, data: any);
+    constructor(client: Client, mangaId: number, data: any);
 }
 export declare class MangaUserUpdate extends ContentUserUpdate {
-    readonly mangaID: number;
+    readonly mangaId: number;
     readonly volumesRead: number;
     readonly volumesTotal: number;
     readonly chaptersRead: number;
     readonly chaptersTotal: number;
     getManga(): Promise<Manga>;
-    constructor(client: Client, mangaID: number, data: any);
+    constructor(client: Client, mangaId: number, data: any);
 }
 export declare class MangaReviewScores extends ContentReviewScores {
     readonly art: number;
     constructor(client: Client, data: any);
 }
 export declare class MangaReview extends ContentReview {
-    readonly mangaID: number;
+    readonly mangaId: number;
     readonly chaptersRead: number;
     readonly scores: MangaReviewScores;
     getManga(): Promise<Manga>;
-    constructor(client: Client, mangaID: number, data: any);
+    constructor(client: Client, mangaId: number, data: any);
 }
 export declare class MangaRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
-    readonly mangaID: number;
+    readonly mangaId: number;
     readonly items: T extends 'Adaptation' ? Array<AnimeMeta> : Array<MangaMeta>;
     getManga(): Promise<Manga>;
-    constructor(client: Client, mangaID: number, relation: T, data: any);
+    constructor(client: Client, mangaId: number, relation: T, data: any);
 }

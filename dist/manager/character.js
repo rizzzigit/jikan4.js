@@ -42,33 +42,33 @@ class CharacterManager extends base_1.BaseManager {
             return new character_1.Character(this.client, rawData);
         });
     }
-    get(characterID) {
+    get(characterId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`characters/${characterID}`);
+            const rawData = yield this.requestResource(`characters/${characterId}`);
             return rawData ? new character_1.Character(this.client, rawData) : undefined;
         });
     }
-    getAnime(characterID) {
+    getAnime(characterId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`characters/${characterID}/anime`);
-            return rawData ? rawData.map((animeReference) => new character_1.CharacterAnimeReference(this.client, characterID, animeReference)) : undefined;
+            const rawData = yield this.requestResource(`characters/${characterId}/anime`);
+            return rawData ? rawData.map((animeReference) => new character_1.CharacterAnimeReference(this.client, characterId, animeReference)) : undefined;
         });
     }
-    getManga(characterID) {
+    getManga(characterId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`characters/${characterID}/manga`);
-            return rawData ? rawData.map((mangaReference) => new character_1.CharacterMangaReference(this.client, characterID, mangaReference)) : undefined;
+            const rawData = yield this.requestResource(`characters/${characterId}/manga`);
+            return rawData ? rawData.map((mangaReference) => new character_1.CharacterMangaReference(this.client, characterId, mangaReference)) : undefined;
         });
     }
-    getVoiceActors(characterID) {
+    getVoiceActors(characterId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`characters/${characterID}/voices`);
-            return rawData ? rawData.map((voiceActorReference) => new character_1.CharacterVoiceActorReference(this.client, characterID, voiceActorReference)) : undefined;
+            const rawData = yield this.requestResource(`characters/${characterId}/voices`);
+            return rawData ? rawData.map((voiceActorReference) => new character_1.CharacterVoiceActorReference(this.client, characterId, voiceActorReference)) : undefined;
         });
     }
-    getPictures(characterID) {
+    getPictures(characterId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`characters/${characterID}/pictures`);
+            const rawData = yield this.requestResource(`characters/${characterId}/pictures`);
             return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
         });
     }

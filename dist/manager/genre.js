@@ -95,14 +95,14 @@ class GenreManager extends base_1.BaseManager {
         }
         return list;
     }
-    getAnime(ID) {
-        return this.listAnime().find((genre) => genre.ID === ID);
+    getAnime(id) {
+        return this.listAnime().find((genre) => genre.id === id);
     }
     getAnimeByName(name) {
         return this.listAnime().find((genre) => genre.name === name);
     }
-    getManga(ID) {
-        return this.listManga().find((genre) => genre.ID === ID);
+    getManga(id) {
+        return this.listManga().find((genre) => genre.id === id);
     }
     getMangaByName(name) {
         return this.listManga().find((genre) => genre.name === name);

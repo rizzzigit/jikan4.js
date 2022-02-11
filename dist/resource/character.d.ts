@@ -16,23 +16,23 @@ export declare class Character extends BaseResource {
     constructor(client: Client, data: any);
 }
 export declare class CharacterAnimeReference extends BaseClass {
-    readonly characterID: number;
+    readonly characterId: number;
     readonly role: string;
     readonly anime: AnimeMeta;
     getCharacter(): Promise<Character>;
-    constructor(client: Client, characterID: number, data: any);
+    constructor(client: Client, characterId: number, data: any);
 }
 export declare class CharacterMangaReference extends BaseClass {
-    readonly characterID: number;
+    readonly characterId: number;
     readonly role: string;
     readonly manga: MangaMeta;
     getCharacter(): Promise<Character>;
-    constructor(client: Client, characterID: number, data: any);
+    constructor(client: Client, characterId: number, data: any);
 }
 export declare class CharacterVoiceActorReference extends BaseClass {
-    readonly characterID: number;
+    readonly characterId: number;
     readonly language: string;
     readonly person: PersonMeta;
     getCharacter(): Promise<Character>;
-    constructor(client: Client, characterID: number, data: any);
+    constructor(client: Client, characterId: number, data: any);
 }

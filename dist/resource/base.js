@@ -81,8 +81,8 @@ exports.BaseClass = BaseClass;
 class BaseResource extends BaseClass {
     constructor(client, data) {
         super(client);
-        this.ID = BaseResource.parseNumber(data.mal_id);
-        this.URL = BaseResource.parseURL(data.url);
+        this.id = BaseResource.parseNumber(data.mal_id);
+        this.url = BaseResource.parseURL(data.url);
     }
 }
 exports.BaseResource = BaseResource;

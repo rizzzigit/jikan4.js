@@ -6,13 +6,13 @@ class Club extends base_1.BaseResource {
     constructor(client, data) {
         var _a, _b;
         super(client, data);
-        this.imageURL = Club.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
+        this.imageUrl = Club.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
         this.memberCount = Club.parseNumber(data.members_count);
         this.pictureCount = Club.parseNumber(data.pictures_count);
         this.category = Club.parseCategory(data.category);
         this.created = Club.parseDate(data.created);
         this.type = Club.parseType(data.type);
-        this.staff = data.staff.map((staff) => new ClubStaff(client, this.ID, staff));
+        this.staff = data.staff.map((staff) => new ClubStaff(client, this.id, staff));
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
@@ -46,32 +46,32 @@ class Club extends base_1.BaseResource {
         }
     }
     getMembers() {
-        return this.client.clubs.getMembers(this.ID);
+        return this.client.clubs.getMembers(this.id);
     }
 }
 exports.Club = Club;
 class ClubStaff extends base_1.BaseClass {
-    constructor(client, clubID, data) {
+    constructor(client, clubId, data) {
         super(client);
-        this.clubID = clubID;
-        this.URL = ClubStaff.parseURL(data.url);
+        this.clubId = clubId;
+        this.url = ClubStaff.parseURL(data.url);
         this.username = ClubStaff.parseString(data.username);
     }
     getClub() {
-        return this.client.clubs.get(this.clubID);
+        return this.client.clubs.get(this.clubId);
     }
 }
 exports.ClubStaff = ClubStaff;
 class ClubMember extends base_1.BaseClass {
-    constructor(client, clubID, data) {
+    constructor(client, clubId, data) {
         super(client);
-        this.clubID = clubID;
+        this.clubId = clubId;
         this.URL = ClubMember.parseURL(data.url);
         this.username = ClubMember.parseString(data.username);
         this.imageURL = ClubMember.parseURL(data.image_url, true);
     }
     getClub() {
-        return this.client.clubs.get(this.clubID);
+        return this.client.clubs.get(this.clubId);
     }
 }
 exports.ClubMember = ClubMember;

@@ -24,14 +24,14 @@ export declare class MangaManager extends BaseManager {
     listTop(offset?: number, maxCount?: number): Promise<Manga[]>;
     listRecommended(offset?: number, maxCount?: number): Promise<Manga[]>;
     random(): Promise<Manga>;
-    get(mangaID: number): Promise<Manga | undefined>;
-    getCharacters(mangaID: number): Promise<Array<MangaCharacterReference> | undefined>;
-    getNews(mangaID: number, offset?: number, maxCount?: number): Promise<Array<MangaNews> | undefined>;
-    getTopics(mangaID: number): Promise<Array<MangaTopic> | undefined>;
-    getPictures(mangaID: number): Promise<Array<Image> | undefined>;
-    getStatistics(mangaID: number): Promise<MangaStatistics | undefined>;
-    getMoreInfo(mangaID: number): Promise<string | null | undefined>;
-    getUserUpdates(mangaID: number): Promise<Array<MangaUserUpdate> | undefined>;
-    getReviews(mangaID: number): Promise<Array<MangaReview> | undefined>;
-    getRelations(mangaID: number): Promise<Array<MangaRelationGroup<ContentRelationType>> | undefined>;
+    get(mangaId: number): Promise<Manga | undefined>;
+    getCharacters(mangaId: number): Promise<Array<MangaCharacterReference> | undefined>;
+    getNews(mangaId: number, offset?: number, maxCount?: number): Promise<Array<MangaNews> | undefined>;
+    getTopics(mangaId: number): Promise<Array<MangaTopic> | undefined>;
+    getPictures(mangaId: number): Promise<Array<Image> | undefined>;
+    getStatistics(mangaId: number): Promise<MangaStatistics | undefined>;
+    getMoreInfo(mangaId: number): Promise<string | null | undefined>;
+    getUserUpdates(mangaId: number): Promise<Array<MangaUserUpdate> | undefined>;
+    getReviews(mangaId: number): Promise<Array<MangaReview> | undefined>;
+    getRelations(mangaId: number): Promise<Array<MangaRelationGroup<ContentRelationType>> | undefined>;
 }

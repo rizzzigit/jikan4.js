@@ -14,52 +14,52 @@ class Character extends base_1.BaseResource {
         this.about = Character.parseString(data.about, true);
     }
     getAnime() {
-        return this.client.characters.getAnime(this.ID);
+        return this.client.characters.getAnime(this.id);
     }
     getManga() {
-        return this.client.characters.getManga(this.ID);
+        return this.client.characters.getManga(this.id);
     }
     getVoiceActors() {
-        return this.client.characters.getVoiceActors(this.ID);
+        return this.client.characters.getVoiceActors(this.id);
     }
     getPictures() {
-        return this.client.characters.getPictures(this.ID);
+        return this.client.characters.getPictures(this.id);
     }
 }
 exports.Character = Character;
 class CharacterAnimeReference extends base_1.BaseClass {
-    constructor(client, characterID, data) {
+    constructor(client, characterId, data) {
         super(client);
-        this.characterID = characterID;
+        this.characterId = characterId;
         this.role = CharacterAnimeReference.parseString(data.role);
         this.anime = new meta_1.AnimeMeta(client, data.anime);
     }
     getCharacter() {
-        return this.client.characters.get(this.characterID);
+        return this.client.characters.get(this.characterId);
     }
 }
 exports.CharacterAnimeReference = CharacterAnimeReference;
 class CharacterMangaReference extends base_1.BaseClass {
-    constructor(client, characterID, data) {
+    constructor(client, characterId, data) {
         super(client);
-        this.characterID = characterID;
+        this.characterId = characterId;
         this.role = CharacterMangaReference.parseString(data.role);
         this.manga = new meta_1.MangaMeta(client, data);
     }
     getCharacter() {
-        return this.client.characters.get(this.characterID);
+        return this.client.characters.get(this.characterId);
     }
 }
 exports.CharacterMangaReference = CharacterMangaReference;
 class CharacterVoiceActorReference extends base_1.BaseClass {
-    constructor(client, characterID, data) {
+    constructor(client, characterId, data) {
         super(client);
-        this.characterID = characterID;
+        this.characterId = characterId;
         this.language = CharacterVoiceActorReference.parseString(data.language);
         this.person = new meta_1.PersonMeta(client, data.person);
     }
     getCharacter() {
-        return this.client.characters.get(this.characterID);
+        return this.client.characters.get(this.characterId);
     }
 }
 exports.CharacterVoiceActorReference = CharacterVoiceActorReference;

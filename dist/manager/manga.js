@@ -21,9 +21,9 @@ class MangaManager extends base_1.BaseManager {
                     case 'minScore': return ['min_score', `${value}`];
                     case 'maxScore': return ['max_score', `${value}`];
                     case 'sfw': return [key, ''];
-                    case 'genres': return [key, `${value.map((value) => value instanceof meta_1.MangaGenreMeta ? value.ID : value)}`];
-                    case 'excludeGenres': return ['genres_exclude', `${value.map((value) => value instanceof meta_1.MangaGenreMeta ? value.ID : value)}`];
-                    case 'magazines': return ['magazine', `${value.map((value) => value instanceof meta_1.MagazineMeta ? value.ID : value)}`];
+                    case 'genres': return [key, `${value.map((value) => value instanceof meta_1.MangaGenreMeta ? value.id : value)}`];
+                    case 'excludeGenres': return ['genres_exclude', `${value.map((value) => value instanceof meta_1.MangaGenreMeta ? value.id : value)}`];
+                    case 'magazines': return ['magazine', `${value.map((value) => value instanceof meta_1.MagazineMeta ? value.id : value)}`];
                     case 'orderBy': return ['order_by', `${value}`];
                     default: return [key, `${value}`];
                 }
@@ -55,64 +55,64 @@ class MangaManager extends base_1.BaseManager {
             return new manga_1.Manga(this.client, rawData);
         });
     }
-    get(mangaID) {
+    get(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`manga/${mangaID}`);
+            const rawData = yield this.requestResource(`manga/${mangaId}`);
             return rawData ? new manga_1.Manga(this.client, rawData) : undefined;
         });
     }
-    getCharacters(mangaID) {
+    getCharacters(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`manga/${mangaID}/characters`);
-            return rawData ? rawData.map((characterReference) => new manga_1.MangaCharacterReference(this.client, mangaID, characterReference)) : undefined;
+            const rawData = yield this.requestResource(`manga/${mangaId}/characters`);
+            return rawData ? rawData.map((characterReference) => new manga_1.MangaCharacterReference(this.client, mangaId, characterReference)) : undefined;
         });
     }
-    getNews(mangaID, offset, maxCount) {
+    getNews(mangaId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`manga/${mangaID}/news`, offset, maxCount);
-            return rawData ? rawData.map((news) => new manga_1.MangaNews(this.client, mangaID, news)) : undefined;
+            const rawData = yield this.requestPaginatedResource(`manga/${mangaId}/news`, offset, maxCount);
+            return rawData ? rawData.map((news) => new manga_1.MangaNews(this.client, mangaId, news)) : undefined;
         });
     }
-    getTopics(mangaID) {
+    getTopics(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`manga/${mangaID}/forum`);
-            return rawData ? rawData.map((topic) => new manga_1.MangaTopic(this.client, mangaID, topic)) : undefined;
+            const rawData = yield this.requestResource(`manga/${mangaId}/forum`);
+            return rawData ? rawData.map((topic) => new manga_1.MangaTopic(this.client, mangaId, topic)) : undefined;
         });
     }
-    getPictures(mangaID) {
+    getPictures(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`manga/${mangaID}/pictures`);
+            const rawData = yield this.requestResource(`manga/${mangaId}/pictures`);
             return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
         });
     }
-    getStatistics(mangaID) {
+    getStatistics(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`manga/${mangaID}/statistics`);
-            return rawData ? new manga_1.MangaStatistics(this.client, mangaID, rawData) : undefined;
+            const rawData = yield this.requestResource(`manga/${mangaId}/statistics`);
+            return rawData ? new manga_1.MangaStatistics(this.client, mangaId, rawData) : undefined;
         });
     }
-    getMoreInfo(mangaID) {
+    getMoreInfo(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`manga/${mangaID}/moreinfo`);
+            const rawData = yield this.requestResource(`manga/${mangaId}/moreinfo`);
             return rawData ? rawData.moreinfo || null : undefined;
         });
     }
-    getUserUpdates(mangaID) {
+    getUserUpdates(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`manga/${mangaID}/userupdates`);
-            return rawData ? rawData.map((userUpdate) => new manga_1.MangaUserUpdate(this.client, mangaID, userUpdate)) : undefined;
+            const rawData = yield this.requestResource(`manga/${mangaId}/userupdates`);
+            return rawData ? rawData.map((userUpdate) => new manga_1.MangaUserUpdate(this.client, mangaId, userUpdate)) : undefined;
         });
     }
-    getReviews(mangaID) {
+    getReviews(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`manga/${mangaID}/reviews`);
-            return rawData ? rawData.map((review) => new manga_1.MangaReview(this.client, mangaID, review)) : undefined;
+            const rawData = yield this.requestResource(`manga/${mangaId}/reviews`);
+            return rawData ? rawData.map((review) => new manga_1.MangaReview(this.client, mangaId, review)) : undefined;
         });
     }
-    getRelations(mangaID) {
+    getRelations(mangaId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`manga/${mangaID}/relations`);
-            return rawData ? rawData.map((relation) => new manga_1.MangaRelationGroup(this.client, mangaID, manga_1.MangaRelationGroup.parseRelation(relation.relation), relation)) : undefined;
+            const rawData = yield this.requestPaginatedResource(`manga/${mangaId}/relations`);
+            return rawData ? rawData.map((relation) => new manga_1.MangaRelationGroup(this.client, mangaId, manga_1.MangaRelationGroup.parseRelation(relation.relation), relation)) : undefined;
         });
     }
 }

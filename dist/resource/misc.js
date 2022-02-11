@@ -15,9 +15,9 @@ exports.Image = Image;
 class YoutubeVideo extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
-        this.ID = data;
-        this.URL = new url_1.URL(`https://youtu.be/${this.ID}`);
-        this.embedURL = new url_1.URL(`https://www.youtube.com/embed/${this.ID}`);
+        this.id = data;
+        this.url = new url_1.URL(`https://youtu.be/${this.id}`);
+        this.embedUrl = new url_1.URL(`https://www.youtube.com/embed/${this.id}`);
     }
 }
 exports.YoutubeVideo = YoutubeVideo;

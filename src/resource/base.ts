@@ -83,13 +83,13 @@ export class BaseClass {
 }
 
 export class BaseResource extends BaseClass {
-  public readonly ID: number
-  public readonly URL: URL
+  public readonly id: number
+  public readonly url: URL
 
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.ID = BaseResource.parseNumber(data.mal_id)
-    this.URL = BaseResource.parseURL(data.url)
+    this.id = BaseResource.parseNumber(data.mal_id)
+    this.url = BaseResource.parseURL(data.url)
   }
 }

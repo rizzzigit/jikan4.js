@@ -9,7 +9,7 @@ export declare class Club extends BaseResource {
     static parseCategory(input: any): ClubCategory;
     /** @hidden */
     static parseType(input: any): ClubType;
-    readonly imageURL: URL | null;
+    readonly imageUrl: URL | null;
     readonly memberCount: number;
     readonly pictureCount: number;
     readonly category: ClubCategory;
@@ -20,17 +20,17 @@ export declare class Club extends BaseResource {
     constructor(client: Client, data: any);
 }
 export declare class ClubStaff extends BaseClass {
-    readonly clubID: number;
-    readonly URL: URL;
+    readonly clubId: number;
+    readonly url: URL;
     readonly username: string;
     getClub(): Promise<Club>;
-    constructor(client: Client, clubID: number, data: any);
+    constructor(client: Client, clubId: number, data: any);
 }
 export declare class ClubMember extends BaseClass {
-    readonly clubID: number;
+    readonly clubId: number;
     readonly URL: URL;
     readonly username: string;
     readonly imageURL: URL | null;
     getClub(): Promise<Club>;
-    constructor(client: Client, clubID: number, data: any);
+    constructor(client: Client, clubId: number, data: any);
 }

@@ -9,8 +9,8 @@ export declare class Image extends BaseClass {
     constructor(client: Client, data: any);
 }
 export declare class YoutubeVideo extends BaseClass {
-    readonly ID: string;
-    readonly URL: URL;
-    readonly embedURL: URL;
+    readonly id: string;
+    readonly url: URL;
+    readonly embedUrl: URL;
     constructor(client: Client, data: any);
 }

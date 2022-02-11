@@ -22,9 +22,9 @@ class ClubManager extends base_1.BaseManager {
             return rawData.map((data) => this.storeCache(data)).map((club) => new club_1.Club(this.client, club));
         });
     }
-    get(clubID) {
+    get(clubId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`clubs/${clubID}`);
+            const rawData = yield this.requestResource(`clubs/${clubId}`);
             if (rawData) {
                 return new club_1.Club(this.client, rawData);
             }
@@ -33,10 +33,10 @@ class ClubManager extends base_1.BaseManager {
             }
         });
     }
-    getMembers(clubID) {
+    getMembers(clubId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`clubs/${clubID}/members`);
-            return rawData ? rawData.map((member) => new club_1.ClubMember(this.client, clubID, member)) : undefined;
+            const rawData = yield this.requestPaginatedResource(`clubs/${clubId}/members`);
+            return rawData ? rawData.map((member) => new club_1.ClubMember(this.client, clubId, member)) : undefined;
         });
     }
 }

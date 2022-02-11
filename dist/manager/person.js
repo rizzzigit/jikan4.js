@@ -42,28 +42,28 @@ class PersonManager extends base_1.BaseManager {
             return new person_1.Person(this.client, rawData);
         });
     }
-    get(personID) {
+    get(personId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`people/${personID}`);
+            const rawData = yield this.requestResource(`people/${personId}`);
             return rawData ? new person_1.Person(this.client, rawData) : undefined;
         });
     }
-    getAnime(personID) {
+    getAnime(personId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`people/${personID}/anime`);
-            return rawData ? rawData.map((animeReference) => new person_1.PersonAnimeReference(this.client, personID, animeReference)) : undefined;
+            const rawData = yield this.requestResource(`people/${personId}/anime`);
+            return rawData ? rawData.map((animeReference) => new person_1.PersonAnimeReference(this.client, personId, animeReference)) : undefined;
         });
     }
-    getVoiceActors(personID) {
+    getVoiceActors(personId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`people/${personID}/voices`);
-            return rawData ? rawData.map((voiceActorReference) => new person_1.PersonVoiceActorReference(this.client, personID, voiceActorReference)) : undefined;
+            const rawData = yield this.requestResource(`people/${personId}/voices`);
+            return rawData ? rawData.map((voiceActorReference) => new person_1.PersonVoiceActorReference(this.client, personId, voiceActorReference)) : undefined;
         });
     }
-    getManga(personID) {
+    getManga(personId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`people/${personID}/manga`);
-            return rawData ? rawData.map((mangaReference) => new person_1.PersonMangaReference(this.client, personID, mangaReference)) : undefined;
+            const rawData = yield this.requestResource(`people/${personId}/manga`);
+            return rawData ? rawData.map((mangaReference) => new person_1.PersonMangaReference(this.client, personId, mangaReference)) : undefined;
         });
     }
     getPictures(personID) {

@@ -105,7 +105,7 @@ class APIClient {
         if (!path) {
             path = '';
         }
-        const parsedURL = new url_1.URL(`http${options.secure ? 's' : ''}://${options.host}/${options.baseURI}${path.length ? '/' : ''}${path}`);
+        const parsedURL = new url_1.URL(`http${options.secure ? 's' : ''}://${options.host}/${options.baseUri}${path.length ? '/' : ''}${path}`);
         if (query) {
             const params = parsedURL.searchParams;
             for (const queryKey in query) {

@@ -48,32 +48,32 @@ export class CharacterManager extends BaseManager {
     return new Character(this.client, rawData)
   }
 
-  public async get (characterID: number): Promise<Character | undefined> {
-    const rawData = await this.requestResource(`characters/${characterID}`)
+  public async get (characterId: number): Promise<Character | undefined> {
+    const rawData = await this.requestResource(`characters/${characterId}`)
 
     return rawData ? new Character(this.client, rawData) : undefined
   }
 
-  public async getAnime (characterID: number): Promise<Array<CharacterAnimeReference> | undefined> {
-    const rawData = await this.requestResource(`characters/${characterID}/anime`)
+  public async getAnime (characterId: number): Promise<Array<CharacterAnimeReference> | undefined> {
+    const rawData = await this.requestResource(`characters/${characterId}/anime`)
 
-    return rawData ? rawData.map((animeReference: any) => new CharacterAnimeReference(this.client, characterID, animeReference)) : undefined
+    return rawData ? rawData.map((animeReference: any) => new CharacterAnimeReference(this.client, characterId, animeReference)) : undefined
   }
 
-  public async getManga (characterID: number): Promise<Array<CharacterMangaReference> | undefined> {
-    const rawData = await this.requestResource(`characters/${characterID}/manga`)
+  public async getManga (characterId: number): Promise<Array<CharacterMangaReference> | undefined> {
+    const rawData = await this.requestResource(`characters/${characterId}/manga`)
 
-    return rawData ? rawData.map((mangaReference: any) => new CharacterMangaReference(this.client, characterID, mangaReference)) : undefined
+    return rawData ? rawData.map((mangaReference: any) => new CharacterMangaReference(this.client, characterId, mangaReference)) : undefined
   }
 
-  public async getVoiceActors (characterID: number): Promise<Array<CharacterVoiceActorReference> | undefined> {
-    const rawData = await this.requestResource(`characters/${characterID}/voices`)
+  public async getVoiceActors (characterId: number): Promise<Array<CharacterVoiceActorReference> | undefined> {
+    const rawData = await this.requestResource(`characters/${characterId}/voices`)
 
-    return rawData ? rawData.map((voiceActorReference: any) => new CharacterVoiceActorReference(this.client, characterID, voiceActorReference)) : undefined
+    return rawData ? rawData.map((voiceActorReference: any) => new CharacterVoiceActorReference(this.client, characterId, voiceActorReference)) : undefined
   }
 
-  public async getPictures (characterID: number): Promise<Array<Image> | undefined> {
-    const rawData = await this.requestResource(`characters/${characterID}/pictures`)
+  public async getPictures (characterId: number): Promise<Array<Image> | undefined> {
+    const rawData = await this.requestResource(`characters/${characterId}/pictures`)
 
     return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
   }

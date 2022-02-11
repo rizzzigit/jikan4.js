@@ -1,6 +1,6 @@
 import { BaseManager } from '../manager/base';
 import { ContentRelationType } from '../resource/content/base';
-import { Anime, AnimeCharacterReference, AnimeStaffReference, AnimePartialEpisode, AnimeEpisode, AnimeTopic, AnimeVideo, AnimeStatistics, AnimeRecommendation, AnimeUserUpdate, AnimeReview, AnimeRelationGroup } from '../resource/content/anime';
+import { Anime, AnimeCharacterReference, AnimeStaffReference, AnimePartialEpisode, AnimeEpisode, AnimeNews, AnimeTopic, AnimeVideo, AnimeStatistics, AnimeRecommendation, AnimeUserUpdate, AnimeReview, AnimeRelationGroup } from '../resource/content/anime';
 import { Image } from '../resource/misc';
 import { AnimeGenreMeta, ProducerMeta, GenreType } from '../resource/meta';
 export interface AnimeSearchFilter {
@@ -27,22 +27,22 @@ export declare class AnimeManager extends BaseManager {
     listRecommended(offset?: number, maxCount?: number): Promise<Anime[]>;
     listScheduled(offset?: number, maxCount?: number): Promise<Anime[]>;
     random(): Promise<Anime>;
-    get(animeID: number): Promise<Anime | undefined>;
-    getCharacters(animeID: number): Promise<Array<AnimeCharacterReference> | undefined>;
-    getStaff(animeID: number): Promise<Array<AnimeStaffReference> | undefined>;
-    getEpisodes(animeID: number, offset?: number, maxCount?: number): Promise<Array<AnimePartialEpisode> | undefined>;
-    getEpisode(animeID: number, episodeID: number): Promise<AnimeEpisode | undefined>;
-    getNews(animeID: number, offset?: number, maxCount?: number): Promise<Array<AnimeTopic> | undefined>;
-    getTopics(animeID: number, topic?: 'all' | 'episode' | 'other'): Promise<Array<AnimeTopic> | undefined>;
-    getVideos(animeID: number): Promise<AnimeVideo | undefined>;
-    getPictures(animeID: number): Promise<Array<Image> | undefined>;
-    getStatistics(animeID: number): Promise<AnimeStatistics | undefined>;
-    getMoreInfo(animeID: number): Promise<string | null | undefined>;
-    getRecommendations(animeID: number): Promise<Array<AnimeRecommendation> | undefined>;
-    getUserUpdates(animeID: number, offset?: number, maxCount?: number): Promise<Array<AnimeUserUpdate> | undefined>;
-    getReviews(animeID: number, offset?: number, maxCount?: number): Promise<Array<AnimeReview> | undefined>;
-    getRelations(animeID: number): Promise<Array<AnimeRelationGroup<ContentRelationType>> | undefined>;
-    getThemes(animeID: number): Promise<{
+    get(animeId: number): Promise<Anime | undefined>;
+    getCharacters(animeId: number): Promise<Array<AnimeCharacterReference> | undefined>;
+    getStaff(animeId: number): Promise<Array<AnimeStaffReference> | undefined>;
+    getEpisodes(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimePartialEpisode> | undefined>;
+    getEpisode(animeId: number, episodeID: number): Promise<AnimeEpisode | undefined>;
+    getNews(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeNews> | undefined>;
+    getTopics(animeId: number, topic?: 'all' | 'episode' | 'other'): Promise<Array<AnimeTopic> | undefined>;
+    getVideos(animeId: number): Promise<AnimeVideo | undefined>;
+    getPictures(animeId: number): Promise<Array<Image> | undefined>;
+    getStatistics(animeId: number): Promise<AnimeStatistics | undefined>;
+    getMoreInfo(animeId: number): Promise<string | null | undefined>;
+    getRecommendations(animeId: number): Promise<Array<AnimeRecommendation> | undefined>;
+    getUserUpdates(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeUserUpdate> | undefined>;
+    getReviews(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeReview> | undefined>;
+    getRelations(animeId: number): Promise<Array<AnimeRelationGroup<ContentRelationType>> | undefined>;
+    getThemes(animeId: number): Promise<{
         openings: Array<string>;
         endings: Array<string>;
     } | undefined>;

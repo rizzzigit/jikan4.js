@@ -81,8 +81,8 @@ class ContentUser extends base_1.BaseClass {
         var _a, _b;
         super(client);
         this.username = ContentUser.parseString(data.username);
-        this.URL = ContentUser.parseURL(data.url);
-        this.imageURL = ContentUser.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
+        this.url = ContentUser.parseURL(data.url);
+        this.imageUrl = ContentUser.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
     }
 }
 exports.ContentUser = ContentUser;

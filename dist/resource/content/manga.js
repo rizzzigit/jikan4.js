@@ -57,63 +57,63 @@ class Manga extends base_2.Content {
         }
     }
     get isExplicit() {
-        return !!(this.genres.find((genre) => !!genre_1.mangaExplicitGenres.find((genreEntry) => genreEntry[0] === genre.ID)));
+        return !!(this.genres.find((genre) => !!genre_1.mangaExplicitGenres.find((genreEntry) => genreEntry[0] === genre.id)));
     }
     getCharacters() {
-        return this.client.manga.getCharacters(this.ID);
+        return this.client.manga.getCharacters(this.id);
     }
     getNews(offset, maxCount) {
-        return this.client.manga.getNews(this.ID, offset, maxCount);
+        return this.client.manga.getNews(this.id, offset, maxCount);
     }
     getTopics() {
-        return this.client.manga.getTopics(this.ID);
+        return this.client.manga.getTopics(this.id);
     }
     getPictures() {
-        return this.client.manga.getPictures(this.ID);
+        return this.client.manga.getPictures(this.id);
     }
     getStatistics() {
-        return this.client.manga.getStatistics(this.ID);
+        return this.client.manga.getStatistics(this.id);
     }
     getMoreInfo() {
-        return this.client.manga.getMoreInfo(this.ID);
+        return this.client.manga.getMoreInfo(this.id);
     }
     getUserUpdates() {
-        return this.client.manga.getUserUpdates(this.ID);
+        return this.client.manga.getUserUpdates(this.id);
     }
     getReviews() {
-        return this.client.manga.getReviews(this.ID);
+        return this.client.manga.getReviews(this.id);
     }
     getRelations() {
-        return this.client.manga.getRelations(this.ID);
+        return this.client.manga.getRelations(this.id);
     }
 }
 exports.Manga = Manga;
 class MangaCharacterReference extends base_1.BaseClass {
-    constructor(client, mangaID, data) {
+    constructor(client, mangaId, data) {
         super(client);
-        this.mangaID = mangaID;
+        this.mangaId = mangaId;
         this.character = new meta_1.CharacterMeta(client, data.character);
         this.role = MangaCharacterReference.parseString(data.role);
     }
     getManga() {
-        return this.client.manga.get(this.mangaID);
+        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaCharacterReference = MangaCharacterReference;
 class MangaNews extends base_2.ContentNews {
-    constructor(client, mangaID, data) {
+    constructor(client, mangaId, data) {
         super(client, data);
-        this.mangaID = mangaID;
+        this.mangaId = mangaId;
     }
     getManga() {
-        return this.client.manga.get(this.mangaID);
+        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaNews = MangaNews;
 class MangaTopic extends base_1.BaseResource {
-    constructor(client, mangaID, data) {
+    constructor(client, mangaId, data) {
         super(client, data);
-        this.mangaID = mangaID;
+        this.mangaId = mangaId;
         this.title = MangaTopic.parseString(data.title);
         this.date = MangaTopic.parseDate(data.date);
         this.authorUsername = MangaTopic.parseString(data.author_username);
@@ -123,38 +123,38 @@ class MangaTopic extends base_1.BaseResource {
 }
 exports.MangaTopic = MangaTopic;
 class MangaStatistics extends base_2.ContentStatistics {
-    constructor(client, mangaID, data) {
+    constructor(client, mangaId, data) {
         super(client, data);
-        this.mangaID = mangaID;
+        this.mangaId = mangaId;
         this.reading = MangaStatistics.parseNumber(data.reading);
         this.planToRead = MangaStatistics.parseNumber(data.plan_to_read);
     }
 }
 exports.MangaStatistics = MangaStatistics;
 class MangaRecommendation extends base_1.BaseClass {
-    constructor(client, mangaID, data) {
+    constructor(client, mangaId, data) {
         super(client);
-        this.mangaID = mangaID;
+        this.mangaId = mangaId;
         this.entry = new meta_1.MangaMeta(client, data.entry);
         this.URL = MangaRecommendation.parseURL(data.url);
         this.votes = MangaRecommendation.parseNumber(data.votes);
     }
     getManga() {
-        return this.client.manga.get(this.mangaID);
+        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaRecommendation = MangaRecommendation;
 class MangaUserUpdate extends base_2.ContentUserUpdate {
-    constructor(client, mangaID, data) {
+    constructor(client, mangaId, data) {
         super(client, data);
-        this.mangaID = mangaID;
+        this.mangaId = mangaId;
         this.volumesRead = MangaUserUpdate.parseNumber(data.volumes_read);
         this.volumesTotal = MangaUserUpdate.parseNumber(data.volumes_total);
         this.chaptersRead = MangaUserUpdate.parseNumber(data.chapters_read);
         this.chaptersTotal = MangaUserUpdate.parseNumber(data.chapters_total);
     }
     getManga() {
-        return this.client.manga.get(this.mangaID);
+        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaUserUpdate = MangaUserUpdate;
@@ -166,25 +166,25 @@ class MangaReviewScores extends base_2.ContentReviewScores {
 }
 exports.MangaReviewScores = MangaReviewScores;
 class MangaReview extends base_2.ContentReview {
-    constructor(client, mangaID, data) {
+    constructor(client, mangaId, data) {
         super(client, data);
-        this.mangaID = mangaID;
+        this.mangaId = mangaId;
         this.chaptersRead = MangaReview.parseNumber(data.chapters_read);
         this.scores = new MangaReviewScores(client, data.scores);
     }
     getManga() {
-        return this.client.manga.get(this.mangaID);
+        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaReview = MangaReview;
 class MangaRelationGroup extends base_2.ContentRelationGroup {
-    constructor(client, mangaID, relation, data) {
+    constructor(client, mangaId, relation, data) {
         super(client, relation, data);
-        this.mangaID = mangaID;
+        this.mangaId = mangaId;
         this.items = data.map((item) => new (this.relation === 'Adaptation' ? meta_1.AnimeMeta : meta_1.MangaMeta)(this.client, item));
     }
     getManga() {
-        return this.client.manga.get(this.mangaID);
+        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaRelationGroup = MangaRelationGroup;

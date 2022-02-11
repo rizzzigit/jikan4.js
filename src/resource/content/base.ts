@@ -121,15 +121,15 @@ export class ContentNews extends BaseResource {
 
 export class ContentUser extends BaseClass {
   public readonly username: string
-  public readonly URL: URL
-  public readonly imageURL: URL | null
+  public readonly url: URL
+  public readonly imageUrl: URL | null
 
   public constructor (client: Client, data: any) {
     super(client)
 
     this.username = ContentUser.parseString(data.username)
-    this.URL = ContentUser.parseURL(data.url)
-    this.imageURL = ContentUser.parseURL(data.images?.jpg?.image_url, true)
+    this.url = ContentUser.parseURL(data.url)
+    this.imageUrl = ContentUser.parseURL(data.images?.jpg?.image_url, true)
   }
 }
 

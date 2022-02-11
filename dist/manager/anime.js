@@ -21,9 +21,9 @@ class AnimeManager extends base_1.BaseManager {
                     case 'minScore': return ['min_score', `${value}`];
                     case 'maxScore': return ['max_score', `${value}`];
                     case 'sfw': return [key, ''];
-                    case 'genres': return [key, `${value.map((value) => value instanceof meta_1.AnimeGenreMeta ? value.ID : value)}`];
-                    case 'excludeGenres': return ['genres_exclude', `${value.map((value) => value instanceof meta_1.AnimeGenreMeta ? value.ID : value)}`];
-                    case 'producers': return ['producer', `${value.map((value) => value instanceof meta_1.ProducerMeta ? value.ID : value)}`];
+                    case 'genres': return [key, `${value.map((value) => value instanceof meta_1.AnimeGenreMeta ? value.id : value)}`];
+                    case 'excludeGenres': return ['genres_exclude', `${value.map((value) => value instanceof meta_1.AnimeGenreMeta ? value.id : value)}`];
+                    case 'producers': return ['producer', `${value.map((value) => value instanceof meta_1.ProducerMeta ? value.id : value)}`];
                     case 'orderBy': return ['order_by', `${value}`];
                     default: return [key, `${value}`];
                 }
@@ -62,99 +62,99 @@ class AnimeManager extends base_1.BaseManager {
             return new anime_1.Anime(this.client, rawData);
         });
     }
-    get(animeID) {
+    get(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}`);
+            const rawData = yield this.requestResource(`anime/${animeId}`);
             return rawData ? new anime_1.Anime(this.client, rawData) : undefined;
         });
     }
-    getCharacters(animeID) {
+    getCharacters(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/characters`);
-            return rawData ? rawData.map((characterReference) => new anime_1.AnimeCharacterReference(this.client, animeID, characterReference)) : undefined;
+            const rawData = yield this.requestResource(`anime/${animeId}/characters`);
+            return rawData ? rawData.map((characterReference) => new anime_1.AnimeCharacterReference(this.client, animeId, characterReference)) : undefined;
         });
     }
-    getStaff(animeID) {
+    getStaff(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/staff`);
-            return rawData ? rawData.map((staffReference) => new anime_1.AnimeStaffReference(this.client, animeID, staffReference)) : undefined;
+            const rawData = yield this.requestResource(`anime/${animeId}/staff`);
+            return rawData ? rawData.map((staffReference) => new anime_1.AnimeStaffReference(this.client, animeId, staffReference)) : undefined;
         });
     }
-    getEpisodes(animeID, offset, maxCount) {
+    getEpisodes(animeId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`anime/${animeID}/episodes`, offset, maxCount);
-            return rawData ? rawData.map((partialEpisode) => new anime_1.AnimePartialEpisode(this.client, animeID, partialEpisode)) : undefined;
+            const rawData = yield this.requestPaginatedResource(`anime/${animeId}/episodes`, offset, maxCount);
+            return rawData ? rawData.map((partialEpisode) => new anime_1.AnimePartialEpisode(this.client, animeId, partialEpisode)) : undefined;
         });
     }
-    getEpisode(animeID, episodeID) {
+    getEpisode(animeId, episodeID) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/episodes/${episodeID}`);
-            return rawData ? new anime_1.AnimeEpisode(this.client, animeID, rawData) : undefined;
+            const rawData = yield this.requestResource(`anime/${animeId}/episodes/${episodeID}`);
+            return rawData ? new anime_1.AnimeEpisode(this.client, animeId, rawData) : undefined;
         });
     }
-    getNews(animeID, offset, maxCount) {
+    getNews(animeId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`anime/${animeID}/news`, offset, maxCount);
-            return rawData ? rawData.map((news) => new anime_1.AnimeNews(this.client, animeID, news)) : undefined;
+            const rawData = yield this.requestPaginatedResource(`anime/${animeId}/news`, offset, maxCount);
+            return rawData ? rawData.map((news) => new anime_1.AnimeNews(this.client, animeId, news)) : undefined;
         });
     }
-    getTopics(animeID, topic = 'all') {
+    getTopics(animeId, topic = 'all') {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/forum`, { topic });
-            return rawData ? rawData.map((topic) => new anime_1.AnimeTopic(this.client, animeID, topic)) : undefined;
+            const rawData = yield this.requestResource(`anime/${animeId}/forum`, { topic });
+            return rawData ? rawData.map((topic) => new anime_1.AnimeTopic(this.client, animeId, topic)) : undefined;
         });
     }
-    getVideos(animeID) {
+    getVideos(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/videos`);
-            return rawData ? new anime_1.AnimeVideo(this.client, animeID, rawData) : undefined;
+            const rawData = yield this.requestResource(`anime/${animeId}/videos`);
+            return rawData ? new anime_1.AnimeVideo(this.client, animeId, rawData) : undefined;
         });
     }
-    getPictures(animeID) {
+    getPictures(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/pictures`);
+            const rawData = yield this.requestResource(`anime/${animeId}/pictures`);
             return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
         });
     }
-    getStatistics(animeID) {
+    getStatistics(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/statistics`);
-            return rawData ? new anime_1.AnimeStatistics(this.client, animeID, rawData) : undefined;
+            const rawData = yield this.requestResource(`anime/${animeId}/statistics`);
+            return rawData ? new anime_1.AnimeStatistics(this.client, animeId, rawData) : undefined;
         });
     }
-    getMoreInfo(animeID) {
+    getMoreInfo(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/moreinfo`);
+            const rawData = yield this.requestResource(`anime/${animeId}/moreinfo`);
             return rawData ? rawData.moreinfo || null : undefined;
         });
     }
-    getRecommendations(animeID) {
+    getRecommendations(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/recommendations`);
-            return rawData ? rawData.map((recommendation) => new anime_1.AnimeRecommendation(this.client, animeID, recommendation)) : undefined;
+            const rawData = yield this.requestResource(`anime/${animeId}/recommendations`);
+            return rawData ? rawData.map((recommendation) => new anime_1.AnimeRecommendation(this.client, animeId, recommendation)) : undefined;
         });
     }
-    getUserUpdates(animeID, offset, maxCount) {
+    getUserUpdates(animeId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`anime/${animeID}/userupdates`, offset, maxCount);
-            return rawData ? rawData.map((userUpdate) => new anime_1.AnimeUserUpdate(this.client, animeID, userUpdate)) : undefined;
+            const rawData = yield this.requestPaginatedResource(`anime/${animeId}/userupdates`, offset, maxCount);
+            return rawData ? rawData.map((userUpdate) => new anime_1.AnimeUserUpdate(this.client, animeId, userUpdate)) : undefined;
         });
     }
-    getReviews(animeID, offset, maxCount) {
+    getReviews(animeId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`anime/${animeID}/reviews`, offset, maxCount);
-            return rawData ? rawData.map((review) => new anime_1.AnimeReview(this.client, animeID, review)) : undefined;
+            const rawData = yield this.requestPaginatedResource(`anime/${animeId}/reviews`, offset, maxCount);
+            return rawData ? rawData.map((review) => new anime_1.AnimeReview(this.client, animeId, review)) : undefined;
         });
     }
-    getRelations(animeID) {
+    getRelations(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeID}/relations`);
-            return rawData ? rawData.map((relation) => new anime_1.AnimeRelationGroup(this.client, animeID, anime_1.AnimeRelationGroup.parseRelation(relation.relation), relation)) : undefined;
+            const rawData = yield this.requestResource(`anime/${animeId}/relations`);
+            return rawData ? rawData.map((relation) => new anime_1.AnimeRelationGroup(this.client, animeId, anime_1.AnimeRelationGroup.parseRelation(relation.relation), relation)) : undefined;
         });
     }
-    getThemes(animeID) {
+    getThemes(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            return yield this.requestResource(`anime/${animeID}/themes`);
+            return yield this.requestResource(`anime/${animeId}/themes`);
         });
     }
 }

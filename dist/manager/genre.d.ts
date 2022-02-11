@@ -13,8 +13,8 @@ export declare class GenreManager extends BaseManager {
     private generateGenre;
     listAnime(filter?: 'Genres' | 'ExplicitGenres' | 'Demographics' | 'Themes'): AnimeGenreMeta<GenreType>[];
     listManga(filter?: 'Genres' | 'ExplicitGenres' | 'Demographics' | 'Themes'): MangaGenreMeta<GenreType>[];
-    getAnime(ID: number): AnimeGenreMeta<GenreType> | undefined;
+    getAnime(id: number): AnimeGenreMeta<GenreType> | undefined;
     getAnimeByName(name: string): AnimeGenreMeta<GenreType> | undefined;
-    getManga(ID: number): MangaGenreMeta<GenreType> | undefined;
+    getManga(id: number): MangaGenreMeta<GenreType> | undefined;
     getMangaByName(name: string): MangaGenreMeta<GenreType> | undefined;
 }

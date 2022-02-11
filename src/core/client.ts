@@ -30,7 +30,7 @@ export interface ClientOptions {
    *
    * Default value: `v4`
   */
-  baseURI: string
+  baseUri: string
 
   /**
    * Whether to use HTTPS protocol instead of HTTP.
@@ -107,7 +107,7 @@ export class Client {
     const defaultOptions: ClientOptions = {
       dataPath: join(__dirname, '..', '..', '.Jikan'),
       host: 'api.jikan.moe',
-      baseURI: 'v4',
+      baseUri: 'v4',
 
       secure: true,
 

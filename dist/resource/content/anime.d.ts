@@ -65,26 +65,26 @@ export declare class Anime extends Content {
     constructor(client: Client, data: any);
 }
 export declare class AnimeVoiceActorReference extends BaseClass {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly language: string;
     readonly person: PersonMeta;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeCharacterReference extends BaseClass {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly role: string;
     readonly character: CharacterMeta;
     readonly voiceActors: Array<AnimeVoiceActorReference>;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeStaffReference extends BaseClass {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly positions: Array<string>;
     readonly person: PersonMeta;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeEpisodeTitle extends BaseClass {
     readonly default: string;
@@ -94,8 +94,8 @@ export declare class AnimeEpisodeTitle extends BaseClass {
     constructor(client: Client, data: any);
 }
 export declare class AnimeEpisode extends BaseClass {
-    readonly animeID: number;
-    readonly episodeID: number;
+    readonly animeId: number;
+    readonly episodeId: number;
     readonly URL: URL | null;
     readonly title: AnimeEpisodeTitle;
     readonly duration: number;
@@ -104,73 +104,73 @@ export declare class AnimeEpisode extends BaseClass {
     readonly recap: boolean;
     readonly synopsis: string | null;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimePartialEpisode extends AnimeEpisode {
     readonly synopsis: null;
-    readonly forumURL: URL;
+    readonly forumUrl: URL;
     getFullEpisode(): Promise<AnimeEpisode>;
     constructor(client: Client, animeID: number, data: any);
 }
 export declare class AnimeTopic extends BaseResource {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly title: string;
     readonly date: Date;
     readonly authorUsername: string;
     readonly authorURL: URL;
     readonly comments: number;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimePromo extends BaseClass {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly title: string;
     readonly trailer: YoutubeVideo & {
         image: Image;
     };
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeEpisodeVideo extends BaseResource {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly title: string;
     readonly episode: number;
     readonly imageURL: URL;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeVideo extends BaseClass {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly promos: Array<AnimePromo>;
     readonly episodes: Array<AnimeEpisodeVideo>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeStatistics extends ContentStatistics {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly watching: number;
     readonly planToWatch: number;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeRecommendation extends BaseClass {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly entry: AnimeMeta;
     readonly URL: URL | null;
     readonly votes: number;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeNews extends ContentNews {
     readonly animeID: number;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeUserUpdate extends ContentUserUpdate {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly episodesSeen: number;
     readonly episodesTotal: number;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeReviewScores extends ContentReviewScores {
     readonly animation: number;
@@ -178,15 +178,15 @@ export declare class AnimeReviewScores extends ContentReviewScores {
     constructor(client: Client, data: any);
 }
 export declare class AnimeReview extends ContentReview {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly episodesWatched: number;
     readonly scores: AnimeReviewScores;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
-    readonly animeID: number;
+    readonly animeId: number;
     readonly items: T extends 'Adaptation' ? Array<MangaMeta> : Array<AnimeMeta>;
     getAnime(): Promise<Anime>;
-    constructor(client: Client, animeID: number, relation: T, data: any);
+    constructor(client: Client, animeId: number, relation: T, data: any);
 }

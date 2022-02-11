@@ -135,68 +135,68 @@ export class Anime extends Content {
   public get isExplicit (): boolean {
     return !!(
       ['Rx', 'R-17+'].includes(this.rating) ||
-      this.genres.find((genre) => !!animeExplicitGenres.find((genreEntry) => genreEntry[0] === genre.ID))
+      this.genres.find((genre) => !!animeExplicitGenres.find((genreEntry) => genreEntry[0] === genre.id))
     )
   }
 
   public getCharacters () {
-    return <Promise<Array<AnimeCharacterReference>>> this.client.anime.getCharacters(this.ID)
+    return <Promise<Array<AnimeCharacterReference>>> this.client.anime.getCharacters(this.id)
   }
 
   public getStaff () {
-    return <Promise<Array<AnimeStaffReference>>> this.client.anime.getStaff(this.ID)
+    return <Promise<Array<AnimeStaffReference>>> this.client.anime.getStaff(this.id)
   }
 
   public getEpisodes (offset?: number, maxCount?: number) {
-    return <Promise<Array<AnimePartialEpisode>>> this.client.anime.getEpisodes(this.ID, offset, maxCount)
+    return <Promise<Array<AnimePartialEpisode>>> this.client.anime.getEpisodes(this.id, offset, maxCount)
   }
 
   public getEpisode (episodeID: number) {
-    return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.ID, episodeID)
+    return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.id, episodeID)
   }
 
   public getNews (offset?: number, maxCount?: number) {
-    return <Promise<Array<AnimeNews>>> this.client.anime.getNews(this.ID, offset, maxCount)
+    return <Promise<Array<AnimeNews>>> this.client.anime.getNews(this.id, offset, maxCount)
   }
 
   public getTopics (topic?: 'all' | 'episode' | 'other') {
-    return <Promise<Array<AnimeTopic>>> this.client.anime.getTopics(this.ID, topic)
+    return <Promise<Array<AnimeTopic>>> this.client.anime.getTopics(this.id, topic)
   }
 
   public getVideos () {
-    return <Promise<AnimeVideo>> this.client.anime.getVideos(this.ID)
+    return <Promise<AnimeVideo>> this.client.anime.getVideos(this.id)
   }
 
   public getPictures () {
-    return <Promise<Array<Image>>> this.client.anime.getPictures(this.ID)
+    return <Promise<Array<Image>>> this.client.anime.getPictures(this.id)
   }
 
   public getStatistics () {
-    return <Promise<AnimeStatistics>> this.client.anime.getStatistics(this.ID)
+    return <Promise<AnimeStatistics>> this.client.anime.getStatistics(this.id)
   }
 
   public getMoreInfo () {
-    return <Promise<string | null>> this.client.anime.getMoreInfo(this.ID)
+    return <Promise<string | null>> this.client.anime.getMoreInfo(this.id)
   }
 
   public getRecommendations () {
-    return <Promise<Array<AnimeRecommendation>>> this.client.anime.getRecommendations(this.ID)
+    return <Promise<Array<AnimeRecommendation>>> this.client.anime.getRecommendations(this.id)
   }
 
   public getUserUpdates (offset?: number, maxCount?: number) {
-    return <Promise<Array<AnimeUserUpdate>>> this.client.anime.getUserUpdates(this.ID, offset, maxCount)
+    return <Promise<Array<AnimeUserUpdate>>> this.client.anime.getUserUpdates(this.id, offset, maxCount)
   }
 
   public getReviews (offset?: number, maxCount?: number) {
-    return <Promise<Array<AnimeReview>>> this.client.anime.getReviews(this.ID, offset, maxCount)
+    return <Promise<Array<AnimeReview>>> this.client.anime.getReviews(this.id, offset, maxCount)
   }
 
   public getRelations () {
-    return <Promise<Array<AnimeRelationGroup<ContentRelationType>>>> this.client.anime.getRelations(this.ID)
+    return <Promise<Array<AnimeRelationGroup<ContentRelationType>>>> this.client.anime.getRelations(this.id)
   }
 
   public getThemes () {
-    return <Promise<{ openings: Array<string>, endings: Array<string> }>> this.client.anime.getThemes(this.ID)
+    return <Promise<{ openings: Array<string>, endings: Array<string> }>> this.client.anime.getThemes(this.id)
   }
 
   public constructor (client: Client, data: any) {
@@ -222,56 +222,56 @@ export class Anime extends Content {
 }
 
 export class AnimeVoiceActorReference extends BaseClass {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly language: string
   public readonly person: PersonMeta
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.language = AnimeVoiceActorReference.parseString(data)
     this.person = new PersonMeta(client, data.person)
   }
 }
 
 export class AnimeCharacterReference extends BaseClass {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly role: string
   public readonly character: CharacterMeta
   public readonly voiceActors: Array<AnimeVoiceActorReference>
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.role = AnimeCharacterReference.parseString(data.role)
     this.character = new CharacterMeta(client, data.character)
-    this.voiceActors = data.voice_actors.map((voiceActor: any) => new AnimeVoiceActorReference(this.client, this.animeID, voiceActor))
+    this.voiceActors = data.voice_actors.map((voiceActor: any) => new AnimeVoiceActorReference(this.client, this.animeId, voiceActor))
   }
 }
 
 export class AnimeStaffReference extends BaseClass {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly positions: Array<string>
   public readonly person: PersonMeta
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.positions = data.positions.map((position: any) => AnimeStaffReference.parseString(position)).filter((position: any) => !!position)
     this.person = new PersonMeta(client, data.person)
   }
@@ -296,8 +296,8 @@ export class AnimeEpisodeTitle extends BaseClass {
 }
 
 export class AnimeEpisode extends BaseClass {
-  public readonly animeID: number
-  public readonly episodeID: number
+  public readonly animeId: number
+  public readonly episodeId: number
   public readonly URL: URL | null
   public readonly title: AnimeEpisodeTitle
   public readonly duration: number
@@ -307,14 +307,14 @@ export class AnimeEpisode extends BaseClass {
   public readonly synopsis: string | null
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client)
 
-    this.animeID = animeID
-    this.episodeID = AnimeEpisode.parseNumber(data.mal_id)
+    this.animeId = animeId
+    this.episodeId = AnimeEpisode.parseNumber(data.mal_id)
     this.URL = AnimeEpisode.parseURL(data.url, true)
     this.title = new AnimeEpisodeTitle(client, data)
     this.duration = AnimeEpisode.parseNumber(data.duration)
@@ -327,22 +327,22 @@ export class AnimeEpisode extends BaseClass {
 
 export class AnimePartialEpisode extends AnimeEpisode {
   public readonly synopsis: null
-  public readonly forumURL: URL
+  public readonly forumUrl: URL
 
   public getFullEpisode () {
-    return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.animeID, this.episodeID)
+    return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.animeId, this.episodeId)
   }
 
   public constructor (client: Client, animeID: number, data: any) {
     super(client, animeID, data)
 
     this.synopsis = null
-    this.forumURL = AnimePartialEpisode.parseURL(data.forum_url)
+    this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url)
   }
 }
 
 export class AnimeTopic extends BaseResource {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly title: string
   public readonly date: Date
   public readonly authorUsername: string
@@ -350,13 +350,13 @@ export class AnimeTopic extends BaseResource {
   public readonly comments: number
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.ID)
+    return <Promise<Anime>> this.client.anime.get(this.id)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client, data)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.title = AnimeTopic.parseString(data.title)
     this.date = new Date(data.date)
     this.authorUsername = AnimeTopic.parseString(data.author_username)
@@ -366,37 +366,37 @@ export class AnimeTopic extends BaseResource {
 }
 
 export class AnimePromo extends BaseClass {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly title: string
   public readonly trailer: YoutubeVideo & { image: Image }
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.title = AnimePromo.parseString(data.title)
     this.trailer = Object.assign(new YoutubeVideo(client, data.trailer.youtube_id), { image: new Image(client, data.trailer.images) })
   }
 }
 
 export class AnimeEpisodeVideo extends BaseResource {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly title: string
   public readonly episode: number
   public readonly imageURL: URL
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client, data)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.title = AnimeEpisodeVideo.parseString(data.title)
     this.episode = typeof (data.episode) === 'string' ? Number(data.episode.toLowerCase().split('episode')[1]?.trim()) || 0 : 0
     this.imageURL = AnimeEpisodeVideo.parseURL(data.images.image_url)
@@ -404,51 +404,51 @@ export class AnimeEpisodeVideo extends BaseResource {
 }
 
 export class AnimeVideo extends BaseClass {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly promos: Array<AnimePromo>
   public readonly episodes: Array<AnimeEpisodeVideo>
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client)
 
-    this.animeID = animeID
-    this.promos = data.promo.map((promo: any) => new AnimePromo(this.client, this.animeID, promo))
-    this.episodes = data.episodes.map((episodeVideo: any) => new AnimeEpisodeVideo(this.client, this.animeID, episodeVideo))
+    this.animeId = animeId
+    this.promos = data.promo.map((promo: any) => new AnimePromo(this.client, this.animeId, promo))
+    this.episodes = data.episodes.map((episodeVideo: any) => new AnimeEpisodeVideo(this.client, this.animeId, episodeVideo))
   }
 }
 
 export class AnimeStatistics extends ContentStatistics {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly watching: number
   public readonly planToWatch: number
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client, data)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.watching = AnimeStatistics.parseNumber(data.watching)
     this.planToWatch = AnimeStatistics.parseNumber(data.plan_to_watch)
   }
 }
 
 export class AnimeRecommendation extends BaseClass {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly entry: AnimeMeta
   public readonly URL: URL | null
   public readonly votes: number
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.entry = new AnimeMeta(client, data.entry)
     this.URL = AnimeRecommendation.parseURL(data.url)
     this.votes = AnimeRecommendation.parseNumber(data.votes)
@@ -462,26 +462,26 @@ export class AnimeNews extends ContentNews {
     return <Promise<Anime>> this.client.anime.get(this.animeID)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client, data)
 
-    this.animeID = animeID
+    this.animeID = animeId
   }
 }
 
 export class AnimeUserUpdate extends ContentUserUpdate {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly episodesSeen: number
   public readonly episodesTotal: number
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client, data)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.episodesSeen = AnimeUserUpdate.parseNumber(data.episodes_seen)
     this.episodesTotal = AnimeUserUpdate.parseNumber(data.episodes_total)
   }
@@ -500,35 +500,35 @@ export class AnimeReviewScores extends ContentReviewScores {
 }
 
 export class AnimeReview extends ContentReview {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly episodesWatched: number
   public readonly scores: AnimeReviewScores
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
+  public constructor (client: Client, animeId: number, data: any) {
     super(client, data)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.episodesWatched = AnimeReview.parseNumber(data.episodes_watched)
     this.scores = new AnimeReviewScores(client, data.scores)
   }
 }
 
 export class AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
-  public readonly animeID: number
+  public readonly animeId: number
   public readonly items: T extends 'Adaptation' ? Array<MangaMeta> : Array<AnimeMeta>
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
-  public constructor (client: Client, animeID: number, relation: T, data: any) {
+  public constructor (client: Client, animeId: number, relation: T, data: any) {
     super(client, relation, data)
 
-    this.animeID = animeID
+    this.animeId = animeId
     this.items = data.map((item: any) => new (this.relation === 'Adaptation' ? MangaMeta : AnimeMeta)(this.client, item))
   }
 }

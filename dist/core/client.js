@@ -16,6 +16,7 @@ const season_1 = require("../manager/season");
 const top_1 = require("../manager/top");
 const events_1 = require("events");
 const schedule_1 = require("../manager/schedule");
+const user_1 = require("../manager/user");
 class Client {
     /**
      * Instantiate new Jikan client
@@ -40,6 +41,7 @@ class Client {
         this.genres = new genre_1.GenreManager(this);
         this.magazines = new magazine_1.MagazineManager(this);
         this.producers = new producer_1.ProducerManager(this);
+        this.users = new user_1.UserManager(this);
         this.seasons = new season_1.SeasonManager(this);
         this.top = new top_1.TopManager(this);
         this.schedules = new schedule_1.ScheduleManager(this);

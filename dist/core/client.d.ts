@@ -13,6 +13,7 @@ import { SeasonManager } from '../manager/season';
 import { TopManager } from '../manager/top';
 import { EventEmitter } from 'events';
 import { ScheduleManager } from '../manager/schedule';
+import { UserManager } from '../manager/user';
 export interface ClientOptions {
     /**
      * The hostname of the server.
@@ -186,6 +187,7 @@ export declare class Client {
      * ```
     */
     readonly producers: ProducerManager;
+    readonly users: UserManager;
     /**
      * Seasons resource context.
      *

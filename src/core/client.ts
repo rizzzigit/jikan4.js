@@ -13,6 +13,7 @@ import { SeasonManager } from '../manager/season'
 import { TopManager } from '../manager/top'
 import { EventEmitter } from 'events'
 import { ScheduleManager } from '../manager/schedule'
+import { UserManager } from '../manager/user'
 
 export interface ClientOptions {
   /**
@@ -243,6 +244,8 @@ export class Client {
   */
   public readonly producers: ProducerManager
 
+  public readonly users: UserManager
+
   /**
    * Seasons resource context.
    *
@@ -342,6 +345,7 @@ export class Client {
     this.genres = new GenreManager(this)
     this.magazines = new MagazineManager(this)
     this.producers = new ProducerManager(this)
+    this.users = new UserManager(this)
     this.seasons = new SeasonManager(this)
     this.top = new TopManager(this)
     this.schedules = new ScheduleManager(this)

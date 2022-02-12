@@ -52,8 +52,8 @@ class Anime extends base_1.Content {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseTrailer(client, input) {
-        const youtubeID = input === null || input === void 0 ? void 0 : input.youtube_id;
-        return youtubeID ? new misc_1.YoutubeVideo(client, youtubeID) : null;
+        const youtubeId = input === null || input === void 0 ? void 0 : input.youtube_id;
+        return youtubeId ? new misc_1.YoutubeVideo(client, youtubeId) : null;
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
@@ -110,8 +110,8 @@ class Anime extends base_1.Content {
     getEpisodes(offset, maxCount) {
         return this.client.anime.getEpisodes(this.id, offset, maxCount);
     }
-    getEpisode(episodeID) {
-        return this.client.anime.getEpisode(this.id, episodeID);
+    getEpisode(episodeId) {
+        return this.client.anime.getEpisode(this.id, episodeId);
     }
     getNews(offset, maxCount) {
         return this.client.anime.getNews(this.id, offset, maxCount);
@@ -216,8 +216,8 @@ class AnimeEpisode extends base_2.BaseClass {
 }
 exports.AnimeEpisode = AnimeEpisode;
 class AnimePartialEpisode extends AnimeEpisode {
-    constructor(client, animeID, data) {
-        super(client, animeID, data);
+    constructor(client, animeId, data) {
+        super(client, animeId, data);
         this.synopsis = null;
         this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url);
     }
@@ -304,10 +304,10 @@ exports.AnimeRecommendation = AnimeRecommendation;
 class AnimeNews extends base_1.ContentNews {
     constructor(client, animeId, data) {
         super(client, data);
-        this.animeID = animeId;
+        this.animeId = animeId;
     }
     getAnime() {
-        return this.client.anime.get(this.animeID);
+        return this.client.anime.get(this.animeId);
     }
 }
 exports.AnimeNews = AnimeNews;

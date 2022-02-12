@@ -47,7 +47,7 @@ export declare class Anime extends Content {
     getCharacters(): Promise<AnimeCharacterReference[]>;
     getStaff(): Promise<AnimeStaffReference[]>;
     getEpisodes(offset?: number, maxCount?: number): Promise<AnimePartialEpisode[]>;
-    getEpisode(episodeID: number): Promise<AnimeEpisode>;
+    getEpisode(episodeId: number): Promise<AnimeEpisode>;
     getNews(offset?: number, maxCount?: number): Promise<AnimeNews[]>;
     getTopics(topic?: 'all' | 'episode' | 'other'): Promise<AnimeTopic[]>;
     getVideos(): Promise<AnimeVideo>;
@@ -110,7 +110,7 @@ export declare class AnimePartialEpisode extends AnimeEpisode {
     readonly synopsis: null;
     readonly forumUrl: URL;
     getFullEpisode(): Promise<AnimeEpisode>;
-    constructor(client: Client, animeID: number, data: any);
+    constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeTopic extends BaseResource {
     readonly animeId: number;
@@ -161,7 +161,7 @@ export declare class AnimeRecommendation extends BaseClass {
     constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeNews extends ContentNews {
-    readonly animeID: number;
+    readonly animeId: number;
     getAnime(): Promise<Anime>;
     constructor(client: Client, animeId: number, data: any);
 }

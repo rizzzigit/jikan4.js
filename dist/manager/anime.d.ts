@@ -31,7 +31,7 @@ export declare class AnimeManager extends BaseManager {
     getCharacters(animeId: number): Promise<Array<AnimeCharacterReference> | undefined>;
     getStaff(animeId: number): Promise<Array<AnimeStaffReference> | undefined>;
     getEpisodes(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimePartialEpisode> | undefined>;
-    getEpisode(animeId: number, episodeID: number): Promise<AnimeEpisode | undefined>;
+    getEpisode(animeId: number, episodeId: number): Promise<AnimeEpisode | undefined>;
     getNews(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeNews> | undefined>;
     getTopics(animeId: number, topic?: 'all' | 'episode' | 'other'): Promise<Array<AnimeTopic> | undefined>;
     getVideos(animeId: number): Promise<AnimeVideo | undefined>;

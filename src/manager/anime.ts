@@ -132,8 +132,8 @@ export class AnimeManager extends BaseManager {
     return rawData ? rawData.map((partialEpisode) => new AnimePartialEpisode(this.client, animeId, partialEpisode)) : undefined
   }
 
-  public async getEpisode (animeId: number, episodeID: number): Promise<AnimeEpisode | undefined> {
-    const rawData = await this.requestResource(`anime/${animeId}/episodes/${episodeID}`)
+  public async getEpisode (animeId: number, episodeId: number): Promise<AnimeEpisode | undefined> {
+    const rawData = await this.requestResource(`anime/${animeId}/episodes/${episodeId}`)
 
     return rawData ? new AnimeEpisode(this.client, animeId, rawData) : undefined
   }

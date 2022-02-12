@@ -66,9 +66,9 @@ class PersonManager extends base_1.BaseManager {
             return rawData ? rawData.map((mangaReference) => new person_1.PersonMangaReference(this.client, personId, mangaReference)) : undefined;
         });
     }
-    getPictures(personID) {
+    getPictures(personId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`people/${personID}/pictures`);
+            const rawData = yield this.requestResource(`people/${personId}/pictures`);
             return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
         });
     }

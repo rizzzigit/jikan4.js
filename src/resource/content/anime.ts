@@ -62,9 +62,9 @@ export class Anime extends Content {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseTrailer (client: Client, input: any) {
-    const youtubeID = input?.youtube_id
+    const youtubeId = input?.youtube_id
 
-    return youtubeID ? new YoutubeVideo(client, youtubeID) : null
+    return youtubeId ? new YoutubeVideo(client, youtubeId) : null
   }
 
   // eslint-disable-next-line tsdoc/syntax
@@ -151,8 +151,8 @@ export class Anime extends Content {
     return <Promise<Array<AnimePartialEpisode>>> this.client.anime.getEpisodes(this.id, offset, maxCount)
   }
 
-  public getEpisode (episodeID: number) {
-    return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.id, episodeID)
+  public getEpisode (episodeId: number) {
+    return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.id, episodeId)
   }
 
   public getNews (offset?: number, maxCount?: number) {
@@ -333,8 +333,8 @@ export class AnimePartialEpisode extends AnimeEpisode {
     return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.animeId, this.episodeId)
   }
 
-  public constructor (client: Client, animeID: number, data: any) {
-    super(client, animeID, data)
+  public constructor (client: Client, animeId: number, data: any) {
+    super(client, animeId, data)
 
     this.synopsis = null
     this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url)
@@ -456,16 +456,16 @@ export class AnimeRecommendation extends BaseClass {
 }
 
 export class AnimeNews extends ContentNews {
-  public readonly animeID: number
+  public readonly animeId: number
 
   public getAnime () {
-    return <Promise<Anime>> this.client.anime.get(this.animeID)
+    return <Promise<Anime>> this.client.anime.get(this.animeId)
   }
 
   public constructor (client: Client, animeId: number, data: any) {
     super(client, data)
 
-    this.animeID = animeId
+    this.animeId = animeId
   }
 }
 

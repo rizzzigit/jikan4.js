@@ -56,12 +56,12 @@ export const mangaDemographics: Array<[number, string]> = [
 export class GenreManager extends BaseManager {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  private generateGenre <T extends 'anime' | 'manga', E extends GenreType> (type: T, ID: number, name: string, genreType: E):
+  private generateGenre <T extends 'anime' | 'manga', E extends GenreType> (type: T, id: number, name: string, genreType: E):
     T extends 'anime' ? AnimeGenreMeta<E> :
     T extends 'manga' ? MangaGenreMeta<E> : never {
     const data = {
-      mal_id: ID,
-      url: `https://myanimelist.net/anime/genre/${ID}/${name.split(' ').join('_')}`,
+      mal_id: id,
+      url: `https://myanimelist.net/anime/genre/${id}/${name.split(' ').join('_')}`,
       name
     }
 

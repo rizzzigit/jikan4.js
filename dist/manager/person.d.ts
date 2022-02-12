@@ -16,5 +16,5 @@ export declare class PersonManager extends BaseManager {
     getAnime(personId: number): Promise<Array<PersonAnimeReference> | undefined>;
     getVoiceActors(personId: number): Promise<Array<PersonVoiceActorReference> | undefined>;
     getManga(personId: number): Promise<Array<PersonMangaReference> | undefined>;
-    getPictures(personID: number): Promise<Array<Image> | undefined>;
+    getPictures(personId: number): Promise<Array<Image> | undefined>;
 }

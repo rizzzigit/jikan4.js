@@ -86,9 +86,9 @@ class AnimeManager extends base_1.BaseManager {
             return rawData ? rawData.map((partialEpisode) => new anime_1.AnimePartialEpisode(this.client, animeId, partialEpisode)) : undefined;
         });
     }
-    getEpisode(animeId, episodeID) {
+    getEpisode(animeId, episodeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/episodes/${episodeID}`);
+            const rawData = yield this.requestResource(`anime/${animeId}/episodes/${episodeId}`);
             return rawData ? new anime_1.AnimeEpisode(this.client, animeId, rawData) : undefined;
         });
     }

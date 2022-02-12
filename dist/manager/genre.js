@@ -50,10 +50,10 @@ exports.mangaDemographics = [
 class GenreManager extends base_1.BaseManager {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
-    generateGenre(type, ID, name, genreType) {
+    generateGenre(type, id, name, genreType) {
         const data = {
-            mal_id: ID,
-            url: `https://myanimelist.net/anime/genre/${ID}/${name.split(' ').join('_')}`,
+            mal_id: id,
+            url: `https://myanimelist.net/anime/genre/${id}/${name.split(' ').join('_')}`,
             name
         };
         switch (type) {

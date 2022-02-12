@@ -74,8 +74,8 @@ export class PersonManager extends BaseManager {
     return rawData ? rawData.map((mangaReference: any) => new PersonMangaReference(this.client, personId, mangaReference)) : undefined
   }
 
-  public async getPictures (personID: number): Promise<Array<Image> | undefined> {
-    const rawData = await this.requestResource(`people/${personID}/pictures`)
+  public async getPictures (personId: number): Promise<Array<Image> | undefined> {
+    const rawData = await this.requestResource(`people/${personId}/pictures`)
 
     return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
   }

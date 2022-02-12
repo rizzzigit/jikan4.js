@@ -28,19 +28,19 @@ export class PersonManager extends BaseManager {
       })
     })
 
-    return rawData.map((data) => this.storeCache(data)).map((person) => new Person(this.client, person))
+    return rawData.map((person) => new Person(this.client, this.storeCache(person)))
   }
 
   public async list (offset?: number, maxCount?: number): Promise<Array<Person>> {
     const rawData = <Array<any>> await this.requestPaginatedResource('people', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((person: any) => new Person(this.client, person))
+    return rawData.map((person: any) => new Person(this.client, this.storeCache(person)))
   }
 
   public async listTop (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('top/people', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((person: any) => new Person(this.client, person))
+    return rawData.map((person: any) => new Person(this.client, this.storeCache(person)))
   }
 
   public async random (): Promise<Person> {

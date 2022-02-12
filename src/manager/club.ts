@@ -46,7 +46,7 @@ export class ClubManager extends BaseManager {
       })
     })
 
-    return rawData.map((data) => this.storeCache(data)).map((club) => new Club(this.client, club))
+    return rawData.map((club) => new Club(this.client, this.storeCache(club)))
   }
 
   public async get (clubId: number): Promise<Club | null | undefined> {

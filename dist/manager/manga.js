@@ -28,25 +28,25 @@ class MangaManager extends base_1.BaseManager {
                     default: return [key, `${value}`];
                 }
             })));
-            return rawData.map((data) => this.storeCache(data)).map((manga) => new manga_1.Manga(this.client, manga));
+            return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
         });
     }
     list(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('manga', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((manga) => new manga_1.Manga(this.client, manga));
+            return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
         });
     }
     listTop(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('top/manga', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((manga) => new manga_1.Manga(this.client, manga));
+            return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
         });
     }
     listRecommended(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('recommendations/manga', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((manga) => new manga_1.Manga(this.client, manga));
+            return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
         });
     }
     random() {

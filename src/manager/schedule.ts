@@ -14,6 +14,6 @@ export class ScheduleManager extends BaseManager {
   public async list (day?: ScheduleDay, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource(`schedules${day ? `/${day}` : ''}`, offset, maxCount, { disableCaching: 'true' })
 
-    return rawData.map((data: any) => this.client.anime.storeCache(data)).map((data: any) => new Anime(this.client, data))
+    return rawData.map((data: any) => new Anime(this.client, this.client.anime.storeCache(data)))
   }
 }

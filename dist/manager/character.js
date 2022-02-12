@@ -20,19 +20,19 @@ class CharacterManager extends base_1.BaseManager {
                     default: return [key, `${value}`];
                 }
             })));
-            return rawData.map((data) => this.storeCache(data)).map((character) => new character_1.Character(this.client, character));
+            return rawData.map((character) => new character_1.Character(this.client, this.storeCache(character)));
         });
     }
     list(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('characters', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((character) => new character_1.Character(this.client, character));
+            return rawData.map((character) => new character_1.Character(this.client, this.storeCache(character)));
         });
     }
     listTop(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('top/characters', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((character) => new character_1.Character(this.client, character));
+            return rawData.map((character) => new character_1.Character(this.client, this.storeCache(character)));
         });
     }
     random() {

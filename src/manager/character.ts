@@ -27,19 +27,19 @@ export class CharacterManager extends BaseManager {
       })
     })
 
-    return rawData.map((data) => this.storeCache(data)).map((character) => new Character(this.client, character))
+    return rawData.map((character) => new Character(this.client, this.storeCache(character)))
   }
 
   public async list (offset?: number, maxCount?: number): Promise<Array<Character>> {
     const rawData = <Array<any>> await this.requestPaginatedResource('characters', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((character: any) => new Character(this.client, character))
+    return rawData.map((character: any) => new Character(this.client, this.storeCache(character)))
   }
 
   public async listTop (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('top/characters', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((character: any) => new Character(this.client, character))
+    return rawData.map((character: any) => new Character(this.client, this.storeCache(character)))
   }
 
   public async random (): Promise<Character> {

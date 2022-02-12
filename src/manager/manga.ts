@@ -66,25 +66,25 @@ export class MangaManager extends BaseManager {
       })
     })
 
-    return rawData.map((data) => this.storeCache(data)).map((manga) => new Manga(this.client, manga))
+    return rawData.map((manga) => new Manga(this.client, this.storeCache(manga)))
   }
 
   public async list (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('manga', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((manga: any) => new Manga(this.client, manga))
+    return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
   public async listTop (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('top/manga', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((manga: any) => new Manga(this.client, manga))
+    return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
   public async listRecommended (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('recommendations/manga', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((manga: any) => new Manga(this.client, manga))
+    return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
   public async random (): Promise<Manga> {

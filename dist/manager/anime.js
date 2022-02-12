@@ -34,25 +34,25 @@ class AnimeManager extends base_1.BaseManager {
     list(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('anime', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((anime) => new anime_1.Anime(this.client, anime));
+            return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
     listTop(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('top/anime', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((anime) => new anime_1.Anime(this.client, anime));
+            return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
     listRecommended(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('recommendations/anime', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((anime) => new anime_1.Anime(this.client, anime));
+            return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
     listScheduled(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('schedules', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((anime) => new anime_1.Anime(this.client, anime));
+            return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
     random() {

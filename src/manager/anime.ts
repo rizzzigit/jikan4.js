@@ -80,25 +80,25 @@ export class AnimeManager extends BaseManager {
   public async list (offset?: number, maxCount?: number): Promise<Array<Anime>> {
     const rawData = <Array<any>> await this.requestPaginatedResource('anime', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((anime: any) => new Anime(this.client, anime))
+    return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
   }
 
   public async listTop (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('top/anime', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((anime: any) => new Anime(this.client, anime))
+    return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
   }
 
   public async listRecommended (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('recommendations/anime', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((anime: any) => new Anime(this.client, anime))
+    return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
   }
 
   public async listScheduled (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('schedules', offset, maxCount)
 
-    return rawData.map((data: any) => this.storeCache(data)).map((anime: any) => new Anime(this.client, anime))
+    return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
   }
 
   public async random (): Promise<Anime> {

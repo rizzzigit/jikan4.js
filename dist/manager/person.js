@@ -20,19 +20,19 @@ class PersonManager extends base_1.BaseManager {
                     default: return [key, `${value}`];
                 }
             })));
-            return rawData.map((data) => this.storeCache(data)).map((person) => new person_1.Person(this.client, person));
+            return rawData.map((person) => new person_1.Person(this.client, this.storeCache(person)));
         });
     }
     list(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('people', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((person) => new person_1.Person(this.client, person));
+            return rawData.map((person) => new person_1.Person(this.client, this.storeCache(person)));
         });
     }
     listTop(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource('top/people', offset, maxCount);
-            return rawData.map((data) => this.storeCache(data)).map((person) => new person_1.Person(this.client, person));
+            return rawData.map((person) => new person_1.Person(this.client, this.storeCache(person)));
         });
     }
     random() {

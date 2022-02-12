@@ -8,7 +8,7 @@ class UserMeta extends base_1.BaseClass {
     constructor(client, data) {
         var _a, _b;
         super(client);
-        this.username = UserMeta.parseString(data.username);
+        this.username = data.username;
         this.url = UserMeta.parseURL(data.url);
         this.imageUrl = UserMeta.parseURL((_b = (_a = data === null || data === void 0 ? void 0 : data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
         this.lastOnline = UserMeta.parseDate(data.last_online);
@@ -22,7 +22,7 @@ class User extends base_1.BaseClass {
     constructor(client, data) {
         var _a, _b;
         super(client);
-        this.username = UserMeta.parseString(data.username);
+        this.username = data.username;
         this.url = UserMeta.parseURL(data.url);
         this.imageUrl = UserMeta.parseURL((_b = (_a = data === null || data === void 0 ? void 0 : data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
         this.lastOnline = UserMeta.parseDate(data.last_online);

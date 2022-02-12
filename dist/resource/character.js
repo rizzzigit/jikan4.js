@@ -8,10 +8,10 @@ class Character extends base_1.BaseResource {
     constructor(client, data) {
         super(client, data);
         this.image = new base_2.ContentImage(client, data.images);
-        this.name = Character.parseString(data.name);
-        this.nicknames = data.nicknames.map((nickname) => Character.parseString(nickname, true)).filter((nickname) => !!nickname);
-        this.favorites = Character.parseNumber(data.favorites);
-        this.about = Character.parseString(data.about, true);
+        this.name = data.name;
+        this.nicknames = data.nicknames.map((nickname) => nickname || null).filter((nickname) => !!nickname);
+        this.favorites = data.favorites;
+        this.about = data.about || null;
     }
     getAnime() {
         return this.client.characters.getAnime(this.id);
@@ -31,7 +31,7 @@ class CharacterAnimeReference extends base_1.BaseClass {
     constructor(client, characterId, data) {
         super(client);
         this.characterId = characterId;
-        this.role = CharacterAnimeReference.parseString(data.role);
+        this.role = data.role;
         this.anime = new meta_1.AnimeMeta(client, data.anime);
     }
     getCharacter() {
@@ -43,7 +43,7 @@ class CharacterMangaReference extends base_1.BaseClass {
     constructor(client, characterId, data) {
         super(client);
         this.characterId = characterId;
-        this.role = CharacterMangaReference.parseString(data.role);
+        this.role = data.role;
         this.manga = new meta_1.MangaMeta(client, data);
     }
     getCharacter() {
@@ -55,7 +55,7 @@ class CharacterVoiceActorReference extends base_1.BaseClass {
     constructor(client, characterId, data) {
         super(client);
         this.characterId = characterId;
-        this.language = CharacterVoiceActorReference.parseString(data.language);
+        this.language = data.language;
         this.person = new meta_1.PersonMeta(client, data.person);
     }
     getCharacter() {

@@ -28,7 +28,7 @@ export class Season extends BaseClass {
   public constructor (client: Client, rawData: any) {
     super(client)
 
-    this.year = Season.parseNumber(rawData.year)
+    this.year = rawData.year
     this.seasons = rawData.seasons.map((season: any) => Season.parseSeasonType(season))
   }
 }

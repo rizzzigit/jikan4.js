@@ -13,10 +13,10 @@ export class PersonName extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.name = PersonName.parseString(data.name)
-    this.given = PersonName.parseString(data.given_name, true)
-    this.family = PersonName.parseString(data.faimly_name, true)
-    this.alternate = data.alternate_names.map((alternate: any) => PersonName.parseString(alternate, true)).filter((alternate: any) => !!alternate)
+    this.name = data.name
+    this.given = data.given_name || null
+    this.family = data.faimly_name || null
+    this.alternate = data.alternate_names.map((alternate: any) => alternate || null).filter((alternate: any) => !!alternate)
   }
 }
 
@@ -51,8 +51,8 @@ export class Person extends BaseResource {
     this.image = new Image(client, data.images?.jpg)
     this.name = new PersonName(client, data)
     this.birth = Person.parseDate(data.birthday)
-    this.favorites = Person.parseNumber(data.favorites)
-    this.about = Person.parseString(data.about, true)
+    this.favorites = data.favorites
+    this.about = data.about || null
   }
 }
 
@@ -69,7 +69,7 @@ export class PersonAnimeReference extends BaseClass {
     super(client)
 
     this.personId = personId
-    this.position = PersonAnimeReference.parseString(data.position)
+    this.position = data.position
     this.anime = new AnimeMeta(client, data.anime)
   }
 }
@@ -88,7 +88,7 @@ export class PersonVoiceActorReference extends BaseClass {
     super(client)
 
     this.personId = personId
-    this.role = PersonVoiceActorReference.parseString(data.role)
+    this.role = data.role
     this.anime = new AnimeMeta(client, data.anime)
     this.character = new CharacterMeta(client, data.character)
   }
@@ -107,7 +107,7 @@ export class PersonMangaReference extends BaseClass {
     super(client)
 
     this.personId = personId
-    this.position = PersonMangaReference.parseString(data.position)
+    this.position = data.position
     this.manga = new MangaMeta(client, data.manga)
   }
 }

@@ -31,8 +31,8 @@ class Manga extends base_2.Content {
     constructor(client, data) {
         super(client, data);
         this.type = Manga.parseType(data.type);
-        this.chapters = Manga.parseNumber(data.chapters);
-        this.volumes = Manga.parseNumber(data.volumes);
+        this.chapters = data.chapters;
+        this.volumes = data.volumes;
         this.publishInfo = new MangaPublishInformation(client, data);
         this.authors = data.authors.map((author) => new meta_1.PersonMeta(this.client, author));
         this.serializations = data.serializations.map((serialization) => new meta_1.MagazineMeta(this.client, serialization));
@@ -93,7 +93,7 @@ class MangaCharacterReference extends base_1.BaseClass {
         super(client);
         this.mangaId = mangaId;
         this.character = new meta_1.CharacterMeta(client, data.character);
-        this.role = MangaCharacterReference.parseString(data.role);
+        this.role = data.role;
     }
     getManga() {
         return this.client.manga.get(this.mangaId);
@@ -114,11 +114,11 @@ class MangaTopic extends base_1.BaseResource {
     constructor(client, mangaId, data) {
         super(client, data);
         this.mangaId = mangaId;
-        this.title = MangaTopic.parseString(data.title);
+        this.title = data.title;
         this.date = MangaTopic.parseDate(data.date);
-        this.authorUsername = MangaTopic.parseString(data.author_username);
+        this.authorUsername = data.author_username;
         this.authorURL = MangaTopic.parseURL(data.author_url);
-        this.comments = MangaTopic.parseNumber(data.comments);
+        this.comments = data.comments;
     }
 }
 exports.MangaTopic = MangaTopic;
@@ -126,8 +126,8 @@ class MangaStatistics extends base_2.ContentStatistics {
     constructor(client, mangaId, data) {
         super(client, data);
         this.mangaId = mangaId;
-        this.reading = MangaStatistics.parseNumber(data.reading);
-        this.planToRead = MangaStatistics.parseNumber(data.plan_to_read);
+        this.reading = data.reading;
+        this.planToRead = data.plan_to_read;
     }
 }
 exports.MangaStatistics = MangaStatistics;
@@ -137,7 +137,7 @@ class MangaRecommendation extends base_1.BaseClass {
         this.mangaId = mangaId;
         this.entry = new meta_1.MangaMeta(client, data.entry);
         this.URL = MangaRecommendation.parseURL(data.url);
-        this.votes = MangaRecommendation.parseNumber(data.votes);
+        this.votes = data.votes;
     }
     getManga() {
         return this.client.manga.get(this.mangaId);
@@ -148,10 +148,10 @@ class MangaUserUpdate extends base_2.ContentUserUpdate {
     constructor(client, mangaId, data) {
         super(client, data);
         this.mangaId = mangaId;
-        this.volumesRead = MangaUserUpdate.parseNumber(data.volumes_read);
-        this.volumesTotal = MangaUserUpdate.parseNumber(data.volumes_total);
-        this.chaptersRead = MangaUserUpdate.parseNumber(data.chapters_read);
-        this.chaptersTotal = MangaUserUpdate.parseNumber(data.chapters_total);
+        this.volumesRead = data.volumes_read;
+        this.volumesTotal = data.volumes_total;
+        this.chaptersRead = data.chapters_read;
+        this.chaptersTotal = data.chapters_total;
     }
     getManga() {
         return this.client.manga.get(this.mangaId);
@@ -169,7 +169,7 @@ class MangaReview extends base_2.ContentReview {
     constructor(client, mangaId, data) {
         super(client, data);
         this.mangaId = mangaId;
-        this.chaptersRead = MangaReview.parseNumber(data.chapters_read);
+        this.chaptersRead = data.chapters_read;
         this.scores = new MangaReviewScores(client, data.scores);
     }
     getManga() {

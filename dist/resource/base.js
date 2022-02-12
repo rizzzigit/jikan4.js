@@ -21,38 +21,34 @@ class BaseClass {
         }
         return date;
     }
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    static parseString(input, nullable = false) {
-        input = input === null || input === void 0 ? void 0 : input.trim();
-        if (!input) {
-            if (nullable) {
-                return null;
-            }
-            else {
-                throw new Error('Invalid string');
-            }
-        }
-        else {
-            return input;
-        }
-    }
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    static parseNumber(input, nullable = false) {
-        const number = Number(input);
-        if (Number.isNaN(number)) {
-            if (nullable) {
-                return null;
-            }
-            else {
-                throw new Error('Invalid number');
-            }
-        }
-        else {
-            return Number(input);
-        }
-    }
+    // // eslint-disable-next-line tsdoc/syntax
+    // /** @hidden */
+    // public static parseString<IsNullable extends boolean = false> (input: any, nullable: IsNullable = <any> false): IsNullable extends false ? string : (string | null) {
+    //   input = input?.trim()
+    //   if (!input) {
+    //     if (nullable) {
+    //       return <any> null
+    //     } else {
+    //       throw new Error('Invalid string')
+    //     }
+    //   } else {
+    //     return input
+    //   }
+    // }
+    // // eslint-disable-next-line tsdoc/syntax
+    // /** @hidden */
+    // public static parseNumber<IsNullable extends boolean = false> (input: any, nullable: IsNullable = <any> false): IsNullable extends false ? number : (number | null) {
+    //   const number = Number(input)
+    //   if (Number.isNaN(number)) {
+    //     if (nullable) {
+    //       return <any> null
+    //     } else {
+    //       throw new Error('Invalid number')
+    //     }
+    //   } else {
+    //     return Number(input)
+    //   }
+    // }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseURL(input, nullable = false) {
@@ -81,7 +77,7 @@ exports.BaseClass = BaseClass;
 class BaseResource extends BaseClass {
     constructor(client, data) {
         super(client);
-        this.id = BaseResource.parseNumber(data.mal_id);
+        this.id = data.mal_id;
         this.url = BaseResource.parseURL(data.url);
     }
 }

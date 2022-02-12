@@ -18,7 +18,7 @@ export class Meta<T extends MetaType> extends BaseResource {
     super(client, data)
 
     this.type = type
-    this.name = Meta.parseString(data.name)
+    this.name = data.name
   }
 }
 
@@ -31,7 +31,7 @@ export class ContentMeta<T extends ContentMetaType> extends BaseResource {
     super(client, data)
 
     this.type = type
-    this.title = ContentMeta.parseString(data.name || data.title)
+    this.title = data.name || data.title
     this.image = new Image(client, data.images?.jpg)
   }
 }

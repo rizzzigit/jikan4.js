@@ -76,8 +76,8 @@ export class Club extends BaseResource {
     super(client, data)
 
     this.imageUrl = Club.parseURL(data.images?.jpg?.image_url, true)
-    this.memberCount = Club.parseNumber(data.members_count)
-    this.pictureCount = Club.parseNumber(data.pictures_count)
+    this.memberCount = data.members_count
+    this.pictureCount = data.pictures_count
     this.category = Club.parseCategory(data.category)
     this.created = Club.parseDate(data.created)
     this.type = Club.parseType(data.type)
@@ -99,7 +99,7 @@ export class ClubStaff extends BaseClass {
 
     this.clubId = clubId
     this.url = ClubStaff.parseURL(data.url)
-    this.username = ClubStaff.parseString(data.username)
+    this.username = data.username
   }
 }
 
@@ -118,7 +118,7 @@ export class ClubMember extends BaseClass {
 
     this.clubId = clubId
     this.URL = ClubMember.parseURL(data.url)
-    this.username = ClubMember.parseString(data.username)
+    this.username = data.username
     this.imageURL = ClubMember.parseURL(data.image_url, true)
   }
 }

@@ -204,13 +204,13 @@ export class Anime extends Content {
 
     this.trailer = Anime.parseTrailer(client, data.trailer)
     this.type = Anime.parseType(data.type)
-    this.source = Anime.parseString(data.source, true)
-    this.episodes = <any> Anime.parseNumber(data.episodes, true)
+    this.source = data.source || null
+    this.episodes = data.episodes || null
     this.airInfo = new AnimeAirInformation(client, data)
-    this.duration = Anime.parseNumber(ParseDuration(data.duration, 'millisecond'), true)
+    this.duration = ParseDuration(data.duration, 'millisecond') || null
     this.rating = Anime.parseRating(data.rating)
     this.season = Anime.parseSeason(data.season)
-    this.year = Anime.parseNumber(data.year, true)
+    this.year = data.year || null
     this.producers = data.producers.map((producer: any) => new ProducerMeta(this.client, producer))
     this.licensors = data.licensors.map((licensor: any) => new ProducerMeta(this.client, licensor))
     this.studios = data.studios.map((studio: any) => new ProducerMeta(this.client, studio))
@@ -234,7 +234,7 @@ export class AnimeVoiceActorReference extends BaseClass {
     super(client)
 
     this.animeId = animeId
-    this.language = AnimeVoiceActorReference.parseString(data)
+    this.language = data.language
     this.person = new PersonMeta(client, data.person)
   }
 }
@@ -253,7 +253,7 @@ export class AnimeCharacterReference extends BaseClass {
     super(client)
 
     this.animeId = animeId
-    this.role = AnimeCharacterReference.parseString(data.role)
+    this.role = data.role
     this.character = new CharacterMeta(client, data.character)
     this.voiceActors = data.voice_actors.map((voiceActor: any) => new AnimeVoiceActorReference(this.client, this.animeId, voiceActor))
   }
@@ -272,7 +272,7 @@ export class AnimeStaffReference extends BaseClass {
     super(client)
 
     this.animeId = animeId
-    this.positions = data.positions.map((position: any) => AnimeStaffReference.parseString(position)).filter((position: any) => !!position)
+    this.positions = data.positions.filter((position: any) => !!position)
     this.person = new PersonMeta(client, data.person)
   }
 }
@@ -289,9 +289,9 @@ export class AnimeEpisodeTitle extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.default = AnimeEpisode.parseString(data.title)
-    this.japanese = AnimeEpisode.parseString(data.japanese, true)
-    this.romanji = AnimeEpisode.parseString(data.romanji, true)
+    this.default = data.title
+    this.japanese = data.japanese || null
+    this.romanji = data.romanji || null
   }
 }
 
@@ -314,14 +314,14 @@ export class AnimeEpisode extends BaseClass {
     super(client)
 
     this.animeId = animeId
-    this.episodeId = AnimeEpisode.parseNumber(data.mal_id)
+    this.episodeId = data.mal_id
     this.URL = AnimeEpisode.parseURL(data.url, true)
     this.title = new AnimeEpisodeTitle(client, data)
-    this.duration = AnimeEpisode.parseNumber(data.duration)
+    this.duration = data.duration || null
     this.aired = data.aired ? new Date(data.aired) : null
     this.filler = !!data.filler
     this.recap = !!data.recap
-    this.synopsis = AnimeEpisode.parseString(data.synopsis, true)
+    this.synopsis = data.synopsis || null
   }
 }
 
@@ -357,11 +357,11 @@ export class AnimeTopic extends BaseResource {
     super(client, data)
 
     this.animeId = animeId
-    this.title = AnimeTopic.parseString(data.title)
+    this.title = data.title
     this.date = new Date(data.date)
-    this.authorUsername = AnimeTopic.parseString(data.author_username)
+    this.authorUsername = data.author_username
     this.authorURL = AnimeTopic.parseURL(data.author_url)
-    this.comments = AnimeTopic.parseNumber(data.comments)
+    this.comments = data.comments
   }
 }
 
@@ -378,7 +378,7 @@ export class AnimePromo extends BaseClass {
     super(client)
 
     this.animeId = animeId
-    this.title = AnimePromo.parseString(data.title)
+    this.title = data.title
     this.trailer = Object.assign(new YoutubeVideo(client, data.trailer.youtube_id), { image: new Image(client, data.trailer.images) })
   }
 }
@@ -397,7 +397,7 @@ export class AnimeEpisodeVideo extends BaseResource {
     super(client, data)
 
     this.animeId = animeId
-    this.title = AnimeEpisodeVideo.parseString(data.title)
+    this.title = data.title
     this.episode = typeof (data.episode) === 'string' ? Number(data.episode.toLowerCase().split('episode')[1]?.trim()) || 0 : 0
     this.imageURL = AnimeEpisodeVideo.parseURL(data.images.image_url)
   }
@@ -430,8 +430,8 @@ export class AnimeStatistics extends ContentStatistics {
     super(client, data)
 
     this.animeId = animeId
-    this.watching = AnimeStatistics.parseNumber(data.watching)
-    this.planToWatch = AnimeStatistics.parseNumber(data.plan_to_watch)
+    this.watching = data.watching
+    this.planToWatch = data.plan_to_watch
   }
 }
 
@@ -451,7 +451,7 @@ export class AnimeRecommendation extends BaseClass {
     this.animeId = animeId
     this.entry = new AnimeMeta(client, data.entry)
     this.URL = AnimeRecommendation.parseURL(data.url)
-    this.votes = AnimeRecommendation.parseNumber(data.votes)
+    this.votes = data.votes
   }
 }
 
@@ -482,8 +482,8 @@ export class AnimeUserUpdate extends ContentUserUpdate {
     super(client, data)
 
     this.animeId = animeId
-    this.episodesSeen = AnimeUserUpdate.parseNumber(data.episodes_seen)
-    this.episodesTotal = AnimeUserUpdate.parseNumber(data.episodes_total)
+    this.episodesSeen = data.episodes_seen
+    this.episodesTotal = data.episodes_total
   }
 }
 
@@ -494,8 +494,8 @@ export class AnimeReviewScores extends ContentReviewScores {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.animation = AnimeReviewScores.parseNumber(data.animation)
-    this.sound = AnimeReviewScores.parseNumber(data.sound)
+    this.animation = data.animation
+    this.sound = data.sound
   }
 }
 
@@ -512,7 +512,7 @@ export class AnimeReview extends ContentReview {
     super(client, data)
 
     this.animeId = animeId
-    this.episodesWatched = AnimeReview.parseNumber(data.episodes_watched)
+    this.episodesWatched = data.episodes_watched
     this.scores = new AnimeReviewScores(client, data.scores)
   }
 }

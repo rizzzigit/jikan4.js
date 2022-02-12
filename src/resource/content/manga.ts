@@ -128,8 +128,8 @@ export class Manga extends Content {
     super(client, data)
 
     this.type = Manga.parseType(data.type)
-    this.chapters = Manga.parseNumber(data.chapters)
-    this.volumes = Manga.parseNumber(data.volumes)
+    this.chapters = data.chapters
+    this.volumes = data.volumes
     this.publishInfo = new MangaPublishInformation(client, data)
     this.authors = data.authors.map((author: any) => new PersonMeta(this.client, author))
     this.serializations = data.serializations.map((serialization: any) => new MagazineMeta(this.client, serialization))
@@ -154,7 +154,7 @@ export class MangaCharacterReference extends BaseClass {
 
     this.mangaId = mangaId
     this.character = new CharacterMeta(client, data.character)
-    this.role = MangaCharacterReference.parseString(data.role)
+    this.role = data.role
   }
 }
 
@@ -184,11 +184,11 @@ export class MangaTopic extends BaseResource {
     super(client, data)
 
     this.mangaId = mangaId
-    this.title = MangaTopic.parseString(data.title)
+    this.title = data.title
     this.date = MangaTopic.parseDate(data.date)
-    this.authorUsername = MangaTopic.parseString(data.author_username)
+    this.authorUsername = data.author_username
     this.authorURL = MangaTopic.parseURL(data.author_url)
-    this.comments = MangaTopic.parseNumber(data.comments)
+    this.comments = data.comments
   }
 }
 
@@ -201,8 +201,8 @@ export class MangaStatistics extends ContentStatistics {
     super(client, data)
 
     this.mangaId = mangaId
-    this.reading = MangaStatistics.parseNumber(data.reading)
-    this.planToRead = MangaStatistics.parseNumber(data.plan_to_read)
+    this.reading = data.reading
+    this.planToRead = data.plan_to_read
   }
 }
 
@@ -222,7 +222,7 @@ export class MangaRecommendation extends BaseClass {
     this.mangaId = mangaId
     this.entry = new MangaMeta(client, data.entry)
     this.URL = MangaRecommendation.parseURL(data.url)
-    this.votes = MangaRecommendation.parseNumber(data.votes)
+    this.votes = data.votes
   }
 }
 
@@ -241,10 +241,10 @@ export class MangaUserUpdate extends ContentUserUpdate {
     super(client, data)
 
     this.mangaId = mangaId
-    this.volumesRead = MangaUserUpdate.parseNumber(data.volumes_read)
-    this.volumesTotal = MangaUserUpdate.parseNumber(data.volumes_total)
-    this.chaptersRead = MangaUserUpdate.parseNumber(data.chapters_read)
-    this.chaptersTotal = MangaUserUpdate.parseNumber(data.chapters_total)
+    this.volumesRead = data.volumes_read
+    this.volumesTotal = data.volumes_total
+    this.chaptersRead = data.chapters_read
+    this.chaptersTotal = data.chapters_total
   }
 }
 
@@ -271,7 +271,7 @@ export class MangaReview extends ContentReview {
     super(client, data)
 
     this.mangaId = mangaId
-    this.chaptersRead = MangaReview.parseNumber(data.chapters_read)
+    this.chaptersRead = data.chapters_read
     this.scores = new MangaReviewScores(client, data.scores)
   }
 }

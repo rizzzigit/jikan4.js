@@ -5,7 +5,7 @@ const base_1 = require("./base");
 class Season extends base_1.BaseClass {
     constructor(client, rawData) {
         super(client);
-        this.year = Season.parseNumber(rawData.year);
+        this.year = rawData.year;
         this.seasons = rawData.seasons.map((season) => Season.parseSeasonType(season));
     }
     // eslint-disable-next-line tsdoc/syntax

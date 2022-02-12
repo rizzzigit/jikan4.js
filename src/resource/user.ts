@@ -20,7 +20,7 @@ export class UserMeta extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = UserMeta.parseString(data.username)
+    this.username = data.username
     this.url = UserMeta.parseURL(data.url)
     this.imageUrl = UserMeta.parseURL(data?.images?.jpg?.image_url, true)
     this.lastOnline = UserMeta.parseDate(data.last_online)
@@ -82,7 +82,7 @@ export class User extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = UserMeta.parseString(data.username)
+    this.username = data.username
     this.url = UserMeta.parseURL(data.url)
     this.imageUrl = UserMeta.parseURL(data?.images?.jpg?.image_url, true)
     this.lastOnline = UserMeta.parseDate(data.last_online)

@@ -7,8 +7,8 @@ class Club extends base_1.BaseResource {
         var _a, _b;
         super(client, data);
         this.imageUrl = Club.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
-        this.memberCount = Club.parseNumber(data.members_count);
-        this.pictureCount = Club.parseNumber(data.pictures_count);
+        this.memberCount = data.members_count;
+        this.pictureCount = data.pictures_count;
         this.category = Club.parseCategory(data.category);
         this.created = Club.parseDate(data.created);
         this.type = Club.parseType(data.type);
@@ -55,7 +55,7 @@ class ClubStaff extends base_1.BaseClass {
         super(client);
         this.clubId = clubId;
         this.url = ClubStaff.parseURL(data.url);
-        this.username = ClubStaff.parseString(data.username);
+        this.username = data.username;
     }
     getClub() {
         return this.client.clubs.get(this.clubId);
@@ -67,7 +67,7 @@ class ClubMember extends base_1.BaseClass {
         super(client);
         this.clubId = clubId;
         this.URL = ClubMember.parseURL(data.url);
-        this.username = ClubMember.parseString(data.username);
+        this.username = data.username;
         this.imageURL = ClubMember.parseURL(data.image_url, true);
     }
     getClub() {

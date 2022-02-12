@@ -28,10 +28,10 @@ export class ContentTitle extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.default = ContentTitle.parseString(data.title)
-    this.english = ContentTitle.parseString(data.english, true)
-    this.japanese = ContentTitle.parseString(data.japanese, true)
-    this.synonyms = data.synonyms?.map((synonym: any) => ContentTitle.parseString(synonym, true)).filter((synonym: any) => !!synonym) || []
+    this.default = data.title
+    this.english = data.english || null
+    this.japanese = data.japanese || null
+    this.synonyms = data.synonyms?.map((synonym: any) => synonym || null).filter((synonym: any) => !!synonym) || []
   }
 }
 
@@ -52,14 +52,14 @@ export class Content extends BaseResource {
 
     this.image = new ContentImage(client, data.images)
     this.title = new ContentTitle(client, data)
-    this.score = Content.parseNumber(data.score || data.scored, true)
-    this.scoredBy = Content.parseNumber(data.scored_by, true)
-    this.rank = Content.parseNumber(data.rank)
-    this.popularity = Content.parseNumber(data.popularity)
-    this.members = Content.parseNumber(data.members)
-    this.favorites = Content.parseNumber(data.favorites)
-    this.synopsis = Content.parseString(data.synopsis, true)
-    this.background = Content.parseString(data.background, true)
+    this.score = data.score || data.scored || null
+    this.scoredBy = data.scored_by || null
+    this.rank = data.rank
+    this.popularity = data.popularity
+    this.members = data.members
+    this.favorites = data.favorites
+    this.synopsis = data.synopsis || null
+    this.background = data.background || null
   }
 }
 
@@ -71,9 +71,9 @@ export class ContentStatisticsScore extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.score = ContentStatisticsScore.parseNumber(data.score)
-    this.votes = ContentStatisticsScore.parseNumber(data.votes)
-    this.percentage = ContentStatisticsScore.parseNumber(data.percentage)
+    this.score = data.score
+    this.votes = data.votes
+    this.percentage = data.percentage
   }
 }
 
@@ -87,10 +87,10 @@ export class ContentStatistics extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.completed = ContentStatistics.parseNumber(data.completed)
-    this.onHold = ContentStatistics.parseNumber(data.on_hold)
-    this.dropped = ContentStatistics.parseNumber(data.dropped)
-    this.total = ContentStatistics.parseNumber(data.total)
+    this.completed = data.completed
+    this.onHold = data.on_hold
+    this.dropped = data.dropped
+    this.total = data.total
     this.scores = data.scores.map((score: any) => new ContentStatisticsScore(client, score))
   }
 }
@@ -108,14 +108,14 @@ export class ContentNews extends BaseResource {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.title = ContentNews.parseString(data.title)
+    this.title = data.title
     this.date = new Date(data.date)
-    this.authorUsername = ContentNews.parseString(data.author_username)
+    this.authorUsername = data.author_username
     this.authorURL = ContentNews.parseURL(data.author_url)
     this.forumURL = ContentNews.parseURL(data.forum_url)
     this.imageURL = ContentNews.parseURL(data.images?.jpg?.image_url, true)
-    this.comments = ContentNews.parseNumber(data.comments)
-    this.excerpt = ContentNews.parseString(data.excerpt)
+    this.comments = data.comments
+    this.excerpt = data.excerpt
   }
 }
 
@@ -127,7 +127,7 @@ export class ContentUser extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = ContentUser.parseString(data.username)
+    this.username = data.username
     this.url = ContentUser.parseURL(data.url)
     this.imageUrl = ContentUser.parseURL(data.images?.jpg?.image_url, true)
   }
@@ -142,10 +142,10 @@ export class ContentReviewScores extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.overall = ContentReviewScores.parseNumber(data.overall)
-    this.story = ContentReviewScores.parseNumber(data.story)
-    this.character = ContentReviewScores.parseNumber(data.character)
-    this.enjoyment = ContentReviewScores.parseNumber(data.enjoyment)
+    this.overall = data.overall
+    this.story = data.story
+    this.character = data.character
+    this.enjoyment = data.enjoyment
   }
 }
 
@@ -160,10 +160,10 @@ export class ContentReview extends BaseResource {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.type = ContentReview.parseString(data.type)
-    this.votes = ContentReview.parseNumber(data.votes)
+    this.type = data.type
+    this.votes = data.votes
     this.date = new Date(data.date)
-    this.review = ContentReview.parseString(data.review)
+    this.review = data.review
     this.scores = new ContentReviewScores(client, data.scores)
     this.user = new ContentUser(client, data.user)
   }
@@ -179,8 +179,8 @@ export class ContentUserUpdate extends BaseClass {
     super(client)
 
     this.user = new ContentUser(client, data.user)
-    this.score = ContentUserUpdate.parseNumber(data.score)
-    this.status = ContentUserUpdate.parseString(data.status)
+    this.score = data.score
+    this.status = data.status
     this.date = new Date(data.date)
   }
 }

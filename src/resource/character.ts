@@ -31,10 +31,10 @@ export class Character extends BaseResource {
     super(client, data)
 
     this.image = new ContentImage(client, data.images)
-    this.name = Character.parseString(data.name)
-    this.nicknames = data.nicknames.map((nickname: any) => Character.parseString(nickname, true)).filter((nickname: any) => !!nickname)
-    this.favorites = Character.parseNumber(data.favorites)
-    this.about = Character.parseString(data.about, true)
+    this.name = data.name
+    this.nicknames = data.nicknames.map((nickname: any) => nickname || null).filter((nickname: any) => !!nickname)
+    this.favorites = data.favorites
+    this.about = data.about || null
   }
 }
 
@@ -51,7 +51,7 @@ export class CharacterAnimeReference extends BaseClass {
     super(client)
 
     this.characterId = characterId
-    this.role = CharacterAnimeReference.parseString(data.role)
+    this.role = data.role
     this.anime = new AnimeMeta(client, data.anime)
   }
 }
@@ -69,7 +69,7 @@ export class CharacterMangaReference extends BaseClass {
     super(client)
 
     this.characterId = characterId
-    this.role = CharacterMangaReference.parseString(data.role)
+    this.role = data.role
     this.manga = new MangaMeta(client, data)
   }
 }
@@ -87,7 +87,7 @@ export class CharacterVoiceActorReference extends BaseClass {
     super(client)
 
     this.characterId = characterId
-    this.language = CharacterVoiceActorReference.parseString(data.language)
+    this.language = data.language
     this.person = new PersonMeta(client, data.person)
   }
 }

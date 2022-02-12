@@ -7,7 +7,7 @@ class Meta extends base_1.BaseResource {
     constructor(client, data, type) {
         super(client, data);
         this.type = type;
-        this.name = Meta.parseString(data.name);
+        this.name = data.name;
     }
 }
 exports.Meta = Meta;
@@ -16,7 +16,7 @@ class ContentMeta extends base_1.BaseResource {
         var _a;
         super(client, data);
         this.type = type;
-        this.title = ContentMeta.parseString(data.name || data.title);
+        this.title = data.name || data.title;
         this.image = new misc_1.Image(client, (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
     }
 }

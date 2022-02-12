@@ -1,6 +1,7 @@
 export * from './core/api'
 export * from './core/client'
 export * from './core/heartbeat'
+export * from './core/cache'
 
 export * from './manager/base'
 export * from './manager/anime'
@@ -15,6 +16,7 @@ export * from './manager/producer'
 export * from './manager/season'
 export * from './manager/top'
 export * from './manager/schedule'
+export * from './manager/user'
 
 export * from './resource/base'
 export * from './resource/character'
@@ -27,5 +29,6 @@ export * from './resource/misc'
 export * from './resource/person'
 export * from './resource/season'
 export * from './resource/top'
+export * from './resource/user'
 
 export * from './utils'

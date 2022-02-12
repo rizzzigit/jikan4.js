@@ -57,6 +57,7 @@ export class AnimeManager extends BaseManager {
 
   public async search (searchString: string, filter?: Partial<AnimeSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('anime', offset, maxCount, {
+      disableCaching: true,
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
       ...filter && translateObject(filter, (key, value) => {
         switch (key) {

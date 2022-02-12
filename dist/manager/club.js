@@ -13,7 +13,7 @@ class ClubManager extends base_1.BaseManager {
     }
     search(searchString, filter, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource('clubs', offset, maxCount, Object.assign({ [searchString.length === 1 ? 'letter' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
+            const rawData = yield this.requestPaginatedResource('clubs', offset, maxCount, Object.assign({ disableCaching: true, [searchString.length === 1 ? 'letter' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
                 switch (key) {
                     case 'orderBy': return ['order_by', value];
                     default: return [key, `${value}`];

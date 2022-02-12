@@ -17,6 +17,7 @@ export class CharacterManager extends BaseManager {
 
   public async search (searchString: string, filter?: Partial<CharacterSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('characters', offset, maxCount, {
+      disableCaching: true,
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
       ...filter && translateObject(filter, (key, value) => {
         switch (key) {

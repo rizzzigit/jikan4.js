@@ -17,6 +17,7 @@ export class PersonManager extends BaseManager {
 
   public async search (searchString: string, filter?: Partial<PersonSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource('people', offset, maxCount, {
+      disableCaching: true,
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
       ...filter && translateObject(filter, (key, value) => {
         switch (key) {

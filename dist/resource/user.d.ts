@@ -140,10 +140,9 @@ export declare class UserRecommendation extends BaseClass {
         url: URL;
         username: string;
     };
-    readonly entry: (AnimeMeta | MangaMeta) & {
+    readonly entries: Array<(AnimeMeta | MangaMeta) & {
         images: ContentImage;
-    };
-    readonly id: number;
+    }>;
     readonly content: string;
     constructor(client: Client, data: any);
 }

@@ -206,18 +206,17 @@ class UserRecommendation extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
         this.user = {
-            url: UserRecommendation.parseURL(data.user.data.url),
-            username: data.user.data.username
+            url: UserRecommendation.parseURL(data.user.url),
+            username: data.user.username
         };
-        this.entry = Object.assign(((entry) => {
+        this.entries = Object.assign(((entry) => entry.map((entry) => {
             if (entry.url.split('/')[3] === 'anime') {
                 return new meta_1.AnimeMeta(client, entry);
             }
             else {
                 return new meta_1.MangaMeta(client, entry);
             }
-        })(data.entry), { images: new Jikan_1.ContentImage(client, data.entry.images) });
-        this.id = data.mal_id;
+        }))(data.entry), { images: new Jikan_1.ContentImage(client, data.entry.images) });
         this.content = data.content;
     }
 }

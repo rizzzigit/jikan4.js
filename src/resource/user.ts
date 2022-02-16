@@ -319,27 +319,25 @@ export class UserRecommendation extends BaseClass {
     username: string
   }
 
-  public readonly entry: (AnimeMeta | MangaMeta) & { images: ContentImage }
-  public readonly id: number
+  public readonly entries: Array<(AnimeMeta | MangaMeta) & { images: ContentImage }>
   public readonly content: string
 
   public constructor (client: Client, data: any) {
     super(client)
 
     this.user = {
-      url: UserRecommendation.parseURL(data.user.data.url),
-      username: data.user.data.username
+      url: UserRecommendation.parseURL(data.user.url),
+      username: data.user.username
     }
 
-    this.entry = Object.assign(((entry) => {
+    this.entries = Object.assign(((entry) => entry.map((entry: any) => {
       if (entry.url.split('/')[3] === 'anime') {
         return new AnimeMeta(client, entry)
       } else {
         return new MangaMeta(client, entry)
       }
-    })(data.entry), { images: new ContentImage(client, data.entry.images) })
+    }))(data.entry), { images: new ContentImage(client, data.entry.images) })
 
-    this.id = data.mal_id
     this.content = data.content
   }
 }

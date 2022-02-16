@@ -1,7 +1,18 @@
-import { AnimeMeta, AnimeReview, Club, MangaMeta, MangaReview } from '../Jikan'
-import { User, UserContentUpdates, UserFavorites, UserFriend, UserMeta, UserRecommendation, UserStats } from '../resource/user'
+import {
+  User,
+  UserContentUpdates,
+  UserFavorites,
+  UserFriend, UserMeta,
+  UserRecommendation,
+  UserStats,
+  UserAnimeHistory,
+  UserMangaHistory
+} from '../resource/user'
 import { translateObject } from '../utils'
 import { BaseManager } from './base'
+import { AnimeReview } from '../resource/content/anime'
+import { Club } from '../resource/club'
+import { MangaReview } from '../resource/content/manga'
 
 export interface UserSearchFilter {
   gender: 'any' | 'male' | 'female' | 'nonbinary'
@@ -62,8 +73,8 @@ export class UserManager extends BaseManager {
 
     return rawData.map((data) => {
       switch (data.entry.type) {
-        case 'manga': return new MangaMeta(this.client, data)
-        case 'anime': return new AnimeMeta(this.client, data)
+        case 'manga': return new UserMangaHistory(this.client, username, data)
+        case 'anime': return new UserAnimeHistory(this.client, username, data)
 
         default: throw new Error(`Unknown entry type: ${data.entry.type}`)
       }

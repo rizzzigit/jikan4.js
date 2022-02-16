@@ -28,7 +28,7 @@ export declare class User extends BaseClass {
     getFavorites(): Promise<UserFavorites>;
     getUpdates(): Promise<UserContentUpdates>;
     getAbout(): Promise<string | null>;
-    getHistory(type?: 'anime' | 'manga' | 'all'): Promise<(AnimeMeta | MangaMeta)[]>;
+    getHistory(type?: 'anime' | 'manga' | 'all'): Promise<(UserMangaHistory | UserAnimeHistory)[]>;
     getFriends(offset?: number, maxCount?: number): Promise<UserFriend[]>;
     getRecommendations(offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
     getClubs(offset?: number, maxCount?: number): Promise<Club[]>;

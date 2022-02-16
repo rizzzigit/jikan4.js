@@ -64,7 +64,7 @@ export class User extends BaseClass {
   }
 
   public getHistory (type?: 'anime' | 'manga' | 'all') {
-    return <Promise<Array<AnimeMeta | MangaMeta>>> this.client.users.getHistory(this.username, type)
+    return <Promise<Array<UserAnimeHistory | UserMangaHistory>>> this.client.users.getHistory(this.username, type)
   }
 
   public getFriends (offset?: number, maxCount?: number) {

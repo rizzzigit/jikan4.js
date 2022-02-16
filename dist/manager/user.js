@@ -2,10 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserManager = void 0;
 const tslib_1 = require("tslib");
-const Jikan_1 = require("../Jikan");
 const user_1 = require("../resource/user");
 const utils_1 = require("../utils");
 const base_1 = require("./base");
+const anime_1 = require("../resource/content/anime");
+const club_1 = require("../resource/club");
+const manga_1 = require("../resource/content/manga");
 class UserManager extends base_1.BaseManager {
     search(searchString, filter, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -54,8 +56,8 @@ class UserManager extends base_1.BaseManager {
             const rawData = yield this.requestResource(`users/${username}/history${type !== 'all' ? `/${type}` : ''}`);
             return rawData.map((data) => {
                 switch (data.entry.type) {
-                    case 'manga': return new Jikan_1.MangaMeta(this.client, data);
-                    case 'anime': return new Jikan_1.AnimeMeta(this.client, data);
+                    case 'manga': return new user_1.UserMangaHistory(this.client, username, data);
+                    case 'anime': return new user_1.UserAnimeHistory(this.client, username, data);
                     default: throw new Error(`Unknown entry type: ${data.entry.type}`);
                 }
             });
@@ -72,10 +74,10 @@ class UserManager extends base_1.BaseManager {
             const rawData = yield this.requestPaginatedResource(`users/${username}/reviews`, offset, maxCount);
             return rawData.map((review) => {
                 if ('episodes_watched' in review) {
-                    return new Jikan_1.AnimeReview(this.client, review.anime.mal_id, review);
+                    return new anime_1.AnimeReview(this.client, review.anime.mal_id, review);
                 }
                 else {
-                    return new Jikan_1.MangaReview(this.client, review.manga.mal_id, review);
+                    return new manga_1.MangaReview(this.client, review.manga.mal_id, review);
                 }
             });
         });
@@ -89,7 +91,7 @@ class UserManager extends base_1.BaseManager {
     getClubs(username, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource(`users/${username}/clubs`, offset, maxCount);
-            return rawData.map((club) => new Jikan_1.Club(this.client, club));
+            return rawData.map((club) => new club_1.Club(this.client, club));
         });
     }
 }

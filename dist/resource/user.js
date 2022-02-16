@@ -141,7 +141,7 @@ exports.UserAnimeUpdate = UserAnimeUpdate;
 class UserMangaUpdate extends UserContentUpdate {
     constructor(client, username, data) {
         super(client, username, data);
-        this.manga = new meta_1.MangaMeta(client, data);
+        this.manga = new meta_1.MangaMeta(client, data.entry);
         this.chaptersRead = data.chapters_read;
         this.chaptersTotal = data.chapters_total;
         this.volumesRead = data.volumes_read;

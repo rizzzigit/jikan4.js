@@ -225,7 +225,7 @@ export class UserMangaUpdate extends UserContentUpdate {
   public constructor (client: Client, username: string, data: any) {
     super(client, username, data)
 
-    this.manga = new MangaMeta(client, data)
+    this.manga = new MangaMeta(client, data.entry)
     this.chaptersRead = data.chapters_read
     this.chaptersTotal = data.chapters_total
     this.volumesRead = data.volumes_read

@@ -72,29 +72,29 @@ class UserStats extends base_1.BaseClass {
         super(client);
         this.username = username;
         this.anime = {
-            daysWatched: data.days_watched,
-            meanScore: data.mean_score,
-            watching: data.watching,
-            completed: data.completed,
-            onHold: data.on_hold,
-            dropped: data.dropped,
-            planToWatch: data.plan_to_watch,
-            totalEntries: data.total_entries,
-            rewatched: data.rewatched,
-            episodesWatched: data.episodes_watched
+            daysWatched: data.anime.days_watched,
+            meanScore: data.anime.mean_score,
+            watching: data.anime.watching,
+            completed: data.anime.completed,
+            onHold: data.anime.on_hold,
+            dropped: data.anime.dropped,
+            planToWatch: data.anime.plan_to_watch,
+            totalEntries: data.anime.total_entries,
+            rewatched: data.anime.rewatched,
+            episodesWatched: data.anime.episodes_watched
         };
         this.manga = {
-            daysRead: data.days_read,
-            meanScore: data.mean_score,
-            reading: data.reading,
-            completed: data.completed,
-            onHold: data.on_hold,
-            dropped: data.dropped,
-            planToRead: data.plan_to_read,
-            totalEntries: data.total_entries,
-            reread: data.reread,
-            chaptersRead: data.chapters_read,
-            volumesRead: data.volumes_read
+            daysRead: data.manga.days_read,
+            meanScore: data.manga.mean_score,
+            reading: data.manga.reading,
+            completed: data.manga.completed,
+            onHold: data.manga.on_hold,
+            dropped: data.manga.dropped,
+            planToRead: data.manga.plan_to_read,
+            totalEntries: data.manga.total_entries,
+            reread: data.manga.reread,
+            chaptersRead: data.manga.chapters_read,
+            volumesRead: data.manga.volumes_read
         };
     }
     getUser() {

@@ -195,7 +195,7 @@ class UserFriend extends base_1.BaseClass {
         this.url = UserFriend.parseURL(data.user.url);
         this.imageUrl = UserFriend.parseURL((_b = (_a = data.user.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
         this.lastOnline = UserFriend.parseDate(data.last_online);
-        this.friendsSince = UserFriend.parseDate(data.friends_since);
+        this.friendsSince = UserFriend.parseDate(data.friends_since, true);
     }
     getUser() {
         return this.client.users.get(this.username);

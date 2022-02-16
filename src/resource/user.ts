@@ -296,7 +296,7 @@ export class UserFriend extends BaseClass {
   public readonly url: URL
   public readonly imageUrl: URL | null
   public readonly lastOnline: Date
-  public readonly friendsSince: Date
+  public readonly friendsSince: Date | null
 
   public getUser () {
     return <Promise<User>> this.client.users.get(this.username)
@@ -309,7 +309,7 @@ export class UserFriend extends BaseClass {
     this.url = UserFriend.parseURL(data.user.url)
     this.imageUrl = UserFriend.parseURL(data.user.images?.jpg?.image_url, true)
     this.lastOnline = UserFriend.parseDate(data.last_online)
-    this.friendsSince = UserFriend.parseDate(data.friends_since)
+    this.friendsSince = UserFriend.parseDate(data.friends_since, true)
   }
 }
 

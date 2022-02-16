@@ -41,7 +41,7 @@ export interface ClientOptions {
   secure: boolean
 
   /**
-   * The amount of miliseconds to wait before creating another request.
+   * The number of miliseconds to wait before creating another request.
    * This is to avoid getting rate-limited by
    *
    * Default value: `1200` (50 requests per minute)
@@ -49,7 +49,7 @@ export interface ClientOptions {
   dataRateLimit: number
 
   /**
-   * The amount of miliseconds before the cache is expired. This is an
+   * The number of miliseconds before the cache is expired. This is an
    * effort to avoid sending multiple requests for the same content to
    *
    * Default value: `86400000` (1 day)
@@ -57,14 +57,14 @@ export interface ClientOptions {
   dataExpiry: number
 
   /**
-   * The amount of items to be returned on each paginated request.
+   * The number of items to be returned on each paginated request.
    *
    * Default value: `25`
   */
   dataPaginationMaxSize: number
 
   /**
-   * The amount of miliseconds before giving up on a request.
+   * The number of miliseconds before giving up on a request.
    *
    * Default value: `15000` (15 seconds)
   */
@@ -83,6 +83,11 @@ export interface ClientOptions {
    * to avoid sending multiple requests for the same content to
   */
   disableCaching: boolean
+
+  /**
+   * The number of retries on HTTP 500 errors.
+  */
+  maxApiErrorRetry: number
 
   dataPath: string
 }
@@ -118,6 +123,8 @@ export class Client {
 
       requestTimeout: 15000,
       requestQueueLimit: 100,
+
+      maxApiErrorRetry: 5,
 
       disableCaching: false
     }

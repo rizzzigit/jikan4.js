@@ -44,7 +44,7 @@ export declare class APIError extends Error {
     readonly trace: string;
     readonly reportURL: string;
     readonly referenceURL: string;
-    constructor(message: string, referenceURL: string, errorData: any);
+    constructor(message: string, referenceURL: string, response: APIResponseData);
 }
 export declare class APIClient {
     readonly cacheManager: CacheManager;

@@ -50,15 +50,29 @@ class APIRequestQueue extends Array {
     }
     runQueue() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const { client: { options: { maxApiErrorRetry } } } = this;
             this.debug('Run request queue');
             this.isRunning = true;
             do {
                 const entry = this.shift();
                 if (entry) {
                     this.debug(`Shift one entry from the queue, new queue size is ${this.length}`);
-                    yield this.APIClient.executeRequest(entry.url)
-                        .then(entry.resolve)
-                        .catch(entry.reject);
+                    let currentTry = 1;
+                    while (currentTry <= maxApiErrorRetry) {
+                        try {
+                            entry.resolve(yield this.APIClient.executeRequest(entry.url));
+                            break;
+                        }
+                        catch (error) {
+                            if ((error.status !== 500) || (currentTry > maxApiErrorRetry)) {
+                                throw error;
+                            }
+                            else {
+                                this.debug(`${error.message}, retry no. ${currentTry}`);
+                            }
+                        }
+                        currentTry++;
+                    }
                 }
                 else {
                     this.debug('Queue is now empty');
@@ -83,13 +97,13 @@ class APIRequestQueue extends Array {
 }
 exports.APIRequestQueue = APIRequestQueue;
 class APIError extends Error {
-    constructor(message, referenceURL, errorData) {
+    constructor(message, referenceURL, response) {
         super(message);
-        this.status = errorData.status;
-        this.errorType = errorData.type;
-        this.error = errorData.error;
-        this.trace = errorData.trace;
-        this.reportURL = errorData.report_url;
+        this.status = response.data.status;
+        this.errorType = response.data.type;
+        this.error = response.data.error;
+        this.trace = response.data.trace;
+        this.reportURL = response.data.report_url;
         this.referenceURL = referenceURL;
     }
 }
@@ -181,7 +195,7 @@ class APIClient {
                             resolve(response);
                             break;
                         default:
-                            reject(new APIError(`HTTP ${response.status} hit on ${url}`, `${url}`, response.data || {}));
+                            reject(new APIError(`HTTP ${response.status} hit on ${url}`, `${url}`, response));
                     }
                 })
                     .catch(reject);

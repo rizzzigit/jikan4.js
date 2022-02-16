@@ -68,6 +68,7 @@ class Client {
             dataPaginationMaxSize: 25,
             requestTimeout: 15000,
             requestQueueLimit: 100,
+            maxApiErrorRetry: 5,
             disableCaching: false
         };
         return Object.assign(defaultOptions, options);

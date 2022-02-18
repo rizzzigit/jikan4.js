@@ -91,7 +91,9 @@ export class APIRequestQueue extends Array<APIRequestQueueEntry> {
             break
           } catch (error: any) {
             if ((error.status !== 500) || (currentTry > maxApiErrorRetry)) {
-              throw error
+              entry.reject(error)
+
+              break
             } else {
               this.debug(`${error.message}, retry no. ${currentTry}`)
             }

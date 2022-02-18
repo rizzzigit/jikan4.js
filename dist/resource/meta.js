@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MangaMeta = exports.AnimeMeta = exports.CharacterMeta = exports.PersonMeta = exports.MangaGenreMeta = exports.AnimeGenreMeta = exports.ProducerMeta = exports.MagazineMeta = exports.ContentMeta = exports.Meta = void 0;
+exports.MangaMeta = exports.AnimeMeta = exports.CharacterMeta = exports.PersonMeta = exports.MangaGenreMeta = exports.AnimeGenreMeta = exports.ClubMeta = exports.ProducerMeta = exports.MagazineMeta = exports.ContentMeta = exports.Meta = void 0;
 const base_1 = require("./base");
 const misc_1 = require("./misc");
 class Meta extends base_1.BaseResource {
@@ -33,6 +33,12 @@ class ProducerMeta extends Meta {
     }
 }
 exports.ProducerMeta = ProducerMeta;
+class ClubMeta extends Meta {
+    constructor(client, data) {
+        super(client, data, 'Club');
+    }
+}
+exports.ClubMeta = ClubMeta;
 class AnimeGenreMeta extends Meta {
     constructor(client, data, type) {
         super(client, data, 'AnimeGenre');

@@ -2,8 +2,7 @@ import { URL } from 'url'
 import { Client } from '../core/client'
 import { ContentImage } from '../Jikan'
 import { BaseClass } from './base'
-import { Club } from './club'
-import { AnimeMeta, CharacterMeta, MangaMeta, PersonMeta } from './meta'
+import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta'
 
 export type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary'
 
@@ -76,7 +75,7 @@ export class User extends BaseClass {
   }
 
   public getClubs (offset?: number, maxCount?: number) {
-    return <Promise<Array<Club>>> this.client.users.getClubs(this.username, offset, maxCount)
+    return <Promise<Array<ClubMeta>>> this.client.users.getClubs(this.username, offset, maxCount)
   }
 
   public constructor (client: Client, data: any) {

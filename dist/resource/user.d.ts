@@ -3,8 +3,7 @@ import { URL } from 'url';
 import { Client } from '../core/client';
 import { ContentImage } from '../Jikan';
 import { BaseClass } from './base';
-import { Club } from './club';
-import { AnimeMeta, CharacterMeta, MangaMeta, PersonMeta } from './meta';
+import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta';
 export declare type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
 export declare class UserMeta extends BaseClass {
     readonly username: string;
@@ -31,7 +30,7 @@ export declare class User extends BaseClass {
     getHistory(type?: 'anime' | 'manga' | 'all'): Promise<(UserMangaHistory | UserAnimeHistory)[]>;
     getFriends(offset?: number, maxCount?: number): Promise<UserFriend[]>;
     getRecommendations(offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
-    getClubs(offset?: number, maxCount?: number): Promise<Club[]>;
+    getClubs(offset?: number, maxCount?: number): Promise<ClubMeta[]>;
     constructor(client: Client, data: any);
 }
 export declare class UserStats extends BaseClass {

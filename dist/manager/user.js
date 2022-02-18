@@ -6,8 +6,8 @@ const user_1 = require("../resource/user");
 const utils_1 = require("../utils");
 const base_1 = require("./base");
 const anime_1 = require("../resource/content/anime");
-const club_1 = require("../resource/club");
 const manga_1 = require("../resource/content/manga");
+const Jikan_1 = require("../Jikan");
 class UserManager extends base_1.BaseManager {
     search(searchString, filter, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -91,7 +91,7 @@ class UserManager extends base_1.BaseManager {
     getClubs(username, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginatedResource(`users/${username}/clubs`, offset, maxCount);
-            return rawData.map((club) => new club_1.Club(this.client, club));
+            return rawData.map((club) => new Jikan_1.ClubMeta(this.client, club));
         });
     }
 }

@@ -1,8 +1,8 @@
 import { User, UserContentUpdates, UserFavorites, UserFriend, UserMeta, UserRecommendation, UserStats, UserAnimeHistory, UserMangaHistory } from '../resource/user';
 import { BaseManager } from './base';
 import { AnimeReview } from '../resource/content/anime';
-import { Club } from '../resource/club';
 import { MangaReview } from '../resource/content/manga';
+import { ClubMeta } from '../Jikan';
 export interface UserSearchFilter {
     gender: 'any' | 'male' | 'female' | 'nonbinary';
     location: string;
@@ -21,5 +21,5 @@ export declare class UserManager extends BaseManager {
     getFriends(username: string, offset?: number, maxCount?: number): Promise<UserFriend[]>;
     getReviews(username: string, offset?: number, maxCount?: number): Promise<(AnimeReview | MangaReview)[]>;
     getRecommendations(username: string, offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
-    getClubs(username: string, offset?: number, maxCount?: number): Promise<Club[]>;
+    getClubs(username: string, offset?: number, maxCount?: number): Promise<ClubMeta[]>;
 }

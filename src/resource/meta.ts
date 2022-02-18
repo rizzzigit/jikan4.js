@@ -6,7 +6,7 @@ import { Manga } from './content/manga'
 import { Person } from './person'
 import { Image } from './misc'
 
-export type MetaType = 'Magazine' | 'Producer' | 'AnimeGenre' | 'MangaGenre' | 'Person' | 'Character'
+export type MetaType = 'Magazine' | 'Producer' | 'AnimeGenre' | 'MangaGenre' | 'Person' | 'Character' | 'Club'
 
 export type ContentMetaType = 'Anime' | 'Manga'
 
@@ -45,6 +45,12 @@ export class MagazineMeta extends Meta<'Magazine'> {
 export class ProducerMeta extends Meta<'Producer'> {
   public constructor (client: Client, data: any) {
     super(client, data, 'Producer')
+  }
+}
+
+export class ClubMeta extends Meta<'Club'> {
+  public constructor (client: Client, data: any) {
+    super(client, data, 'Club')
   }
 }
 

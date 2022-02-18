@@ -11,8 +11,8 @@ import {
 import { translateObject } from '../utils'
 import { BaseManager } from './base'
 import { AnimeReview } from '../resource/content/anime'
-import { Club } from '../resource/club'
 import { MangaReview } from '../resource/content/manga'
+import { ClubMeta } from '../Jikan'
 
 export interface UserSearchFilter {
   gender: 'any' | 'male' | 'female' | 'nonbinary'
@@ -108,6 +108,6 @@ export class UserManager extends BaseManager {
   public async getClubs (username: string, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginatedResource(`users/${username}/clubs`, offset, maxCount)
 
-    return rawData.map((club) => new Club(this.client, club))
+    return rawData.map((club) => new ClubMeta(this.client, club))
   }
 }

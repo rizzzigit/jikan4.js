@@ -52,12 +52,13 @@ class ContentStatisticsScore extends base_1.BaseClass {
 exports.ContentStatisticsScore = ContentStatisticsScore;
 class ContentStatistics extends base_1.BaseClass {
     constructor(client, data) {
+        var _a;
         super(client);
         this.completed = data.completed;
         this.onHold = data.on_hold;
         this.dropped = data.dropped;
         this.total = data.total;
-        this.scores = data.scores.map((score) => new ContentStatisticsScore(client, score));
+        this.scores = ((_a = data.scores) === null || _a === void 0 ? void 0 : _a.map((score) => new ContentStatisticsScore(client, score))) || [];
     }
 }
 exports.ContentStatistics = ContentStatistics;

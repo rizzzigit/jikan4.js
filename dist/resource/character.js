@@ -6,11 +6,12 @@ const base_2 = require("./content/base");
 const meta_1 = require("./meta");
 class Character extends base_1.BaseResource {
     constructor(client, data) {
+        var _a;
         super(client, data);
         this.image = new base_2.ContentImage(client, data.images);
         this.name = data.name;
         this.nameKanji = data.name_kanji || null;
-        this.nicknames = data.nicknames.map((nickname) => nickname || null).filter((nickname) => !!nickname);
+        this.nicknames = ((_a = data.nicknames) === null || _a === void 0 ? void 0 : _a.map((nickname) => nickname || null).filter((nickname) => !!nickname)) || [];
         this.favorites = data.favorites;
         this.about = data.about || null;
     }

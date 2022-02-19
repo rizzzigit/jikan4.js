@@ -131,12 +131,12 @@ export class Manga extends Content {
     this.chapters = data.chapters
     this.volumes = data.volumes
     this.publishInfo = new MangaPublishInformation(client, data)
-    this.authors = data.authors.map((author: any) => new PersonMeta(this.client, author))
-    this.serializations = data.serializations.map((serialization: any) => new MagazineMeta(this.client, serialization))
-    this.genres = data.genres.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Genre'))
-    this.explicitGenres = data.explicit_genres.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Explicit'))
-    this.demographics = data.demographics.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Demographic'))
-    this.themes = data.themes.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Theme'))
+    this.authors = data.authors?.map((author: any) => new PersonMeta(this.client, author)) || []
+    this.serializations = data.serializations?.map((serialization: any) => new MagazineMeta(this.client, serialization)) || []
+    this.genres = data.genres?.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Genre')) || []
+    this.explicitGenres = data.explicit_genres?.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Explicit')) || []
+    this.demographics = data.demographics?.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Demographic')) || []
+    this.themes = data.themes?.map((genre: any) => new MangaGenreMeta(this.client, genre, 'Theme')) || []
   }
 }
 
@@ -288,6 +288,6 @@ export class MangaRelationGroup<T extends ContentRelationType> extends ContentRe
     super(client, relation, data)
 
     this.mangaId = mangaId
-    this.items = data.map((item: any) => new (this.relation === 'Adaptation' ? AnimeMeta : MangaMeta)(this.client, item))
+    this.items = data?.map((item: any) => new (this.relation === 'Adaptation' ? AnimeMeta : MangaMeta)(this.client, item)) || []
   }
 }

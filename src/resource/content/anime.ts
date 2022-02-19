@@ -211,13 +211,13 @@ export class Anime extends Content {
     this.rating = Anime.parseRating(data.rating)
     this.season = Anime.parseSeason(data.season)
     this.year = data.year || null
-    this.producers = data.producers.map((producer: any) => new ProducerMeta(this.client, producer))
-    this.licensors = data.licensors.map((licensor: any) => new ProducerMeta(this.client, licensor))
-    this.studios = data.studios.map((studio: any) => new ProducerMeta(this.client, studio))
-    this.genres = data.genres.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Genre'))
-    this.explicitGenres = data.explicit_genres.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Explicit'))
-    this.demographics = data.demographics.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Demographic'))
-    this.themes = data.themes.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Theme'))
+    this.producers = data.producers?.map((producer: any) => new ProducerMeta(this.client, producer)) || []
+    this.licensors = data.licensors?.map((licensor: any) => new ProducerMeta(this.client, licensor)) || []
+    this.studios = data.studios?.map((studio: any) => new ProducerMeta(this.client, studio)) || []
+    this.genres = data.genres?.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Genre')) || []
+    this.explicitGenres = data.explicit_genres?.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Explicit')) || []
+    this.demographics = data.demographics?.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Demographic')) || []
+    this.themes = data.themes?.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Theme')) || []
   }
 }
 
@@ -255,7 +255,7 @@ export class AnimeCharacterReference extends BaseClass {
     this.animeId = animeId
     this.role = data.role
     this.character = new CharacterMeta(client, data.character)
-    this.voiceActors = data.voice_actors.map((voiceActor: any) => new AnimeVoiceActorReference(this.client, this.animeId, voiceActor))
+    this.voiceActors = data.voice_actors?.map((voiceActor: any) => new AnimeVoiceActorReference(this.client, this.animeId, voiceActor)) || []
   }
 }
 
@@ -412,8 +412,8 @@ export class AnimeVideo extends BaseClass {
     super(client)
 
     this.animeId = animeId
-    this.promos = data.promo.map((promo: any) => new AnimePromo(this.client, this.animeId, promo))
-    this.episodes = data.episodes.map((episodeVideo: any) => new AnimeEpisodeVideo(this.client, this.animeId, episodeVideo))
+    this.promos = data.promo?.map((promo: any) => new AnimePromo(this.client, this.animeId, promo)) || []
+    this.episodes = data.episodes?.map((episodeVideo: any) => new AnimeEpisodeVideo(this.client, this.animeId, episodeVideo)) || []
   }
 }
 
@@ -529,6 +529,6 @@ export class AnimeRelationGroup<T extends ContentRelationType> extends ContentRe
     super(client, relation, data)
 
     this.animeId = animeId
-    this.items = data.map((item: any) => new (this.relation === 'Adaptation' ? MangaMeta : AnimeMeta)(this.client, item))
+    this.items = data?.map((item: any) => new (this.relation === 'Adaptation' ? MangaMeta : AnimeMeta)(this.client, item)) || []
   }
 }

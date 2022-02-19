@@ -20,7 +20,7 @@ export class PersonName extends BaseClass {
     this.name = data.name
     this.given = data.given_name || null
     this.family = data.faimly_name || null
-    this.alternate = data.alternate_names.map((alternate: any) => alternate || null).filter((alternate: any) => !!alternate)
+    this.alternate = data.alternate_names?.map((alternate: any) => alternate || null).filter((alternate: any) => !!alternate) || []
   }
 }
 

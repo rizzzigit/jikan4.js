@@ -34,7 +34,7 @@ export class Character extends BaseResource {
     this.image = new ContentImage(client, data.images)
     this.name = data.name
     this.nameKanji = data.name_kanji || null
-    this.nicknames = data.nicknames.map((nickname: any) => nickname || null).filter((nickname: any) => !!nickname)
+    this.nicknames = data.nicknames?.map((nickname: any) => nickname || null).filter((nickname: any) => !!nickname) || []
     this.favorites = data.favorites
     this.about = data.about || null
   }

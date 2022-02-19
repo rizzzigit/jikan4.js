@@ -173,10 +173,10 @@ export class UserFavorites extends BaseClass {
     super(client)
 
     this.username = username
-    this.anime = data.anime.map((anime: any) => Object.assign(new AnimeMeta(client, anime), { images: new ContentImage(client, anime.images) }))
-    this.manga = data.manga.map((manga: any) => Object.assign(new MangaMeta(client, manga), { images: new ContentImage(client, manga.images) }))
-    this.characters = data.characters.map((character: any) => Object.assign(new CharacterMeta(client, character), { images: new ContentImage(client, character.images) }))
-    this.people = data.people.map((person: any) => Object.assign(new PersonMeta(client, person), { images: new ContentImage(client, person.images) }))
+    this.anime = data.anime?.map((anime: any) => Object.assign(new AnimeMeta(client, anime), { images: new ContentImage(client, anime.images) })) || []
+    this.manga = data.manga?.map((manga: any) => Object.assign(new MangaMeta(client, manga), { images: new ContentImage(client, manga.images) })) || []
+    this.characters = data.characters?.map((character: any) => Object.assign(new CharacterMeta(client, character), { images: new ContentImage(client, character.images) })) || []
+    this.people = data.people?.map((person: any) => Object.assign(new PersonMeta(client, person), { images: new ContentImage(client, person.images) })) || []
   }
 }
 
@@ -245,8 +245,8 @@ export class UserContentUpdates extends BaseClass {
     super(client)
 
     this.username = username
-    this.anime = data.anime.map((anime: any) => new UserAnimeUpdate(client, username, anime))
-    this.manga = data.manga.map((manga: any) => new UserMangaUpdate(client, username, manga))
+    this.anime = data.anime?.map((anime: any) => new UserAnimeUpdate(client, username, anime)) || []
+    this.manga = data.manga?.map((manga: any) => new UserMangaUpdate(client, username, manga)) || []
   }
 }
 
@@ -329,13 +329,13 @@ export class UserRecommendation extends BaseClass {
       username: data.user.username
     }
 
-    this.entries = Object.assign(((entry) => entry.map((entry: any) => {
+    this.entries = Object.assign(((entry) => entry?.map((entry: any) => {
       if (entry.url.split('/')[3] === 'anime') {
         return new AnimeMeta(client, entry)
       } else {
         return new MangaMeta(client, entry)
       }
-    }))(data.entry), { images: new ContentImage(client, data.entry.images) })
+    }) || [])(data.entry), { images: new ContentImage(client, data.entry.images) })
 
     this.content = data.content
   }

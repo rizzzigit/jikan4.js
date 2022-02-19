@@ -29,17 +29,18 @@ class MangaPublishInformation extends base_1.BaseClass {
 exports.MangaPublishInformation = MangaPublishInformation;
 class Manga extends base_2.Content {
     constructor(client, data) {
+        var _a, _b, _c, _d, _e, _f;
         super(client, data);
         this.type = Manga.parseType(data.type);
         this.chapters = data.chapters;
         this.volumes = data.volumes;
         this.publishInfo = new MangaPublishInformation(client, data);
-        this.authors = data.authors.map((author) => new meta_1.PersonMeta(this.client, author));
-        this.serializations = data.serializations.map((serialization) => new meta_1.MagazineMeta(this.client, serialization));
-        this.genres = data.genres.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Genre'));
-        this.explicitGenres = data.explicit_genres.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Explicit'));
-        this.demographics = data.demographics.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Demographic'));
-        this.themes = data.themes.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Theme'));
+        this.authors = ((_a = data.authors) === null || _a === void 0 ? void 0 : _a.map((author) => new meta_1.PersonMeta(this.client, author))) || [];
+        this.serializations = ((_b = data.serializations) === null || _b === void 0 ? void 0 : _b.map((serialization) => new meta_1.MagazineMeta(this.client, serialization))) || [];
+        this.genres = ((_c = data.genres) === null || _c === void 0 ? void 0 : _c.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Genre'))) || [];
+        this.explicitGenres = ((_d = data.explicit_genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Explicit'))) || [];
+        this.demographics = ((_e = data.demographics) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Demographic'))) || [];
+        this.themes = ((_f = data.themes) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Theme'))) || [];
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
@@ -181,7 +182,7 @@ class MangaRelationGroup extends base_2.ContentRelationGroup {
     constructor(client, mangaId, relation, data) {
         super(client, relation, data);
         this.mangaId = mangaId;
-        this.items = data.map((item) => new (this.relation === 'Adaptation' ? meta_1.AnimeMeta : meta_1.MangaMeta)(this.client, item));
+        this.items = (data === null || data === void 0 ? void 0 : data.map((item) => new (this.relation === 'Adaptation' ? meta_1.AnimeMeta : meta_1.MangaMeta)(this.client, item))) || [];
     }
     getManga() {
         return this.client.manga.get(this.mangaId);

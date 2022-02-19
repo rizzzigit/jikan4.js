@@ -6,11 +6,12 @@ const meta_1 = require("./meta");
 const misc_1 = require("./misc");
 class PersonName extends base_1.BaseClass {
     constructor(client, data) {
+        var _a;
         super(client);
         this.name = data.name;
         this.given = data.given_name || null;
         this.family = data.faimly_name || null;
-        this.alternate = data.alternate_names.map((alternate) => alternate || null).filter((alternate) => !!alternate);
+        this.alternate = ((_a = data.alternate_names) === null || _a === void 0 ? void 0 : _a.map((alternate) => alternate || null).filter((alternate) => !!alternate)) || [];
     }
     toString() {
         return this.name;

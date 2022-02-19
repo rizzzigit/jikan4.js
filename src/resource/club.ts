@@ -81,7 +81,7 @@ export class Club extends BaseResource {
     this.category = Club.parseCategory(data.category)
     this.created = Club.parseDate(data.created)
     this.type = Club.parseType(data.type)
-    this.staff = data.staff.map((staff: any) => new ClubStaff(client, this.id, staff))
+    this.staff = data.staff?.map((staff: any) => new ClubStaff(client, this.id, staff)) || []
   }
 }
 

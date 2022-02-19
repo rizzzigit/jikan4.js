@@ -31,6 +31,7 @@ class AnimeAirInformation extends base_2.BaseClass {
 exports.AnimeAirInformation = AnimeAirInformation;
 class Anime extends base_1.Content {
     constructor(client, data) {
+        var _a, _b, _c, _d, _e, _f, _g;
         super(client, data);
         this.trailer = Anime.parseTrailer(client, data.trailer);
         this.type = Anime.parseType(data.type);
@@ -41,13 +42,13 @@ class Anime extends base_1.Content {
         this.rating = Anime.parseRating(data.rating);
         this.season = Anime.parseSeason(data.season);
         this.year = data.year || null;
-        this.producers = data.producers.map((producer) => new meta_1.ProducerMeta(this.client, producer));
-        this.licensors = data.licensors.map((licensor) => new meta_1.ProducerMeta(this.client, licensor));
-        this.studios = data.studios.map((studio) => new meta_1.ProducerMeta(this.client, studio));
-        this.genres = data.genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'));
-        this.explicitGenres = data.explicit_genres.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'));
-        this.demographics = data.demographics.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'));
-        this.themes = data.themes.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'));
+        this.producers = ((_a = data.producers) === null || _a === void 0 ? void 0 : _a.map((producer) => new meta_1.ProducerMeta(this.client, producer))) || [];
+        this.licensors = ((_b = data.licensors) === null || _b === void 0 ? void 0 : _b.map((licensor) => new meta_1.ProducerMeta(this.client, licensor))) || [];
+        this.studios = ((_c = data.studios) === null || _c === void 0 ? void 0 : _c.map((studio) => new meta_1.ProducerMeta(this.client, studio))) || [];
+        this.genres = ((_d = data.genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'))) || [];
+        this.explicitGenres = ((_e = data.explicit_genres) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
+        this.demographics = ((_f = data.demographics) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
+        this.themes = ((_g = data.themes) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
@@ -162,11 +163,12 @@ class AnimeVoiceActorReference extends base_2.BaseClass {
 exports.AnimeVoiceActorReference = AnimeVoiceActorReference;
 class AnimeCharacterReference extends base_2.BaseClass {
     constructor(client, animeId, data) {
+        var _a;
         super(client);
         this.animeId = animeId;
         this.role = data.role;
         this.character = new meta_1.CharacterMeta(client, data.character);
-        this.voiceActors = data.voice_actors.map((voiceActor) => new AnimeVoiceActorReference(this.client, this.animeId, voiceActor));
+        this.voiceActors = ((_a = data.voice_actors) === null || _a === void 0 ? void 0 : _a.map((voiceActor) => new AnimeVoiceActorReference(this.client, this.animeId, voiceActor))) || [];
     }
     getAnime() {
         return this.client.anime.get(this.animeId);
@@ -269,10 +271,11 @@ class AnimeEpisodeVideo extends base_2.BaseResource {
 exports.AnimeEpisodeVideo = AnimeEpisodeVideo;
 class AnimeVideo extends base_2.BaseClass {
     constructor(client, animeId, data) {
+        var _a, _b;
         super(client);
         this.animeId = animeId;
-        this.promos = data.promo.map((promo) => new AnimePromo(this.client, this.animeId, promo));
-        this.episodes = data.episodes.map((episodeVideo) => new AnimeEpisodeVideo(this.client, this.animeId, episodeVideo));
+        this.promos = ((_a = data.promo) === null || _a === void 0 ? void 0 : _a.map((promo) => new AnimePromo(this.client, this.animeId, promo))) || [];
+        this.episodes = ((_b = data.episodes) === null || _b === void 0 ? void 0 : _b.map((episodeVideo) => new AnimeEpisodeVideo(this.client, this.animeId, episodeVideo))) || [];
     }
 }
 exports.AnimeVideo = AnimeVideo;
@@ -347,7 +350,7 @@ class AnimeRelationGroup extends base_1.ContentRelationGroup {
     constructor(client, animeId, relation, data) {
         super(client, relation, data);
         this.animeId = animeId;
-        this.items = data.map((item) => new (this.relation === 'Adaptation' ? meta_1.MangaMeta : meta_1.AnimeMeta)(this.client, item));
+        this.items = (data === null || data === void 0 ? void 0 : data.map((item) => new (this.relation === 'Adaptation' ? meta_1.MangaMeta : meta_1.AnimeMeta)(this.client, item))) || [];
     }
     getAnime() {
         return this.client.anime.get(this.animeId);

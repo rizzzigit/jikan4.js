@@ -29,6 +29,6 @@ export class Season extends BaseClass {
     super(client)
 
     this.year = rawData.year
-    this.seasons = rawData.seasons.map((season: any) => Season.parseSeasonType(season))
+    this.seasons = rawData.seasons?.map((season: any) => Season.parseSeasonType(season)) || []
   }
 }

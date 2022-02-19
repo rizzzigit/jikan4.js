@@ -104,12 +104,13 @@ class UserStats extends base_1.BaseClass {
 exports.UserStats = UserStats;
 class UserFavorites extends base_1.BaseClass {
     constructor(client, username, data) {
+        var _a, _b, _c, _d;
         super(client);
         this.username = username;
-        this.anime = data.anime.map((anime) => Object.assign(new meta_1.AnimeMeta(client, anime), { images: new Jikan_1.ContentImage(client, anime.images) }));
-        this.manga = data.manga.map((manga) => Object.assign(new meta_1.MangaMeta(client, manga), { images: new Jikan_1.ContentImage(client, manga.images) }));
-        this.characters = data.characters.map((character) => Object.assign(new meta_1.CharacterMeta(client, character), { images: new Jikan_1.ContentImage(client, character.images) }));
-        this.people = data.people.map((person) => Object.assign(new meta_1.PersonMeta(client, person), { images: new Jikan_1.ContentImage(client, person.images) }));
+        this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => Object.assign(new meta_1.AnimeMeta(client, anime), { images: new Jikan_1.ContentImage(client, anime.images) }))) || [];
+        this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => Object.assign(new meta_1.MangaMeta(client, manga), { images: new Jikan_1.ContentImage(client, manga.images) }))) || [];
+        this.characters = ((_c = data.characters) === null || _c === void 0 ? void 0 : _c.map((character) => Object.assign(new meta_1.CharacterMeta(client, character), { images: new Jikan_1.ContentImage(client, character.images) }))) || [];
+        this.people = ((_d = data.people) === null || _d === void 0 ? void 0 : _d.map((person) => Object.assign(new meta_1.PersonMeta(client, person), { images: new Jikan_1.ContentImage(client, person.images) }))) || [];
     }
     getUser() {
         return this.client.users.get(this.username);
@@ -151,10 +152,11 @@ class UserMangaUpdate extends UserContentUpdate {
 exports.UserMangaUpdate = UserMangaUpdate;
 class UserContentUpdates extends base_1.BaseClass {
     constructor(client, username, data) {
+        var _a, _b;
         super(client);
         this.username = username;
-        this.anime = data.anime.map((anime) => new UserAnimeUpdate(client, username, anime));
-        this.manga = data.manga.map((manga) => new UserMangaUpdate(client, username, manga));
+        this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => new UserAnimeUpdate(client, username, anime))) || [];
+        this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => new UserMangaUpdate(client, username, manga))) || [];
     }
     getUser() {
         return this.client.users.get(this.username);
@@ -209,14 +211,14 @@ class UserRecommendation extends base_1.BaseClass {
             url: UserRecommendation.parseURL(data.user.url),
             username: data.user.username
         };
-        this.entries = Object.assign(((entry) => entry.map((entry) => {
+        this.entries = Object.assign(((entry) => (entry === null || entry === void 0 ? void 0 : entry.map((entry) => {
             if (entry.url.split('/')[3] === 'anime') {
                 return new meta_1.AnimeMeta(client, entry);
             }
             else {
                 return new meta_1.MangaMeta(client, entry);
             }
-        }))(data.entry), { images: new Jikan_1.ContentImage(client, data.entry.images) });
+        })) || [])(data.entry), { images: new Jikan_1.ContentImage(client, data.entry.images) });
         this.content = data.content;
     }
 }

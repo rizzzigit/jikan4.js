@@ -91,7 +91,7 @@ export class ContentStatistics extends BaseClass {
     this.onHold = data.on_hold
     this.dropped = data.dropped
     this.total = data.total
-    this.scores = data.scores.map((score: any) => new ContentStatisticsScore(client, score))
+    this.scores = data.scores?.map((score: any) => new ContentStatisticsScore(client, score)) || []
   }
 }
 

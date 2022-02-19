@@ -6,6 +6,7 @@ import { Image } from './misc';
 export declare class Character extends BaseResource {
     readonly image: ContentImage;
     readonly name: string;
+    readonly nameKanji: string | null;
     readonly nicknames: Array<string>;
     readonly favorites: number;
     readonly about: string | null;

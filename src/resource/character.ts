@@ -7,6 +7,7 @@ import { Image } from './misc'
 export class Character extends BaseResource {
   public readonly image: ContentImage
   public readonly name: string
+  public readonly nameKanji: string | null
   public readonly nicknames: Array<string>
   public readonly favorites: number
   public readonly about: string | null
@@ -32,6 +33,7 @@ export class Character extends BaseResource {
 
     this.image = new ContentImage(client, data.images)
     this.name = data.name
+    this.nameKanji = data.name_kanji || null
     this.nicknames = data.nicknames.map((nickname: any) => nickname || null).filter((nickname: any) => !!nickname)
     this.favorites = data.favorites
     this.about = data.about || null

@@ -9,6 +9,7 @@ class Character extends base_1.BaseResource {
         super(client, data);
         this.image = new base_2.ContentImage(client, data.images);
         this.name = data.name;
+        this.nameKanji = data.name_kanji || null;
         this.nicknames = data.nicknames.map((nickname) => nickname || null).filter((nickname) => !!nickname);
         this.favorites = data.favorites;
         this.about = data.about || null;

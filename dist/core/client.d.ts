@@ -78,6 +78,19 @@ export interface ClientOptions {
      * The number of retries on HTTP 500 errors.
     */
     maxApiErrorRetry: number;
+    /**
+     * Keep sockets around in a pool to be used by other requests in the future.
+  
+    * Default value: `true`
+    */
+    keepAlive: boolean;
+    /**
+     * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets
+     * being kept alive. Only relevant if keepAlive is set to true.
+     *
+     * Default value: `60000`
+    */
+    keepAliveMsecs: number;
     dataPath: string;
 }
 export interface ClientEvents {

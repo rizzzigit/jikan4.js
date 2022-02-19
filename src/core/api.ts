@@ -187,6 +187,10 @@ export class APIClient {
 
   public readonly client: Client
   public readonly queue: APIRequestQueue
+  public readonly agent: {
+    http: HTTP.Agent
+    https: HTTPS.Agent
+  }
 
   private debug (message: string) {
     return this.client.debug('API Client', message)
@@ -210,7 +214,7 @@ export class APIClient {
   }
 
   public async executeRequest (url: URL): Promise<APIResponseData> {
-    const { client: { options }, cacheManager } = this
+    const { client: { options }, cacheManager, agent } = this
     const isCachingEnabled = this.isCachingEnabled(url)
 
     if (isCachingEnabled && cacheManager.has(url)) {
@@ -225,7 +229,7 @@ export class APIClient {
     this.queue.lastRequest = Date.now()
     const responseData: APIResponseData = await new Promise((resolve, reject: (error: Error | APIError) => void) => {
       const callREST = () => new Promise((resolve: (data: APIResponseData) => void, reject: (error: Error) => void) => {
-        const request = (url.protocol === 'https:' ? HTTPS : HTTP).request(`${url}`)
+        const request = (url.protocol === 'https:' ? HTTPS : HTTP).request(`${url}`, { agent: (url.protocol === 'https:' ? agent.https : agent.http) })
         const requestTimeout = async () => {
           await sleep(options.requestTimeout)
 
@@ -279,5 +283,12 @@ export class APIClient {
     this.client = client
     this.queue = new APIRequestQueue(this)
     this.cacheManager = new CacheManager(client)
+    this.agent = ((options) => ({
+      http: new HTTP.Agent(options),
+      https: new HTTPS.Agent(options)
+    }))({
+      keepAlive: client.options.keepAlive,
+      keepAliveMsecs: client.options.keepAliveMsecs
+    })
   }
 }

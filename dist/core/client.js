@@ -69,6 +69,8 @@ class Client {
             requestTimeout: 15000,
             requestQueueLimit: 100,
             maxApiErrorRetry: 5,
+            keepAlive: true,
+            keepAliveMsecs: 60000,
             disableCaching: false
         };
         return Object.assign(defaultOptions, options);

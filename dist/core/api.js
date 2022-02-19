@@ -114,6 +114,13 @@ class APIClient {
         this.client = client;
         this.queue = new APIRequestQueue(this);
         this.cacheManager = new cache_1.CacheManager(client);
+        this.agent = ((options) => ({
+            http: new http_1.default.Agent(options),
+            https: new https_1.default.Agent(options)
+        }))({
+            keepAlive: client.options.keepAlive,
+            keepAliveMsecs: client.options.keepAliveMsecs
+        });
     }
     parseURL(path, query) {
         const { client: { options } } = this;
@@ -152,7 +159,7 @@ class APIClient {
     }
     executeRequest(url) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const { client: { options }, cacheManager } = this;
+            const { client: { options }, cacheManager, agent } = this;
             const isCachingEnabled = this.isCachingEnabled(url);
             if (isCachingEnabled && cacheManager.has(url)) {
                 return cacheManager.get(url);
@@ -164,7 +171,7 @@ class APIClient {
             this.queue.lastRequest = Date.now();
             const responseData = yield new Promise((resolve, reject) => {
                 const callREST = () => new Promise((resolve, reject) => {
-                    const request = (url.protocol === 'https:' ? https_1.default : http_1.default).request(`${url}`);
+                    const request = (url.protocol === 'https:' ? https_1.default : http_1.default).request(`${url}`, { agent: (url.protocol === 'https:' ? agent.https : agent.http) });
                     const requestTimeout = () => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
                         var _a;
                         yield (0, utils_1.sleep)(options.requestTimeout);

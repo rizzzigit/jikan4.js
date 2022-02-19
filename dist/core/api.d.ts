@@ -2,6 +2,7 @@
 import { Client } from '../core/client';
 import { URL } from 'url';
 import HTTP from 'http';
+import HTTPS from 'https';
 import { CacheManager } from './cache';
 export interface APIRequestQuery {
     disableCaching?: any;
@@ -51,6 +52,10 @@ export declare class APIClient {
     parseURL(path: string, query?: APIRequestQuery): URL;
     readonly client: Client;
     readonly queue: APIRequestQueue;
+    readonly agent: {
+        http: HTTP.Agent;
+        https: HTTPS.Agent;
+    };
     private debug;
     request(path: string, query?: APIRequestQuery): Promise<APIResponseData>;
     isCachingEnabled(url: URL): boolean;

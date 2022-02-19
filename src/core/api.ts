@@ -82,7 +82,7 @@ export class APIRequestQueue extends Array<APIRequestQueueEntry> {
 
       if (entry) {
         this.debug(`Shift one entry from the queue, new queue size is ${this.length}`)
-        let currentTry = 1
+        let currentTry = 0
 
         while (currentTry <= maxApiErrorRetry) {
           try {
@@ -96,7 +96,7 @@ export class APIRequestQueue extends Array<APIRequestQueueEntry> {
 
                 break
               } else {
-                this.debug(`${error.message}, retry no. ${currentTry}`)
+                this.debug(`${error.message}, retry no. ${currentTry + 1}`)
               }
             } else {
               entry.reject(error)

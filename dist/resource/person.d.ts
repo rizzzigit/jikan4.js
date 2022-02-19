@@ -9,6 +9,7 @@ export declare class PersonName extends BaseClass {
     readonly given: string | null;
     readonly family: string | null;
     readonly alternate: Array<string>;
+    toString(): string;
     constructor(client: Client, data: any);
 }
 export declare class Person extends BaseResource {

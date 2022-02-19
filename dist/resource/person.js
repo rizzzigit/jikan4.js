@@ -12,6 +12,9 @@ class PersonName extends base_1.BaseClass {
         this.family = data.faimly_name || null;
         this.alternate = data.alternate_names.map((alternate) => alternate || null).filter((alternate) => !!alternate);
     }
+    toString() {
+        return this.name;
+    }
 }
 exports.PersonName = PersonName;
 class Person extends base_1.BaseResource {

@@ -10,6 +10,10 @@ export class PersonName extends BaseClass {
   public readonly family: string | null
   public readonly alternate: Array<string>
 
+  public toString () {
+    return this.name
+  }
+
   public constructor (client: Client, data: any) {
     super(client)
 

@@ -10,7 +10,7 @@ class CharacterManager extends base_1.BaseManager {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     storeCache(data) {
-        return super.storeCache(`characters/${data.raw_id}`, data);
+        return super.storeCache(`characters/${data.mal_id}`, data);
     }
     search(searchString, filter, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {

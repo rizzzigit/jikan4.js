@@ -12,7 +12,7 @@ export class CharacterManager extends BaseManager {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public storeCache (data: any) {
-    return super.storeCache(`characters/${data.raw_id}`, data)
+    return super.storeCache(`characters/${data.mal_id}`, data)
   }
 
   public async search (searchString: string, filter?: Partial<CharacterSearchFilter>, offset?: number, maxCount?: number) {

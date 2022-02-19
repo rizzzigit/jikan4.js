@@ -69,6 +69,7 @@ class Client {
             requestTimeout: 15000,
             requestQueueLimit: 100,
             maxApiErrorRetry: 5,
+            retryOnApiError: true,
             keepAlive: true,
             keepAliveMsecs: 60000,
             disableCaching: false

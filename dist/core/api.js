@@ -50,7 +50,7 @@ class APIRequestQueue extends Array {
     }
     runQueue() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const { client: { options: { maxApiErrorRetry } } } = this;
+            const { client: { options: { maxApiErrorRetry, retryOnApiError } } } = this;
             this.debug('Run request queue');
             this.isRunning = true;
             do {
@@ -64,11 +64,18 @@ class APIRequestQueue extends Array {
                             break;
                         }
                         catch (error) {
-                            if ((error.status !== 500) || (currentTry >= maxApiErrorRetry)) {
-                                break;
+                            if (retryOnApiError) {
+                                if ((error.status !== 500) || (currentTry >= maxApiErrorRetry)) {
+                                    entry.reject(error.status === 500 ? new Error(`${error.message} after ${currentTry} tries`) : error);
+                                    break;
+                                }
+                                else {
+                                    this.debug(`${error.message}, retry no. ${currentTry}`);
+                                }
                             }
                             else {
-                                this.debug(`${error.message}, retry no. ${currentTry}`);
+                                entry.reject(error);
+                                break;
                             }
                         }
                         currentTry++;

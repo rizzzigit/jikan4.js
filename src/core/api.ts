@@ -72,7 +72,7 @@ export class APIRequestQueue extends Array<APIRequestQueueEntry> {
   }
 
   public async runQueue () {
-    const { client: { options: { maxApiErrorRetry } } } = this
+    const { client: { options: { maxApiErrorRetry, retryOnApiError } } } = this
 
     this.debug('Run request queue')
     this.isRunning = true
@@ -90,11 +90,17 @@ export class APIRequestQueue extends Array<APIRequestQueueEntry> {
 
             break
           } catch (error: any) {
-            if ((error.status !== 500) || (currentTry >= maxApiErrorRetry)) {
+            if (retryOnApiError) {
+              if ((error.status !== 500) || (currentTry >= maxApiErrorRetry)) {
+                entry.reject(error.status === 500 ? new Error(`${error.message} after ${currentTry} tries`) : error)
 
-              break
+                break
+              } else {
+                this.debug(`${error.message}, retry no. ${currentTry}`)
+              }
             } else {
-              this.debug(`${error.message}, retry no. ${currentTry}`)
+              entry.reject(error)
+              break
             }
           }
 

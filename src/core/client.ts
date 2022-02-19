@@ -90,6 +90,11 @@ export interface ClientOptions {
   maxApiErrorRetry: number
 
   /**
+   * Whether to retry on HTTP 500 errors.
+  */
+  retryOnApiError: boolean
+
+  /**
    * Keep sockets around in a pool to be used by other requests in the future.
 
   * Default value: `true`
@@ -140,6 +145,7 @@ export class Client {
       requestQueueLimit: 100,
 
       maxApiErrorRetry: 5,
+      retryOnApiError: true,
 
       keepAlive: true,
       keepAliveMsecs: 60000,

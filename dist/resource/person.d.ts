@@ -15,7 +15,7 @@ export declare class Person extends BaseResource {
     readonly websiteUrl: URL | null;
     readonly image: Image;
     readonly name: PersonName;
-    readonly birth: Date;
+    readonly birth: Date | null;
     readonly favorites: number;
     readonly about: string | null;
     getAnime(): Promise<PersonAnimeReference[]>;

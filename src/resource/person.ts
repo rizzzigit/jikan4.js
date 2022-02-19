@@ -24,7 +24,7 @@ export class Person extends BaseResource {
   public readonly websiteUrl: URL | null
   public readonly image: Image
   public readonly name: PersonName
-  public readonly birth: Date
+  public readonly birth: Date | null
   public readonly favorites: number
   public readonly about: string | null
 
@@ -50,7 +50,7 @@ export class Person extends BaseResource {
     this.websiteUrl = Person.parseURL(data.website_url, true)
     this.image = new Image(client, data.images?.jpg)
     this.name = new PersonName(client, data)
-    this.birth = Person.parseDate(data.birthday)
+    this.birth = Person.parseDate(data.birthday, true)
     this.favorites = data.favorites
     this.about = data.about || null
   }

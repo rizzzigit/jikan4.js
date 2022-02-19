@@ -21,7 +21,7 @@ class Person extends base_1.BaseResource {
         this.websiteUrl = Person.parseURL(data.website_url, true);
         this.image = new misc_1.Image(client, (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
         this.name = new PersonName(client, data);
-        this.birth = Person.parseDate(data.birthday);
+        this.birth = Person.parseDate(data.birthday, true);
         this.favorites = data.favorites;
         this.about = data.about || null;
     }

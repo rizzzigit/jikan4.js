@@ -64,8 +64,7 @@ class APIRequestQueue extends Array {
                             break;
                         }
                         catch (error) {
-                            if ((error.status !== 500) || (currentTry > maxApiErrorRetry)) {
-                                entry.reject(error);
+                            if ((error.status !== 500) || (currentTry >= maxApiErrorRetry)) {
                                 break;
                             }
                             else {

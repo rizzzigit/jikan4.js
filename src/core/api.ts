@@ -90,8 +90,7 @@ export class APIRequestQueue extends Array<APIRequestQueueEntry> {
 
             break
           } catch (error: any) {
-            if ((error.status !== 500) || (currentTry > maxApiErrorRetry)) {
-              entry.reject(error)
+            if ((error.status !== 500) || (currentTry >= maxApiErrorRetry)) {
 
               break
             } else {

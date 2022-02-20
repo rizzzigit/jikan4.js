@@ -176,18 +176,14 @@ class APIClient {
             }
             this.queue.lastRequest = Date.now();
             const responseData = yield new Promise((resolve, reject) => {
+                const context = {};
                 const callREST = () => new Promise((resolve, reject) => {
                     const request = (url.protocol === 'https:' ? https_1.default : http_1.default).request(`${url}`, { agent: (url.protocol === 'https:' ? agent.https : agent.http) });
-                    const requestTimeout = () => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-                        var _a;
-                        yield (0, utils_1.sleep)(options.requestTimeout);
-                        if (!(request.destroyed || ((_a = request.socket) === null || _a === void 0 ? void 0 : _a.destroyed))) {
-                            request.destroy(new Error(`${options.requestTimeout} ms timeout`));
-                        }
-                    });
+                    context.request = request;
                     request.on('error', reject);
                     request.on('response', (response) => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
                         let responseText = '';
+                        context.response = response;
                         response.on('error', reject);
                         response.on('data', (chunk) => (responseText += chunk));
                         response.on('end', () => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -196,9 +192,19 @@ class APIClient {
                             resolve(new APIResponseData(deserialized.status, url, response.headers, deserialized));
                         }));
                     }));
-                    requestTimeout();
                     this.debug(`HTTP GET ${url}`);
                     request.end();
+                });
+                const sleep = () => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+                    return new Promise((resolve) => {
+                        context.timeout = Number(setTimeout(resolve, options.requestTimeout));
+                    });
+                });
+                sleep().then(() => {
+                    var _a, _b, _c, _d;
+                    if (!(((_a = context.request) === null || _a === void 0 ? void 0 : _a.destroyed) || ((_c = (_b = context.request) === null || _b === void 0 ? void 0 : _b.socket) === null || _c === void 0 ? void 0 : _c.destroyed))) {
+                        (_d = context.request) === null || _d === void 0 ? void 0 : _d.destroy(new Error(`${options.requestTimeout} ms timeout`));
+                    }
                 });
                 callREST()
                     .then((response) => {
@@ -212,7 +218,8 @@ class APIClient {
                             reject(new APIError(`HTTP ${response.status} hit on ${url}`, `${url}`, response));
                     }
                 })
-                    .catch(reject);
+                    .catch(reject)
+                    .finally(() => (context.timeout !== undefined) && clearTimeout(context.timeout));
             });
             if (isCachingEnabled) {
                 cacheManager.set(url, responseData);

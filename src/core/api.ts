@@ -1,6 +1,6 @@
 import { Client } from '../core/client'
 import { URL } from 'url'
-import { waitUntil, sleep } from '../utils'
+import { waitUntil } from '../utils'
 import HTTP from 'http'
 import HTTPS from 'https'
 import { CacheManager } from './cache'
@@ -233,20 +233,15 @@ export class APIClient {
 
     this.queue.lastRequest = Date.now()
     const responseData: APIResponseData = await new Promise((resolve, reject: (error: Error | APIError) => void) => {
+      const context: { timeout?: any, request?: HTTP.ClientRequest, response?: HTTP.IncomingMessage } = {}
       const callREST = () => new Promise((resolve: (data: APIResponseData) => void, reject: (error: Error) => void) => {
         const request = (url.protocol === 'https:' ? HTTPS : HTTP).request(`${url}`, { agent: (url.protocol === 'https:' ? agent.https : agent.http) })
-        const requestTimeout = async () => {
-          await sleep(options.requestTimeout)
-
-          if (!(request.destroyed || request.socket?.destroyed)) {
-            request.destroy(new Error(`${options.requestTimeout} ms timeout`))
-          }
-        }
-
+        context.request = request
         request.on('error', reject)
         request.on('response', async (response) => {
           let responseText: string = ''
 
+          context.response = response
           response.on('error', reject)
           response.on('data', (chunk) => (responseText += chunk))
           response.on('end', async () => {
@@ -257,11 +252,19 @@ export class APIClient {
           })
         })
 
-        requestTimeout()
         this.debug(`HTTP GET ${url}`)
         request.end()
       })
 
+      const sleep = async () => new Promise<void>((resolve) => {
+        context.timeout = Number(setTimeout(resolve, options.requestTimeout))
+      })
+
+      sleep().then(() => {
+        if (!(context.request?.destroyed || context.request?.socket?.destroyed)) {
+          context.request?.destroy(new Error(`${options.requestTimeout} ms timeout`))
+        }
+      })
       callREST()
         .then((response) => {
           switch (response.status) {
@@ -276,6 +279,7 @@ export class APIClient {
           }
         })
         .catch(reject)
+        .finally(() => (context.timeout !== undefined) && clearTimeout(context.timeout))
     })
 
     if (isCachingEnabled) {

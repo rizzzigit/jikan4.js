@@ -108,7 +108,7 @@ export declare class AnimeEpisode extends BaseClass {
 }
 export declare class AnimePartialEpisode extends AnimeEpisode {
     readonly synopsis: null;
-    readonly forumUrl: URL;
+    readonly forumUrl: URL | null;
     getFullEpisode(): Promise<AnimeEpisode>;
     constructor(client: Client, animeId: number, data: any);
 }
@@ -135,7 +135,7 @@ export declare class AnimeEpisodeVideo extends BaseResource {
     readonly animeId: number;
     readonly title: string;
     readonly episode: number;
-    readonly imageURL: URL;
+    readonly imageURL: URL | null;
     getAnime(): Promise<Anime>;
     constructor(client: Client, animeId: number, data: any);
 }

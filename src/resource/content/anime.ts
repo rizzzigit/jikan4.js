@@ -327,7 +327,7 @@ export class AnimeEpisode extends BaseClass {
 
 export class AnimePartialEpisode extends AnimeEpisode {
   public readonly synopsis: null
-  public readonly forumUrl: URL
+  public readonly forumUrl: URL | null
 
   public getFullEpisode () {
     return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.animeId, this.episodeId)
@@ -337,7 +337,7 @@ export class AnimePartialEpisode extends AnimeEpisode {
     super(client, animeId, data)
 
     this.synopsis = null
-    this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url)
+    this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url, true)
   }
 }
 
@@ -387,7 +387,7 @@ export class AnimeEpisodeVideo extends BaseResource {
   public readonly animeId: number
   public readonly title: string
   public readonly episode: number
-  public readonly imageURL: URL
+  public readonly imageURL: URL | null
 
   public getAnime () {
     return <Promise<Anime>> this.client.anime.get(this.animeId)
@@ -399,7 +399,7 @@ export class AnimeEpisodeVideo extends BaseResource {
     this.animeId = animeId
     this.title = data.title
     this.episode = typeof (data.episode) === 'string' ? Number(data.episode.toLowerCase().split('episode')[1]?.trim()) || 0 : 0
-    this.imageURL = AnimeEpisodeVideo.parseURL(data.images.image_url)
+    this.imageURL = AnimeEpisodeVideo.parseURL(data.images?.jpg?.image_url, true)
   }
 }
 
@@ -529,6 +529,6 @@ export class AnimeRelationGroup<T extends ContentRelationType> extends ContentRe
     super(client, relation, data)
 
     this.animeId = animeId
-    this.items = data?.map((item: any) => new (this.relation === 'Adaptation' ? MangaMeta : AnimeMeta)(this.client, item)) || []
+    this.items = data.entry?.map((item: any) => new (this.relation === 'Adaptation' ? MangaMeta : AnimeMeta)(this.client, item)) || []
   }
 }

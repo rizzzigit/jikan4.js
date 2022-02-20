@@ -46,7 +46,7 @@ class CharacterMangaReference extends base_1.BaseClass {
         super(client);
         this.characterId = characterId;
         this.role = data.role;
-        this.manga = new meta_1.MangaMeta(client, data);
+        this.manga = new meta_1.MangaMeta(client, data.manga);
     }
     getCharacter() {
         return this.client.characters.get(this.characterId);

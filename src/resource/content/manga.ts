@@ -288,6 +288,6 @@ export class MangaRelationGroup<T extends ContentRelationType> extends ContentRe
     super(client, relation, data)
 
     this.mangaId = mangaId
-    this.items = data?.map((item: any) => new (this.relation === 'Adaptation' ? AnimeMeta : MangaMeta)(this.client, item)) || []
+    this.items = data.entry?.map((item: any) => new (this.relation === 'Adaptation' ? AnimeMeta : MangaMeta)(this.client, item)) || []
   }
 }

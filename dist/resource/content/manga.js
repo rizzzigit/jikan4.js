@@ -180,9 +180,10 @@ class MangaReview extends base_2.ContentReview {
 exports.MangaReview = MangaReview;
 class MangaRelationGroup extends base_2.ContentRelationGroup {
     constructor(client, mangaId, relation, data) {
+        var _a;
         super(client, relation, data);
         this.mangaId = mangaId;
-        this.items = (data === null || data === void 0 ? void 0 : data.map((item) => new (this.relation === 'Adaptation' ? meta_1.AnimeMeta : meta_1.MangaMeta)(this.client, item))) || [];
+        this.items = ((_a = data.entry) === null || _a === void 0 ? void 0 : _a.map((item) => new (this.relation === 'Adaptation' ? meta_1.AnimeMeta : meta_1.MangaMeta)(this.client, item))) || [];
     }
     getManga() {
         return this.client.manga.get(this.mangaId);

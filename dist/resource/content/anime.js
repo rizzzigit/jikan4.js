@@ -221,7 +221,7 @@ class AnimePartialEpisode extends AnimeEpisode {
     constructor(client, animeId, data) {
         super(client, animeId, data);
         this.synopsis = null;
-        this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url);
+        this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url, true);
     }
     getFullEpisode() {
         return this.client.anime.getEpisode(this.animeId, this.episodeId);
@@ -257,12 +257,12 @@ class AnimePromo extends base_2.BaseClass {
 exports.AnimePromo = AnimePromo;
 class AnimeEpisodeVideo extends base_2.BaseResource {
     constructor(client, animeId, data) {
-        var _a;
+        var _a, _b, _c;
         super(client, data);
         this.animeId = animeId;
         this.title = data.title;
         this.episode = typeof (data.episode) === 'string' ? Number((_a = data.episode.toLowerCase().split('episode')[1]) === null || _a === void 0 ? void 0 : _a.trim()) || 0 : 0;
-        this.imageURL = AnimeEpisodeVideo.parseURL(data.images.image_url);
+        this.imageURL = AnimeEpisodeVideo.parseURL((_c = (_b = data.images) === null || _b === void 0 ? void 0 : _b.jpg) === null || _c === void 0 ? void 0 : _c.image_url, true);
     }
     getAnime() {
         return this.client.anime.get(this.animeId);
@@ -348,9 +348,10 @@ class AnimeReview extends base_1.ContentReview {
 exports.AnimeReview = AnimeReview;
 class AnimeRelationGroup extends base_1.ContentRelationGroup {
     constructor(client, animeId, relation, data) {
+        var _a;
         super(client, relation, data);
         this.animeId = animeId;
-        this.items = (data === null || data === void 0 ? void 0 : data.map((item) => new (this.relation === 'Adaptation' ? meta_1.MangaMeta : meta_1.AnimeMeta)(this.client, item))) || [];
+        this.items = ((_a = data.entry) === null || _a === void 0 ? void 0 : _a.map((item) => new (this.relation === 'Adaptation' ? meta_1.MangaMeta : meta_1.AnimeMeta)(this.client, item))) || [];
     }
     getAnime() {
         return this.client.anime.get(this.animeId);

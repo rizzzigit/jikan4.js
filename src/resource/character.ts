@@ -72,7 +72,7 @@ export class CharacterMangaReference extends BaseClass {
 
     this.characterId = characterId
     this.role = data.role
-    this.manga = new MangaMeta(client, data)
+    this.manga = new MangaMeta(client, data.manga)
   }
 }
 

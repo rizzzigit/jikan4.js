@@ -13,15 +13,30 @@
   ```
 
 ## Usage
-  This is how to get a resource. It returns `undefined` if the requested resource does not exist.
-
+  This is how to import the module. It depends on the type of your project.
+ 
+  **ESModule import**
   ```javascript
   import Jikan from 'jikan4.js'
+  ```
+  **CommonJS require**
+  ```javascript
+  const Jikan = require('jikan4.js')
+  ```
 
+  This is how to get a resource. It returns `undefined` if the requested resource does not exist.
+
+  **ES2020-compliant example**
+  ```javascript
   const client = new Jikan.Client()
+  async function printAnime (id) {
+    const anime = await client.anime.get(id)
 
-  client.anime.random()
-    .then((anime) => console.log(`${anime.title} (#${anime.ID})`))
+    console.log(anime ? `${anime.title} (#${anime.id})` : `Anime with ID ${id} does not exist.`)
+  }
+
+  printAnime(4)
+  printAnime(5)
   ```
 
 ## Links

@@ -6,7 +6,6 @@
 ## Installation
   > **Important:**
   > - The minimum Node.js version requirement for `Jikan4.js` is **v12.0.0**
-  > - `Jikan4.js` is under development as well as Jikan v4 API.
 
   ```shell
   $ npm i jikan4.js
@@ -26,7 +25,7 @@
 
   This is how to get a resource. It returns `undefined` if the requested resource does not exist.
 
-  **ES2020-compliant example**
+  **Example**
   ```javascript
   const client = new Jikan.Client()
   async function printAnime (id) {

@@ -219,23 +219,23 @@ export class APIClient {
   }
 
   public async executeRequest (url: URL): Promise<APIResponseData> {
-    const { client: { options }, cacheManager, agent } = this
+    const { client: { options }, cacheManager, agent, queue, queue: { nextRequest } } = this
     const isCachingEnabled = this.isCachingEnabled(url)
 
     if (isCachingEnabled && cacheManager.has(url)) {
       return cacheManager.get(url)
     }
 
-    if (this.queue.nextRequest > Date.now()) {
-      this.debug(`Wait ${this.queue.nextRequest - Date.now()} ms before requesting`)
-      await waitUntil(this.queue.nextRequest)
+    if (nextRequest > Date.now()) {
+      this.debug(`Wait ${nextRequest - Date.now()} ms before requesting`)
+      await waitUntil(nextRequest)
     }
 
-    this.queue.lastRequest = Date.now()
+    queue.lastRequest = Date.now()
     const responseData: APIResponseData = await new Promise((resolve, reject: (error: Error | APIError) => void) => {
       const context: { timeout?: any, request?: HTTP.ClientRequest, response?: HTTP.IncomingMessage } = {}
       const callREST = () => new Promise((resolve: (data: APIResponseData) => void, reject: (error: Error) => void) => {
-        const request = (url.protocol === 'https:' ? HTTPS : HTTP).request(`${url}`, { agent: (url.protocol === 'https:' ? agent.https : agent.http) })
+        const request = (url.protocol === 'https:' ? HTTPS.request(url.href, { agent: agent.https }) : HTTP.request(url.href, { agent: agent.http }))
         context.request = request
         request.on('error', reject)
         request.on('response', async (response) => {
@@ -260,11 +260,13 @@ export class APIClient {
         context.timeout = Number(setTimeout(resolve, options.requestTimeout))
       })
 
-      sleep().then(() => {
-        if (!(context.request?.destroyed || context.request?.socket?.destroyed)) {
-          context.request?.destroy(new Error(`${options.requestTimeout} ms timeout`))
-        }
-      })
+      sleep()
+        .then(() => {
+          if (!(context.request?.destroyed || context.request?.socket?.destroyed)) {
+            context.request?.destroy(new Error(`${options.requestTimeout} ms timeout`))
+          }
+        })
+
       callREST()
         .then((response) => {
           switch (response.status) {

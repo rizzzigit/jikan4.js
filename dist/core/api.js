@@ -165,20 +165,20 @@ class APIClient {
     }
     executeRequest(url) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const { client: { options }, cacheManager, agent } = this;
+            const { client: { options }, cacheManager, agent, queue, queue: { nextRequest } } = this;
             const isCachingEnabled = this.isCachingEnabled(url);
             if (isCachingEnabled && cacheManager.has(url)) {
                 return cacheManager.get(url);
             }
-            if (this.queue.nextRequest > Date.now()) {
-                this.debug(`Wait ${this.queue.nextRequest - Date.now()} ms before requesting`);
-                yield (0, utils_1.waitUntil)(this.queue.nextRequest);
+            if (nextRequest > Date.now()) {
+                this.debug(`Wait ${nextRequest - Date.now()} ms before requesting`);
+                yield (0, utils_1.waitUntil)(nextRequest);
             }
-            this.queue.lastRequest = Date.now();
+            queue.lastRequest = Date.now();
             const responseData = yield new Promise((resolve, reject) => {
                 const context = {};
                 const callREST = () => new Promise((resolve, reject) => {
-                    const request = (url.protocol === 'https:' ? https_1.default : http_1.default).request(`${url}`, { agent: (url.protocol === 'https:' ? agent.https : agent.http) });
+                    const request = (url.protocol === 'https:' ? https_1.default.request(url.href, { agent: agent.https }) : http_1.default.request(url.href, { agent: agent.http }));
                     context.request = request;
                     request.on('error', reject);
                     request.on('response', (response) => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -200,7 +200,8 @@ class APIClient {
                         context.timeout = Number(setTimeout(resolve, options.requestTimeout));
                     });
                 });
-                sleep().then(() => {
+                sleep()
+                    .then(() => {
                     var _a, _b, _c, _d;
                     if (!(((_a = context.request) === null || _a === void 0 ? void 0 : _a.destroyed) || ((_c = (_b = context.request) === null || _b === void 0 ? void 0 : _b.socket) === null || _c === void 0 ? void 0 : _c.destroyed))) {
                         (_d = context.request) === null || _d === void 0 ? void 0 : _d.destroy(new Error(`${options.requestTimeout} ms timeout`));

@@ -28,10 +28,14 @@ class HeartBeatMonitor extends base_1.BaseClass {
     }
     check() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const { APIClient } = this;
-            const responseData = yield APIClient.request('', { disableCaching: '1' });
+            const { APIClient, client } = this;
+            const responseData = yield APIClient.request({
+                cache: false,
+                path: '/'
+            });
             if (responseData.status === 200) {
-                return new HeartBeat(this.client, responseData.data.myanimelist_heartbeat);
+                const { body: { myanimelist_heartbeat: heartBeat } } = responseData;
+                return new HeartBeat(client, heartBeat);
             }
         });
     }

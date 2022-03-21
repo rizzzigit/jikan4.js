@@ -1,14 +1,20 @@
+import HTTP from 'http'
+import HTTPS from 'https'
+import Path from 'path'
+
 import { Client } from '../core/client'
 import { URL } from 'url'
 import { waitUntil } from '../utils'
-import HTTP from 'http'
-import HTTPS from 'https'
 import { CacheManager } from './cache'
 
 export interface APIRequestQuery {
-  disableCaching?: any
-
   [key: string]: string | undefined
+}
+
+export interface APIRequestData {
+  path: string
+  query?: APIRequestQuery
+  cache?: boolean
 }
 
 export class APIResponseData {
@@ -20,286 +26,287 @@ export class APIResponseData {
     return { current, last, hasNext }
   }
 
-  public readonly data?: any
-  public readonly date: number
+  public constructor (status: number, url: URL, headers: HTTP.IncomingHttpHeaders, body: any) {
+    this.time = Date.now()
+    this.url = `${url.href}`
+    this.status = status || 200
+    this.headers = headers
+    this.body = body
+    this.pagination = body?.pagination
+      ? APIResponseData.parsePagination(url, body.pagination)
+      : undefined
+  }
+
+  public readonly url: string
   public readonly status: number
+  public readonly body: any
+  public readonly time: number
   public readonly headers: HTTP.IncomingHttpHeaders
   public readonly pagination?: {
     current: number
     last: number
-
     hasNext: boolean
-  }
-
-  public constructor (status: number | undefined, url: URL, headers: HTTP.IncomingHttpHeaders, data: any) {
-    this.date = Date.now()
-    this.status = status || 200
-    this.headers = headers
-
-    if (this.status === 200) {
-      if (data?.data) {
-        this.pagination = data.pagination ? APIResponseData.parsePagination(url, data.pagination) : undefined
-        this.data = data?.data
-      } else {
-        this.data = data
-      }
-    } else if (this.status === 500) {
-      this.data = data
-    }
-  }
-}
-
-export interface APIRequestQueueEntry {
-  url: URL
-
-  resolve: (data: APIResponseData) => void
-  reject: (error: Error) => void
-}
-
-export class APIRequestQueue extends Array<APIRequestQueueEntry> {
-  public readonly APIClient: APIClient
-  public readonly client: Client
-  public isRunning: boolean
-  public lastRequest: number
-  public warningEmitted: boolean
-
-  public get nextRequest () {
-    return this.lastRequest + this.APIClient.client.options.dataRateLimit
-  }
-
-  private debug (message: string) {
-    this.APIClient.client.debug('Request Queue', message)
-  }
-
-  public async runQueue () {
-    const { client: { options: { maxApiErrorRetry, retryOnApiError } } } = this
-
-    this.debug('Run request queue')
-    this.isRunning = true
-
-    do {
-      const entry = this.shift()
-
-      if (entry) {
-        this.debug(`Shift one entry from the queue, new queue size is ${this.length}`)
-        let currentTry = 0
-
-        while (currentTry <= maxApiErrorRetry) {
-          try {
-            entry.resolve(await this.APIClient.executeRequest(entry.url))
-
-            break
-          } catch (error: any) {
-            if (retryOnApiError) {
-              if ((error.status !== 500) || (currentTry >= maxApiErrorRetry)) {
-                entry.reject(error.status === 500 ? new Error(`${error.message} after ${currentTry} tries`) : error)
-
-                break
-              } else {
-                this.debug(`${error.message}, retry no. ${currentTry + 1}`)
-              }
-            } else {
-              entry.reject(error)
-              break
-            }
-          }
-
-          currentTry++
-        }
-      } else {
-        this.debug('Queue is now empty')
-        this.isRunning = false
-      }
-    } while (this.isRunning)
-
-    this.debug('Request queue done')
-  }
-
-  public push (queueEntry: APIRequestQueueEntry): number {
-    const { client: { options: { requestQueueLimit } } } = this
-
-    if (requestQueueLimit && (requestQueueLimit <= this.length)) {
-      throw new Error(`Request queue has reached the limit (${requestQueueLimit})`)
-    }
-
-    super.push(queueEntry)
-
-    this.debug(`Add new queue entry: ${queueEntry.url}, new queue size is ${this.length}`)
-    if (!this.isRunning) {
-      this.runQueue()
-    }
-
-    return this.length
-  }
-
-  public constructor (APIClient: APIClient) {
-    super()
-
-    this.APIClient = APIClient
-    this.client = APIClient.client
-    this.isRunning = false
-    this.lastRequest = 0
-    this.warningEmitted = false
   }
 }
 
 export class APIError extends Error {
+  public constructor (response: APIResponseData) {
+    const { status, url: referenceUrl, body: { type, message, error, trace, report_url: reportUrl } } = response
+    if (!error) {
+      throw new Error('Invalid error data')
+    }
+
+    super(`HTTP ${status} Hit: ${message}`)
+
+    this.status = status
+    this.errorType = type
+    this.error = error
+    this.trace = trace
+    this.reportUrl = reportUrl
+    this.referenceUrl = referenceUrl
+    this.response = response
+  }
+
   public readonly status: number
   public readonly errorType: string
   public readonly error: string
   public readonly trace: string
-  public readonly reportURL: string
-  public readonly referenceURL: string
-
-  public constructor (message: string, referenceURL: string, response: APIResponseData) {
-    super(message)
-
-    this.status = response.data.status
-    this.errorType = response.data.type
-    this.error = response.data.error
-    this.trace = response.data.trace
-    this.reportURL = response.data.report_url
-    this.referenceURL = referenceURL
-  }
+  public readonly reportUrl: string
+  public readonly referenceUrl: string
+  public readonly response: APIResponseData
 }
 
 export class APIClient {
-  public readonly cacheManager: CacheManager
+  public constructor (client: Client) {
+    this.client = client
+    this.queue = []
+    this.cache = !client.options.disableCaching
+      ? new CacheManager(client)
+      : undefined
 
-  public parseURL (path: string, query?: APIRequestQuery) {
-    const { client: { options } } = this
+    this.lastRequest = 0
+    this.isQueueRunning = false
+    this.agent = (() => {
+      const { options: { keepAlive, keepAliveMsecs } } = client
+      const options = { keepAlive, keepAliveMsecs }
 
-    if (!path) {
-      path = ''
-    }
-
-    const parsedURL = new URL(`http${options.secure ? 's' : ''}://${options.host}/${options.baseUri}${path.length ? '/' : ''}${path}`)
-
-    if (query) {
-      const params = parsedURL.searchParams
-
-      for (const queryKey in query) {
-        const queryEntry = query[queryKey]
-
-        if (queryEntry !== undefined) {
-          params.set(queryKey, queryEntry)
-        }
+      return {
+        http: new HTTP.Agent(options),
+        https: new HTTPS.Agent(options)
       }
-    }
-
-    return parsedURL
+    })()
   }
 
   public readonly client: Client
-  public readonly queue: APIRequestQueue
+  public readonly queue: Array<{
+    requestData: APIRequestData
+
+    resolve: (data: APIResponseData) => void
+    reject: (error: Error | APIError) => void
+  }>
+
+  public readonly cache?: CacheManager
   public readonly agent: {
     http: HTTP.Agent
     https: HTTPS.Agent
   }
 
-  private debug (message: string) {
-    return this.client.debug('API Client', message)
-  }
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private newRequestInstance (secure: boolean, url: URL, options: HTTP.RequestOptions | HTTPS.RequestOptions) {
+    const { agent } = this
 
-  public async request (path: string, query?: APIRequestQuery): Promise<APIResponseData> {
-    const { cacheManager } = this
-    const url = this.parseURL(path, query)
-
-    if (this.isCachingEnabled(url) && cacheManager.has(url)) {
-      return cacheManager.get(url)
+    if (secure) {
+      return HTTPS.request(url, { ...options, agent: agent.https })
     }
 
-    return await new Promise((resolve, reject) => this.queue.push({
-      url, resolve, reject
-    }))
+    return HTTP.request(url, { ...options, agent: agent.http })
   }
 
-  public isCachingEnabled (url: URL) {
-    return !(this.client.options.disableCaching || url.searchParams.has('disableCaching'))
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private lastRequest: number
+
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private get nextRequest (): number {
+    const { client: { options: { dataRateLimit } }, lastRequest } = this
+
+    return lastRequest + dataRateLimit
   }
 
-  public async executeRequest (url: URL): Promise<APIResponseData> {
-    const { client: { options }, cacheManager, agent, queue, queue: { nextRequest } } = this
-    const isCachingEnabled = this.isCachingEnabled(url)
-
-    if (isCachingEnabled && cacheManager.has(url)) {
-      return cacheManager.get(url)
-    }
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private async awaitNextRequest () {
+    const { nextRequest } = this
 
     if (nextRequest > Date.now()) {
       this.debug(`Wait ${nextRequest - Date.now()} ms before requesting`)
       await waitUntil(nextRequest)
     }
-
-    queue.lastRequest = Date.now()
-    const responseData: APIResponseData = await new Promise((resolve, reject: (error: Error | APIError) => void) => {
-      const context: { timeout?: any, request?: HTTP.ClientRequest, response?: HTTP.IncomingMessage } = {}
-      const callREST = () => new Promise((resolve: (data: APIResponseData) => void, reject: (error: Error) => void) => {
-        const request = (url.protocol === 'https:' ? HTTPS.request(url.href, { agent: agent.https }) : HTTP.request(url.href, { agent: agent.http }))
-        context.request = request
-        request.on('error', reject)
-        request.on('response', async (response) => {
-          let responseText: string = ''
-
-          context.response = response
-          response.on('error', reject)
-          response.on('data', (chunk) => (responseText += chunk))
-          response.on('end', async () => {
-            const deserialized = await (async () => JSON.parse(responseText))().catch(() => ({}))
-            deserialized.status = !deserialized.status ? response.statusCode : deserialized.status
-
-            resolve(new APIResponseData(deserialized.status, url, response.headers, deserialized))
-          })
-        })
-
-        this.debug(`HTTP GET ${url}`)
-        request.end()
-      })
-
-      const sleep = async () => new Promise<void>((resolve) => {
-        context.timeout = Number(setTimeout(resolve, options.requestTimeout))
-      })
-
-      sleep()
-        .then(() => {
-          if (!(context.request?.destroyed || context.request?.socket?.destroyed)) {
-            context.request?.destroy(new Error(`${options.requestTimeout} ms timeout`))
-          }
-        })
-
-      callREST()
-        .then((response) => {
-          switch (response.status) {
-            case 418:
-            case 200:
-            case 404:
-              resolve(response)
-              break
-
-            default:
-              reject(new APIError(`HTTP ${response.status} hit on ${url}`, `${url}`, response))
-          }
-        })
-        .catch(reject)
-        .finally(() => (context.timeout !== undefined) && clearTimeout(context.timeout))
-    })
-
-    if (isCachingEnabled) {
-      cacheManager.set(url, responseData)
-    }
-    return responseData
   }
 
-  public constructor (client: Client) {
-    this.client = client
-    this.queue = new APIRequestQueue(this)
-    this.cacheManager = new CacheManager(client)
-    this.agent = ((options) => ({
-      http: new HTTP.Agent(options),
-      https: new HTTPS.Agent(options)
-    }))({
-      keepAlive: client.options.keepAlive,
-      keepAliveMsecs: client.options.keepAliveMsecs
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private isQueueRunning: boolean
+
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private async runQueue () {
+    if (this.isQueueRunning) {
+      return
+    }
+
+    this.isQueueRunning = true
+    try {
+      const { queue } = this
+
+      while (queue.length) {
+        const entry = <this['queue'][0]> queue.shift()
+        this.debug(`Queue size update: ${queue.length}`)
+        const { requestData, resolve, reject } = entry
+
+        try {
+          const responseData = await this.execReqeust(requestData)
+          for (let queueIndex = 0; queue.length > queueIndex; queueIndex++) {
+            const otherEntry = queue[queueIndex]
+            const { requestData: { path: otherPath, query: otherQuery } } = otherEntry
+            const { path, query } = requestData
+
+            if (JSON.stringify([otherPath, otherQuery]) === JSON.stringify([path, query])) {
+              queue.splice(queueIndex--, 1)
+
+              resolve(responseData)
+            }
+          }
+
+          resolve(responseData)
+        } catch (error: any) {
+          reject(error)
+        }
+      }
+    } finally {
+      this.isQueueRunning = false
+    }
+  }
+
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private addQueue (requestData: APIRequestData, resolve: (data: APIResponseData) => void, reject: (error: Error | APIError) => void) {
+    const { queue } = this
+    queue.push({ requestData, resolve, reject })
+    this.debug(`Queue size update: ${queue.length}`)
+
+    if (!this.isQueueRunning) {
+      this.runQueue()
+    }
+  }
+
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private debug (message: string) {
+    return this.client.debug('API Client', message)
+  }
+
+  public constructURL (requestData: APIRequestData) {
+    const { client: { options: { host, baseUri, secure } } } = this
+    const { path, query } = requestData
+    const url = new URL(`http${secure ? 's' : ''}://${host}${((path) => `${path.startsWith('/') ? '' : '/'}${path}`)(Path.join(baseUri, path))}`)
+    const { searchParams } = url
+
+    if (query) {
+      for (const queryKey in query) {
+        const { [queryKey]: queryEntry } = query
+
+        if (queryEntry) {
+          searchParams.set(queryKey, queryEntry)
+        }
+      }
+    }
+
+    return url
+  }
+
+  public async request (requestData: APIRequestData) {
+    const { cache } = this
+
+    if ((requestData.cache !== undefined ? requestData.cache : true) && cache?.has(requestData)) {
+      return <APIResponseData> cache.get(requestData)
+    }
+
+    return await new Promise<APIResponseData>((resolve, reject) => this.addQueue(requestData, resolve, reject))
+  }
+
+  // eslint-disable-next-line tsdoc/syntax
+  /** @hidden */
+  private async execReqeust (requestData: APIRequestData) {
+    const { client: { options: { secure, requestTimeout, maxApiErrorRetry, retryOnApiError } }, cache } = this
+    const url = this.constructURL(requestData)
+    const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true
+
+    const run = () => new Promise<APIResponseData>((resolve, reject) => {
+      if (cachingEnabled && cache?.has(requestData)) {
+        return cache.get(requestData)
+      }
+
+      this.lastRequest = Date.now()
+      this.debug(`HTTP GET ${url}`)
+      const request = this.newRequestInstance(secure, url, { timeout: requestTimeout })
+      request.on('error', reject)
+      request.on('timeout', () => request.destroy(new Error(`${requestTimeout} ms timeout`)))
+      request.on('response', async (response) => {
+        response.on('error', reject)
+        let bufferSink = Buffer.alloc(0)
+
+        for await (const buffer of response) {
+          bufferSink = Buffer.concat([bufferSink, buffer])
+        }
+
+        const body = JSON.parse(bufferSink.toString('utf-8'))
+        const responseData = new APIResponseData(body.status || response.statusCode, url, response.headers, body)
+
+        if ([418, 200, 404].includes(responseData.status)) {
+          if (cachingEnabled) {
+            cache?.set(requestData, responseData)
+          }
+
+          resolve(responseData)
+        } else {
+          reject(new APIError(responseData))
+        }
+      })
+
+      request.end()
+    })
+
+    return new Promise<APIResponseData>((resolve, reject) => {
+      let retry: number = 0
+      const exec = async () => {
+        await this.awaitNextRequest()
+        await run()
+          .then(resolve)
+          .catch((error) => {
+            if (!(
+              retryOnApiError &&
+              (retry <= maxApiErrorRetry) &&
+              (
+                error.response
+                  ? (
+                      (error.response.status >= 500) &&
+                      (error.response.status < 600)
+                    )
+                  : true
+              )
+            )) {
+              reject(error)
+            } else {
+              retry++
+              exec()
+            }
+          })
+      }
+
+      exec()
     })
   }
 }

@@ -1,6 +1,12 @@
 import { Client } from '../core/client'
 import { BaseClass } from '../resource/base'
-import { APIClient, APIRequestQuery } from '../core/api'
+import { APIClient, APIRequestQuery, APIRequestData } from '../core/api'
+
+export interface Result<Paginated extends boolean = false> {
+  path: string
+  query: APIRequestQuery
+  data: Paginated extends true ? Array<any> : any
+}
 
 export class BaseManager extends BaseClass {
   protected APIClient: APIClient
@@ -13,13 +19,12 @@ export class BaseManager extends BaseClass {
 
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  protected async requestResource (path: string, query?: APIRequestQuery) {
+  protected async request (path: string, query?: APIRequestQuery) {
     this.debug(`Get content ${path}`)
-    const responseData = await this.APIClient.request(path, query)
-
+    const responseData = await this.APIClient.request({ path, query })
     switch (responseData.status) {
       case 418: return null
-      case 200: return responseData.data
+      case 200: return responseData.body.data
 
       default: return undefined
     }
@@ -27,7 +32,7 @@ export class BaseManager extends BaseClass {
 
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  protected async requestPaginatedResource (path: string, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query?: APIRequestQuery) {
+  protected async requestPaginated (path: string, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query?: APIRequestQuery) {
     const data: Array<any> = []
     const maxCountValid = maxCount > 0
 
@@ -42,13 +47,12 @@ export class BaseManager extends BaseClass {
       page++
       this.debug(`Get content ${path} page #${page}${lastPage !== null ? ` of ${lastPage}` : ''}`)
 
-      const responseData = await this.APIClient.request(path, Object.assign({}, query, { page }))
-      const { pagination } = responseData
+      const responseData = await this.APIClient.request({ path, query: { ...query, page: `${page}` } })
+      const { pagination, body, status } = responseData
+      is200 = status === 200
 
-      is200 = responseData.status === 200
-
-      if (Array.isArray(responseData.data)) {
-        data.push(...responseData.data)
+      if (Array.isArray(body.data)) {
+        data.push(...body.data)
 
         hasNext = pagination?.hasNext || false
         lastPage = pagination?.last || 0
@@ -66,10 +70,12 @@ export class BaseManager extends BaseClass {
 
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  public storeCache (path: string, data: any, query?: APIRequestQuery) {
-    const { APIClient, APIClient: { cacheManager } } = this
+  public storeCache (requestData: APIRequestData, body: any) {
+    if ((requestData.cache !== undefined) ? requestData.cache : true) {
+      return body
+    }
 
-    return cacheManager.set(APIClient.parseURL(path, query), data)
+    return this.APIClient.cache?.set(requestData, body) || body
   }
 
   public constructor (client: Client) {

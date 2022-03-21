@@ -18,7 +18,7 @@ export interface MangaSearchFilter {
 }
 export declare class MangaManager extends BaseManager {
     /** @hidden */
-    storeCache(data: any): any;
+    storeCache(body: any): any;
     search(searchString: string, filter?: Partial<MangaSearchFilter>, offset?: number, maxCount?: number): Promise<Manga[]>;
     list(offset?: number, maxCount?: number): Promise<Manga[]>;
     listTop(offset?: number, maxCount?: number): Promise<Manga[]>;

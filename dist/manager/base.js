@@ -15,20 +15,20 @@ class BaseManager extends base_1.BaseClass {
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
-    requestResource(path, query) {
+    request(path, query) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             this.debug(`Get content ${path}`);
-            const responseData = yield this.APIClient.request(path, query);
+            const responseData = yield this.APIClient.request({ path, query });
             switch (responseData.status) {
                 case 418: return null;
-                case 200: return responseData.data;
+                case 200: return responseData.body.data;
                 default: return undefined;
             }
         });
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
-    requestPaginatedResource(path, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query) {
+    requestPaginated(path, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const data = [];
             const maxCountValid = maxCount > 0;
@@ -40,11 +40,11 @@ class BaseManager extends base_1.BaseClass {
             do {
                 page++;
                 this.debug(`Get content ${path} page #${page}${lastPage !== null ? ` of ${lastPage}` : ''}`);
-                const responseData = yield this.APIClient.request(path, Object.assign({}, query, { page }));
-                const { pagination } = responseData;
-                is200 = responseData.status === 200;
-                if (Array.isArray(responseData.data)) {
-                    data.push(...responseData.data);
+                const responseData = yield this.APIClient.request({ path, query: Object.assign(Object.assign({}, query), { page: `${page}` }) });
+                const { pagination, body, status } = responseData;
+                is200 = status === 200;
+                if (Array.isArray(body.data)) {
+                    data.push(...body.data);
                     hasNext = (pagination === null || pagination === void 0 ? void 0 : pagination.hasNext) || false;
                     lastPage = (pagination === null || pagination === void 0 ? void 0 : pagination.last) || 0;
                 }
@@ -58,9 +58,12 @@ class BaseManager extends base_1.BaseClass {
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
-    storeCache(path, data, query) {
-        const { APIClient, APIClient: { cacheManager } } = this;
-        return cacheManager.set(APIClient.parseURL(path, query), data);
+    storeCache(requestData, body) {
+        var _a;
+        if ((requestData.cache !== undefined) ? requestData.cache : true) {
+            return body;
+        }
+        return ((_a = this.APIClient.cache) === null || _a === void 0 ? void 0 : _a.set(requestData, body)) || body;
     }
 }
 exports.BaseManager = BaseManager;

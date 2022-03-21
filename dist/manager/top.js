@@ -19,7 +19,7 @@ class TopManager extends base_1.BaseManager {
     }
     listReviews(offset = 0, maxCount = this.client.options.dataPaginationMaxSize) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource('top/reviews', offset, maxCount);
+            const rawData = yield this.requestPaginated('top/reviews', offset, maxCount);
             return rawData.map((data) => {
                 switch (data.type) {
                     case 'anime': return new top_1.TopAnimeReview(this.client, data);

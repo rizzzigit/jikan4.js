@@ -29,12 +29,12 @@ export interface ClubSearchFilter {
 export class ClubManager extends BaseManager {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  public storeCache (data: any) {
-    return super.storeCache(`clubs/${data.mal_id}`, data)
+  public storeCache (body: any) {
+    return super.storeCache({ path: `clubs/${body.mal_id}` }, body)
   }
 
   public async search (searchString: string, filter?: Partial<ClubSearchFilter>, offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginatedResource('clubs', offset, maxCount, {
+    const rawData = <Array<any>> await this.requestPaginated('clubs', offset, maxCount, {
       disableCaching: true,
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
       ...filter && translateObject(filter, (key, value) => {
@@ -50,7 +50,7 @@ export class ClubManager extends BaseManager {
   }
 
   public async get (clubId: number): Promise<Club | null | undefined> {
-    const rawData = await this.requestResource(`clubs/${clubId}`)
+    const rawData = await this.request(`clubs/${clubId}`)
 
     if (rawData) {
       return new Club(this.client, rawData)
@@ -60,7 +60,7 @@ export class ClubManager extends BaseManager {
   }
 
   public async getMembers (clubId: number): Promise<Array<ClubMember> | undefined> {
-    const rawData = await this.requestPaginatedResource(`clubs/${clubId}/members`)
+    const rawData = await this.requestPaginated(`clubs/${clubId}/members`)
 
     return rawData ? rawData.map((member: any) => new ClubMember(this.client, clubId, member)) : undefined
   }

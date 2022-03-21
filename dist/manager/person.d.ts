@@ -7,7 +7,7 @@ export interface PersonSearchFilter {
 }
 export declare class PersonManager extends BaseManager {
     /** @hidden */
-    storeCache(data: any): any;
+    storeCache(body: any): any;
     search(searchString: string, filter?: Partial<PersonSearchFilter>, offset?: number, maxCount?: number): Promise<Person[]>;
     list(offset?: number, maxCount?: number): Promise<Array<Person>>;
     listTop(offset?: number, maxCount?: number): Promise<Person[]>;

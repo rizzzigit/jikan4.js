@@ -2,6 +2,7 @@ import { Client } from './client'
 import { dirname, join } from 'path'
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
 import { URL } from 'url'
+import { APIRequestData, APIRequestQuery, APIResponseData } from './api'
 
 export class CacheManager {
   public readonly client: Client
@@ -16,14 +17,27 @@ export class CacheManager {
 
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  private file (url: URL) {
-    const path: Array<string> = [this.cacheDir, url.pathname]
+  private file (path: string, query?: APIRequestQuery) {
+    const pathArray: Array<string> = [this.cacheDir, path]
+    const url = new URL(`https://asd${path || '/'}`)
+    const { searchParams } = url
 
-    if (url.search.length) {
-      path.push(`_q_${Buffer.from(url.search).toString('hex')}`)
+    if (query) {
+      for (const queryKey in query) {
+        const { [queryKey]: queryEntry } = query
+
+        if (queryEntry) {
+          searchParams.set(queryKey, queryEntry)
+        }
+      }
     }
 
-    return `${join(...path)}.json`
+    const { search } = url
+    if (search.length) {
+      pathArray.push(`_q_${Buffer.from(search).toString('hex')}`)
+    }
+
+    return `${join(...pathArray)}.json`
   }
 
   // eslint-disable-next-line tsdoc/syntax
@@ -34,20 +48,22 @@ export class CacheManager {
     return (date + options.dataExpiry) < Date.now()
   }
 
-  public get (url: URL) {
-    const file = this.file(url)
+  public get (requestData: APIRequestData) {
+    const { path, query } = requestData
+    const file = this.file(path, query)
 
     if (existsSync(file)) {
-      const data = JSON.parse(`${readFileSync(file)}`)
+      const fileContents = JSON.parse(`${readFileSync(file)}`)
 
-      if (!this.isExpired(data.date)) {
-        return data.data
+      if (!this.isExpired(fileContents.date)) {
+        return <APIResponseData> fileContents.data
       }
     }
   }
 
-  public set (url: URL, rawData: any) {
-    const file = this.file(url)
+  public set (requestData: APIRequestData, rawData: APIResponseData) {
+    const { path, query } = requestData
+    const file = this.file(path, query)
 
     if (rawData) {
       const data = {
@@ -65,8 +81,9 @@ export class CacheManager {
     return rawData
   }
 
-  public has (url: URL) {
-    const file = this.file(url)
+  public has (requestData: APIRequestData) {
+    const { path, query } = requestData
+    const file = this.file(path, query)
 
     if (existsSync(file)) {
       const data = JSON.parse(`${readFileSync(file)}`)
@@ -77,16 +94,18 @@ export class CacheManager {
     return false
   }
 
-  public delete (url: URL) {
-    const file = this.file(url)
+  public delete (requestData: APIRequestData) {
+    const { path, query } = requestData
+    const file = this.file(path, query)
 
     if (existsSync(file)) {
       unlinkSync(file)
     }
   }
 
-  public default (url: URL, rawData: any) {
-    const file = this.file(url)
+  public default (requestData: APIRequestData, rawData: any) {
+    const { path, query } = requestData
+    const file = this.file(path, query)
 
     if (existsSync(file)) {
       const data = JSON.parse(`${readFileSync(file)}`)

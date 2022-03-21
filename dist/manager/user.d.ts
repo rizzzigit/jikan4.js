@@ -2,7 +2,7 @@ import { User, UserContentUpdates, UserFavorites, UserFriend, UserMeta, UserReco
 import { BaseManager } from './base';
 import { AnimeReview } from '../resource/content/anime';
 import { MangaReview } from '../resource/content/manga';
-import { ClubMeta } from '../Jikan';
+import { ClubMeta } from '../resource/meta';
 export interface UserSearchFilter {
     gender: 'any' | 'male' | 'female' | 'nonbinary';
     location: string;

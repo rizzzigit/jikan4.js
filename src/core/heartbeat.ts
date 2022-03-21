@@ -37,11 +37,16 @@ export class HeartBeatMonitor extends BaseClass {
   protected APIClient: APIClient
 
   public async check () {
-    const { APIClient } = this
-    const responseData = await APIClient.request('', { disableCaching: '1' })
+    const { APIClient, client } = this
+    const responseData = await APIClient.request({
+      cache: false,
+      path: '/'
+    })
 
     if (responseData.status === 200) {
-      return new HeartBeat(this.client, responseData.data.myanimelist_heartbeat)
+      const { body: { myanimelist_heartbeat: heartBeat } } = responseData
+
+      return new HeartBeat(client, heartBeat)
     }
   }
 

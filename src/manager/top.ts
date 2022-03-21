@@ -19,7 +19,7 @@ export class TopManager extends BaseManager {
   }
 
   public async listReviews (offset: number = 0, maxCount: number = this.client.options.dataPaginationMaxSize) {
-    const rawData = <Array<any>> await this.requestPaginatedResource('top/reviews', offset, maxCount)
+    const rawData = <Array<any>> await this.requestPaginated('top/reviews', offset, maxCount)
 
     return rawData.map((data: any) => {
       switch (data.type) {

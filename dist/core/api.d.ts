@@ -1,64 +1,72 @@
 /// <reference types="node" />
-import { Client } from '../core/client';
-import { URL } from 'url';
 import HTTP from 'http';
 import HTTPS from 'https';
+import { Client } from '../core/client';
+import { URL } from 'url';
 import { CacheManager } from './cache';
 export interface APIRequestQuery {
-    disableCaching?: any;
     [key: string]: string | undefined;
+}
+export interface APIRequestData {
+    path: string;
+    query?: APIRequestQuery;
+    cache?: boolean;
 }
 export declare class APIResponseData {
     private static parsePagination;
-    readonly data?: any;
-    readonly date: number;
+    constructor(status: number, url: URL, headers: HTTP.IncomingHttpHeaders, body: any);
+    readonly url: string;
     readonly status: number;
+    readonly body: any;
+    readonly time: number;
     readonly headers: HTTP.IncomingHttpHeaders;
     readonly pagination?: {
         current: number;
         last: number;
         hasNext: boolean;
     };
-    constructor(status: number | undefined, url: URL, headers: HTTP.IncomingHttpHeaders, data: any);
-}
-export interface APIRequestQueueEntry {
-    url: URL;
-    resolve: (data: APIResponseData) => void;
-    reject: (error: Error) => void;
-}
-export declare class APIRequestQueue extends Array<APIRequestQueueEntry> {
-    readonly APIClient: APIClient;
-    readonly client: Client;
-    isRunning: boolean;
-    lastRequest: number;
-    warningEmitted: boolean;
-    get nextRequest(): number;
-    private debug;
-    runQueue(): Promise<void>;
-    push(queueEntry: APIRequestQueueEntry): number;
-    constructor(APIClient: APIClient);
 }
 export declare class APIError extends Error {
+    constructor(response: APIResponseData);
     readonly status: number;
     readonly errorType: string;
     readonly error: string;
     readonly trace: string;
-    readonly reportURL: string;
-    readonly referenceURL: string;
-    constructor(message: string, referenceURL: string, response: APIResponseData);
+    readonly reportUrl: string;
+    readonly referenceUrl: string;
+    readonly response: APIResponseData;
 }
 export declare class APIClient {
-    readonly cacheManager: CacheManager;
-    parseURL(path: string, query?: APIRequestQuery): URL;
+    constructor(client: Client);
     readonly client: Client;
-    readonly queue: APIRequestQueue;
+    readonly queue: Array<{
+        requestData: APIRequestData;
+        resolve: (data: APIResponseData) => void;
+        reject: (error: Error | APIError) => void;
+    }>;
+    readonly cache?: CacheManager;
     readonly agent: {
         http: HTTP.Agent;
         https: HTTPS.Agent;
     };
+    /** @hidden */
+    private newRequestInstance;
+    /** @hidden */
+    private lastRequest;
+    /** @hidden */
+    private get nextRequest();
+    /** @hidden */
+    private awaitNextRequest;
+    /** @hidden */
+    private isQueueRunning;
+    /** @hidden */
+    private runQueue;
+    /** @hidden */
+    private addQueue;
+    /** @hidden */
     private debug;
-    request(path: string, query?: APIRequestQuery): Promise<APIResponseData>;
-    isCachingEnabled(url: URL): boolean;
-    executeRequest(url: URL): Promise<APIResponseData>;
-    constructor(client: Client);
+    constructURL(requestData: APIRequestData): URL;
+    request(requestData: APIRequestData): Promise<APIResponseData>;
+    /** @hidden */
+    private execReqeust;
 }

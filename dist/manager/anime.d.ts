@@ -20,7 +20,7 @@ export interface AnimeSearchFilter {
 }
 export declare class AnimeManager extends BaseManager {
     /** @hidden */
-    storeCache(data: any): any;
+    storeCache(body: any): any;
     search(searchString: string, filter?: Partial<AnimeSearchFilter>, offset?: number, maxCount?: number): Promise<Anime[]>;
     list(offset?: number, maxCount?: number): Promise<Array<Anime>>;
     listTop(offset?: number, maxCount?: number): Promise<Anime[]>;

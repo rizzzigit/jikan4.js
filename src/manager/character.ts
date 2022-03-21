@@ -11,12 +11,12 @@ export interface CharacterSearchFilter {
 export class CharacterManager extends BaseManager {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  public storeCache (data: any) {
-    return super.storeCache(`characters/${data.mal_id}`, data)
+  public storeCache (body: any) {
+    return super.storeCache({ path: `characters/${body.mal_id}` }, body)
   }
 
   public async search (searchString: string, filter?: Partial<CharacterSearchFilter>, offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginatedResource('characters', offset, maxCount, {
+    const rawData = <Array<any>> await this.requestPaginated('characters', offset, maxCount, {
       disableCaching: true,
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
       ...filter && translateObject(filter, (key, value) => {
@@ -31,50 +31,49 @@ export class CharacterManager extends BaseManager {
   }
 
   public async list (offset?: number, maxCount?: number): Promise<Array<Character>> {
-    const rawData = <Array<any>> await this.requestPaginatedResource('characters', offset, maxCount)
+    const rawData = <Array<any>> await this.requestPaginated('characters', offset, maxCount)
 
     return rawData.map((character: any) => new Character(this.client, this.storeCache(character)))
   }
 
   public async listTop (offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginatedResource('top/characters', offset, maxCount)
+    const rawData = <Array<any>> await this.requestPaginated('top/characters', offset, maxCount)
 
     return rawData.map((character: any) => new Character(this.client, this.storeCache(character)))
   }
 
   public async random (): Promise<Character> {
-    const rawData = await this.requestResource('random/characters', { disableCaching: 'true' })
+    const rawData = await this.request('random/characters', { disableCaching: 'true' })
 
-    this.storeCache(rawData)
-    return new Character(this.client, rawData)
+    return new Character(this.client, this.storeCache(rawData))
   }
 
   public async get (characterId: number): Promise<Character | undefined> {
-    const rawData = await this.requestResource(`characters/${characterId}`)
+    const rawData = await this.request(`characters/${characterId}`)
 
     return rawData ? new Character(this.client, rawData) : undefined
   }
 
   public async getAnime (characterId: number): Promise<Array<CharacterAnimeReference> | undefined> {
-    const rawData = await this.requestResource(`characters/${characterId}/anime`)
+    const rawData = await this.request(`characters/${characterId}/anime`)
 
     return rawData ? rawData.map((animeReference: any) => new CharacterAnimeReference(this.client, characterId, animeReference)) : undefined
   }
 
   public async getManga (characterId: number): Promise<Array<CharacterMangaReference> | undefined> {
-    const rawData = await this.requestResource(`characters/${characterId}/manga`)
+    const rawData = await this.request(`characters/${characterId}/manga`)
 
     return rawData ? rawData.map((mangaReference: any) => new CharacterMangaReference(this.client, characterId, mangaReference)) : undefined
   }
 
   public async getVoiceActors (characterId: number): Promise<Array<CharacterVoiceActorReference> | undefined> {
-    const rawData = await this.requestResource(`characters/${characterId}/voices`)
+    const rawData = await this.request(`characters/${characterId}/voices`)
 
     return rawData ? rawData.map((voiceActorReference: any) => new CharacterVoiceActorReference(this.client, characterId, voiceActorReference)) : undefined
   }
 
   public async getPictures (characterId: number): Promise<Array<Image> | undefined> {
-    const rawData = await this.requestResource(`characters/${characterId}/pictures`)
+    const rawData = await this.request(`characters/${characterId}/pictures`)
 
     return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
   }

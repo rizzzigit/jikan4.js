@@ -43,12 +43,12 @@ export interface MangaSearchFilter {
 export class MangaManager extends BaseManager {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  public storeCache (data: any) {
-    return super.storeCache(`manga/${data.mal_id}`, data)
+  public storeCache (body: any) {
+    return super.storeCache({ path: `manga/${body.mal_id}` }, body)
   }
 
   public async search (searchString: string, filter?: Partial<MangaSearchFilter>, offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginatedResource('manga', offset, maxCount, {
+    const rawData = <Array<any>> await this.requestPaginated('manga', offset, maxCount, {
       disableCaching: true,
       [searchString.length === 1 ? 'length' : 'q']: searchString,
       ...filter && translateObject(filter, (key, value) => {
@@ -70,85 +70,85 @@ export class MangaManager extends BaseManager {
   }
 
   public async list (offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginatedResource('manga', offset, maxCount)
+    const rawData = <Array<any>> await this.requestPaginated('manga', offset, maxCount)
 
     return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
   public async listTop (offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginatedResource('top/manga', offset, maxCount)
+    const rawData = <Array<any>> await this.requestPaginated('top/manga', offset, maxCount)
 
     return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
   public async listRecommended (offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginatedResource('recommendations/manga', offset, maxCount)
+    const rawData = <Array<any>> await this.requestPaginated('recommendations/manga', offset, maxCount)
 
     return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
   public async random (): Promise<Manga> {
-    const rawData = await this.requestResource('random/manga', { disableCaching: 'true' })
+    const rawData = await this.request('random/manga', { disableCaching: 'true' })
 
     return new Manga(this.client, rawData)
   }
 
   public async get (mangaId: number): Promise<Manga | undefined> {
-    const rawData = await this.requestResource(`manga/${mangaId}`)
+    const rawData = await this.request(`manga/${mangaId}`)
 
     return rawData ? new Manga(this.client, rawData) : undefined
   }
 
   public async getCharacters (mangaId: number): Promise<Array<MangaCharacterReference> | undefined> {
-    const rawData = await this.requestResource(`manga/${mangaId}/characters`)
+    const rawData = await this.request(`manga/${mangaId}/characters`)
 
     return rawData ? rawData.map((characterReference: any) => new MangaCharacterReference(this.client, mangaId, characterReference)) : undefined
   }
 
   public async getNews (mangaId: number, offset?: number, maxCount?: number): Promise<Array<MangaNews> | undefined> {
-    const rawData = await this.requestPaginatedResource(`manga/${mangaId}/news`, offset, maxCount)
+    const rawData = await this.requestPaginated(`manga/${mangaId}/news`, offset, maxCount)
 
     return rawData ? rawData.map((news: any) => new MangaNews(this.client, mangaId, news)) : undefined
   }
 
   public async getTopics (mangaId: number): Promise<Array<MangaTopic> | undefined> {
-    const rawData = await this.requestResource(`manga/${mangaId}/forum`)
+    const rawData = await this.request(`manga/${mangaId}/forum`)
 
     return rawData ? rawData.map((topic: any) => new MangaTopic(this.client, mangaId, topic)) : undefined
   }
 
   public async getPictures (mangaId: number): Promise<Array<Image> | undefined> {
-    const rawData = await this.requestResource(`manga/${mangaId}/pictures`)
+    const rawData = await this.request(`manga/${mangaId}/pictures`)
 
     return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
   }
 
   public async getStatistics (mangaId: number): Promise<MangaStatistics | undefined> {
-    const rawData = await this.requestResource(`manga/${mangaId}/statistics`)
+    const rawData = await this.request(`manga/${mangaId}/statistics`)
 
     return rawData ? new MangaStatistics(this.client, mangaId, rawData) : undefined
   }
 
   public async getMoreInfo (mangaId: number): Promise<string | null | undefined> {
-    const rawData = await this.requestResource(`manga/${mangaId}/moreinfo`)
+    const rawData = await this.request(`manga/${mangaId}/moreinfo`)
 
     return rawData ? rawData.moreinfo || null : undefined
   }
 
   public async getUserUpdates (mangaId: number): Promise<Array<MangaUserUpdate> | undefined> {
-    const rawData = await this.requestResource(`manga/${mangaId}/userupdates`)
+    const rawData = await this.request(`manga/${mangaId}/userupdates`)
 
     return rawData ? rawData.map((userUpdate: any) => new MangaUserUpdate(this.client, mangaId, userUpdate)) : undefined
   }
 
   public async getReviews (mangaId: number): Promise<Array<MangaReview> | undefined> {
-    const rawData = await this.requestResource(`manga/${mangaId}/reviews`)
+    const rawData = await this.request(`manga/${mangaId}/reviews`)
 
     return rawData ? rawData.map((review: any) => new MangaReview(this.client, mangaId, review)) : undefined
   }
 
   public async getRelations (mangaId: number): Promise<Array<MangaRelationGroup<ContentRelationType>> | undefined> {
-    const rawData = await this.requestPaginatedResource(`manga/${mangaId}/relations`)
+    const rawData = await this.requestPaginated(`manga/${mangaId}/relations`)
 
     return rawData ? rawData.map((relation) => new MangaRelationGroup(this.client, mangaId, MangaRelationGroup.parseRelation(relation.relation), relation)) : undefined
   }

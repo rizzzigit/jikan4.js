@@ -7,7 +7,7 @@ const base_1 = require("./base");
 class MagazineManager extends base_1.BaseManager {
     list(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const responseData = yield this.requestPaginatedResource('magazines', offset, maxCount);
+            const responseData = yield this.requestPaginated('magazines', offset, maxCount);
             return responseData.map((data) => new meta_1.MagazineMeta(this.client, data));
         });
     }

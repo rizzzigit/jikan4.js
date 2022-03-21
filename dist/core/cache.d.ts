@@ -1,6 +1,5 @@
-/// <reference types="node" />
 import { Client } from './client';
-import { URL } from 'url';
+import { APIRequestData, APIResponseData } from './api';
 export declare class CacheManager {
     readonly client: Client;
     /** @hidden */
@@ -9,10 +8,10 @@ export declare class CacheManager {
     private file;
     /** @hidden */
     private isExpired;
-    get(url: URL): any;
-    set(url: URL, rawData: any): any;
-    has(url: URL): boolean;
-    delete(url: URL): void;
-    default(url: URL, rawData: any): any;
+    get(requestData: APIRequestData): APIResponseData | undefined;
+    set(requestData: APIRequestData, rawData: APIResponseData): APIResponseData;
+    has(requestData: APIRequestData): boolean;
+    delete(requestData: APIRequestData): void;
+    default(requestData: APIRequestData, rawData: any): any;
     constructor(client: Client);
 }

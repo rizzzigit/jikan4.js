@@ -10,12 +10,12 @@ const meta_1 = require("../resource/meta");
 class AnimeManager extends base_1.BaseManager {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
-    storeCache(data) {
-        return super.storeCache(`anime/${data.mal_id}`, data);
+    storeCache(body) {
+        return super.storeCache({ path: `anime/${body.mal_id}` }, body);
     }
     search(searchString, filter, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource('anime', offset, maxCount, Object.assign({ disableCaching: true, [searchString.length === 1 ? 'letter' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
+            const rawData = yield this.requestPaginated('anime', offset, maxCount, Object.assign({ disableCaching: true, [searchString.length === 1 ? 'letter' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
                 switch (key) {
                     case 'score': return [key, `${value}`];
                     case 'minScore': return ['min_score', `${value}`];
@@ -33,128 +33,127 @@ class AnimeManager extends base_1.BaseManager {
     }
     list(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource('anime', offset, maxCount);
+            const rawData = yield this.requestPaginated('anime', offset, maxCount);
             return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
     listTop(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource('top/anime', offset, maxCount);
+            const rawData = yield this.requestPaginated('top/anime', offset, maxCount);
             return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
     listRecommended(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource('recommendations/anime', offset, maxCount);
+            const rawData = yield this.requestPaginated('recommendations/anime', offset, maxCount);
             return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
     listScheduled(offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource('schedules', offset, maxCount);
+            const rawData = yield this.requestPaginated('schedules', offset, maxCount);
             return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
     random() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource('random/anime', { disableCaching: 'true' });
-            this.storeCache(rawData);
-            return new anime_1.Anime(this.client, rawData);
+            const rawData = yield this.request('random/anime', { disableCaching: 'true' });
+            return new anime_1.Anime(this.client, this.storeCache(rawData));
         });
     }
     get(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}`);
+            const rawData = yield this.request(`anime/${animeId}`);
             return rawData ? new anime_1.Anime(this.client, rawData) : undefined;
         });
     }
     getCharacters(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/characters`);
+            const rawData = yield this.request(`anime/${animeId}/characters`);
             return rawData ? rawData.map((characterReference) => new anime_1.AnimeCharacterReference(this.client, animeId, characterReference)) : undefined;
         });
     }
     getStaff(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/staff`);
+            const rawData = yield this.request(`anime/${animeId}/staff`);
             return rawData ? rawData.map((staffReference) => new anime_1.AnimeStaffReference(this.client, animeId, staffReference)) : undefined;
         });
     }
     getEpisodes(animeId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`anime/${animeId}/episodes`, offset, maxCount);
+            const rawData = yield this.requestPaginated(`anime/${animeId}/episodes`, offset, maxCount);
             return rawData ? rawData.map((partialEpisode) => new anime_1.AnimePartialEpisode(this.client, animeId, partialEpisode)) : undefined;
         });
     }
     getEpisode(animeId, episodeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/episodes/${episodeId}`);
+            const rawData = yield this.request(`anime/${animeId}/episodes/${episodeId}`);
             return rawData ? new anime_1.AnimeEpisode(this.client, animeId, rawData) : undefined;
         });
     }
     getNews(animeId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`anime/${animeId}/news`, offset, maxCount);
+            const rawData = yield this.requestPaginated(`anime/${animeId}/news`, offset, maxCount);
             return rawData ? rawData.map((news) => new anime_1.AnimeNews(this.client, animeId, news)) : undefined;
         });
     }
     getTopics(animeId, topic = 'all') {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/forum`, { topic });
+            const rawData = yield this.request(`anime/${animeId}/forum`, { topic });
             return rawData ? rawData.map((topic) => new anime_1.AnimeTopic(this.client, animeId, topic)) : undefined;
         });
     }
     getVideos(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/videos`);
+            const rawData = yield this.request(`anime/${animeId}/videos`);
             return rawData ? new anime_1.AnimeVideo(this.client, animeId, rawData) : undefined;
         });
     }
     getPictures(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/pictures`);
+            const rawData = yield this.request(`anime/${animeId}/pictures`);
             return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
         });
     }
     getStatistics(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/statistics`);
+            const rawData = yield this.request(`anime/${animeId}/statistics`);
             return rawData ? new anime_1.AnimeStatistics(this.client, animeId, rawData) : undefined;
         });
     }
     getMoreInfo(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/moreinfo`);
+            const rawData = yield this.request(`anime/${animeId}/moreinfo`);
             return rawData ? rawData.moreinfo || null : undefined;
         });
     }
     getRecommendations(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/recommendations`);
+            const rawData = yield this.request(`anime/${animeId}/recommendations`);
             return rawData ? rawData.map((recommendation) => new anime_1.AnimeRecommendation(this.client, animeId, recommendation)) : undefined;
         });
     }
     getUserUpdates(animeId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`anime/${animeId}/userupdates`, offset, maxCount);
+            const rawData = yield this.requestPaginated(`anime/${animeId}/userupdates`, offset, maxCount);
             return rawData ? rawData.map((userUpdate) => new anime_1.AnimeUserUpdate(this.client, animeId, userUpdate)) : undefined;
         });
     }
     getReviews(animeId, offset, maxCount) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginatedResource(`anime/${animeId}/reviews`, offset, maxCount);
+            const rawData = yield this.requestPaginated(`anime/${animeId}/reviews`, offset, maxCount);
             return rawData ? rawData.map((review) => new anime_1.AnimeReview(this.client, animeId, review)) : undefined;
         });
     }
     getRelations(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestResource(`anime/${animeId}/relations`);
+            const rawData = yield this.request(`anime/${animeId}/relations`);
             return rawData ? rawData.map((relation) => new anime_1.AnimeRelationGroup(this.client, animeId, anime_1.AnimeRelationGroup.parseRelation(relation.relation), relation)) : undefined;
         });
     }
     getThemes(animeId) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            return yield this.requestResource(`anime/${animeId}/themes`);
+            return yield this.request(`anime/${animeId}/themes`);
         });
     }
 }

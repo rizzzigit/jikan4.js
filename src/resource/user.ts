@@ -1,6 +1,6 @@
 import { URL } from 'url'
 import { Client } from '../core/client'
-import { ContentImage } from '../Jikan'
+import { ContentImage } from '../resource/content/base'
 import { BaseClass } from './base'
 import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta'
 

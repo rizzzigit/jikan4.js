@@ -23,7 +23,7 @@ class AnimeManager extends base_1.BaseManager {
                     case 'sfw': return [key, ''];
                     case 'genres': return [key, `${value.map((value) => value instanceof meta_1.AnimeGenreMeta ? value.id : value)}`];
                     case 'excludeGenres': return ['genres_exclude', `${value.map((value) => value instanceof meta_1.AnimeGenreMeta ? value.id : value)}`];
-                    case 'producers': return ['producer', `${value.map((value) => value instanceof meta_1.ProducerMeta ? value.id : value)}`];
+                    case 'producers': return [key, `${value.map((value) => value instanceof meta_1.ProducerMeta ? value.id : value)}`];
                     case 'orderBy': return ['order_by', `${value}`];
                     default: return [key, `${value}`];
                 }

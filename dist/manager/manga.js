@@ -23,7 +23,7 @@ class MangaManager extends base_1.BaseManager {
                     case 'sfw': return [key, ''];
                     case 'genres': return [key, `${value.map((value) => value instanceof meta_1.MangaGenreMeta ? value.id : value)}`];
                     case 'excludeGenres': return ['genres_exclude', `${value.map((value) => value instanceof meta_1.MangaGenreMeta ? value.id : value)}`];
-                    case 'magazines': return ['magazine', `${value.map((value) => value instanceof meta_1.MagazineMeta ? value.id : value)}`];
+                    case 'magazines': return [key, `${value.map((value) => value instanceof meta_1.MagazineMeta ? value.id : value)}`];
                     case 'orderBy': return ['order_by', `${value}`];
                     default: return [key, `${value}`];
                 }

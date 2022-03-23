@@ -5,11 +5,11 @@ const tslib_1 = require("tslib");
 const top_1 = require("../resource/top");
 const base_1 = require("./base");
 class TopManager extends base_1.BaseManager {
-    listAnime(offset, maxCount) {
-        return this.client.anime.listTop(offset, maxCount);
+    listAnime(filter, offset, maxCount) {
+        return this.client.anime.listTop(filter, offset, maxCount);
     }
-    listManga(offset, maxCount) {
-        return this.client.manga.listTop(offset, maxCount);
+    listManga(filter, offset, maxCount) {
+        return this.client.manga.listTop(filter, offset, maxCount);
     }
     listPeople(offset, maxCount) {
         return this.client.people.listTop(offset, maxCount);

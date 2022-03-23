@@ -40,6 +40,11 @@ export interface MangaSearchFilter {
   sort: 'desc' | 'asc'
 }
 
+export interface TopMangaFilter {
+  type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'mahua'
+  filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite'
+}
+
 export class MangaManager extends BaseManager {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
@@ -75,8 +80,8 @@ export class MangaManager extends BaseManager {
     return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
-  public async listTop (offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginated('top/manga', offset, maxCount)
+  public async listTop (filter?: TopMangaFilter, offset?: number, maxCount?: number) {
+    const rawData = <Array<any>> await this.requestPaginated('top/manga', offset, maxCount, { ...filter })
 
     return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }

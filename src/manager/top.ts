@@ -1,13 +1,15 @@
 import { TopAnimeReview, TopMangaReview } from '../resource/top'
+import { TopAnimeFilter } from './anime'
 import { BaseManager } from './base'
+import { TopMangaFilter } from './manga'
 
 export class TopManager extends BaseManager {
-  public listAnime (offset?: number, maxCount?: number) {
-    return this.client.anime.listTop(offset, maxCount)
+  public listAnime (filter?: TopAnimeFilter, offset?: number, maxCount?: number) {
+    return this.client.anime.listTop(filter, offset, maxCount)
   }
 
-  public listManga (offset?: number, maxCount?: number) {
-    return this.client.manga.listTop(offset, maxCount)
+  public listManga (filter?: TopMangaFilter, offset?: number, maxCount?: number) {
+    return this.client.manga.listTop(filter, offset, maxCount)
   }
 
   public listPeople (offset?: number, maxCount?: number) {

@@ -37,9 +37,9 @@ class AnimeManager extends base_1.BaseManager {
             return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
-    listTop(offset, maxCount) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginated('top/anime', offset, maxCount);
+    listTop(filter, offset, maxCount) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.requestPaginated('top/anime', offset, maxCount, Object.assign({}, filter));
             return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }

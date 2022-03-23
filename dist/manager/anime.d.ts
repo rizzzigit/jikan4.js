@@ -18,12 +18,16 @@ export interface AnimeSearchFilter {
     orderBy: 'mal_id' | 'title' | 'type' | 'rating' | 'start_date' | 'end_date' | 'episodes' | 'score' | 'scored_by' | 'rank' | 'popularity' | 'members' | 'favorites';
     sort: 'desc' | 'asc';
 }
+export interface TopAnimeFilter {
+    type: 'tv' | 'movie' | 'ova' | 'special' | 'ona' | 'music';
+    filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite';
+}
 export declare class AnimeManager extends BaseManager {
     /** @hidden */
     storeCache(body: any): any;
     search(searchString: string, filter?: Partial<AnimeSearchFilter>, offset?: number, maxCount?: number): Promise<Anime[]>;
     list(offset?: number, maxCount?: number): Promise<Array<Anime>>;
-    listTop(offset?: number, maxCount?: number): Promise<Anime[]>;
+    listTop(filter?: TopAnimeFilter, offset?: number, maxCount?: number): Promise<Anime[]>;
     listRecommended(offset?: number, maxCount?: number): Promise<Anime[]>;
     listScheduled(offset?: number, maxCount?: number): Promise<Anime[]>;
     random(): Promise<Anime>;

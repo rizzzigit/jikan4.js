@@ -16,12 +16,16 @@ export interface MangaSearchFilter {
     orderBy: 'mal_id' | 'title' | 'start_date' | 'end_date' | 'chapters' | 'volumes' | 'score' | 'scored_by' | 'rank' | 'popularity' | 'members' | 'favorites';
     sort: 'desc' | 'asc';
 }
+export interface TopMangaFilter {
+    type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'mahua';
+    filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite';
+}
 export declare class MangaManager extends BaseManager {
     /** @hidden */
     storeCache(body: any): any;
     search(searchString: string, filter?: Partial<MangaSearchFilter>, offset?: number, maxCount?: number): Promise<Manga[]>;
     list(offset?: number, maxCount?: number): Promise<Manga[]>;
-    listTop(offset?: number, maxCount?: number): Promise<Manga[]>;
+    listTop(filter?: TopMangaFilter, offset?: number, maxCount?: number): Promise<Manga[]>;
     listRecommended(offset?: number, maxCount?: number): Promise<Manga[]>;
     random(): Promise<Manga>;
     get(mangaId: number): Promise<Manga | undefined>;

@@ -37,9 +37,9 @@ class MangaManager extends base_1.BaseManager {
             return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
         });
     }
-    listTop(offset, maxCount) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginated('top/manga', offset, maxCount);
+    listTop(filter, offset, maxCount) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.requestPaginated('top/manga', offset, maxCount, Object.assign({}, filter));
             return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
         });
     }

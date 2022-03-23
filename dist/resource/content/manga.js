@@ -50,7 +50,8 @@ class Manga extends base_2.Content {
             case 'novel': return 'Novel';
             case 'light novel': return 'LightNovel';
             case 'one-shot': return 'OneShot';
-            case 'doujinshi': return 'Doujinshi';
+            case 'doujinshi':
+            case 'doujin': return 'Doujinshi';
             case 'manhua': return 'Manhua';
             case 'manhwa': return 'Manhwa';
             case 'oel': return 'OEL';

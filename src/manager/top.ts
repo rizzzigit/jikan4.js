@@ -4,11 +4,11 @@ import { BaseManager } from './base'
 import { TopMangaFilter } from './manga'
 
 export class TopManager extends BaseManager {
-  public listAnime (filter?: TopAnimeFilter, offset?: number, maxCount?: number) {
+  public listAnime (filter?: Partial<TopAnimeFilter>, offset?: number, maxCount?: number) {
     return this.client.anime.listTop(filter, offset, maxCount)
   }
 
-  public listManga (filter?: TopMangaFilter, offset?: number, maxCount?: number) {
+  public listManga (filter?: Partial<TopMangaFilter>, offset?: number, maxCount?: number) {
     return this.client.manga.listTop(filter, offset, maxCount)
   }
 

@@ -27,7 +27,7 @@ export declare class AnimeManager extends BaseManager {
     storeCache(body: any): any;
     search(searchString: string, filter?: Partial<AnimeSearchFilter>, offset?: number, maxCount?: number): Promise<Anime[]>;
     list(offset?: number, maxCount?: number): Promise<Array<Anime>>;
-    listTop(filter?: TopAnimeFilter, offset?: number, maxCount?: number): Promise<Anime[]>;
+    listTop(filter?: Partial<TopAnimeFilter>, offset?: number, maxCount?: number): Promise<Anime[]>;
     listRecommended(offset?: number, maxCount?: number): Promise<Anime[]>;
     listScheduled(offset?: number, maxCount?: number): Promise<Anime[]>;
     random(): Promise<Anime>;

@@ -88,7 +88,7 @@ export class AnimeManager extends BaseManager {
     return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
   }
 
-  public async listTop (filter?: TopAnimeFilter, offset?: number, maxCount?: number) {
+  public async listTop (filter?: Partial<TopAnimeFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('top/anime', offset, maxCount, { ...filter })
 
     return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))

@@ -25,7 +25,7 @@ export declare class MangaManager extends BaseManager {
     storeCache(body: any): any;
     search(searchString: string, filter?: Partial<MangaSearchFilter>, offset?: number, maxCount?: number): Promise<Manga[]>;
     list(offset?: number, maxCount?: number): Promise<Manga[]>;
-    listTop(filter?: TopMangaFilter, offset?: number, maxCount?: number): Promise<Manga[]>;
+    listTop(filter?: Partial<TopMangaFilter>, offset?: number, maxCount?: number): Promise<Manga[]>;
     listRecommended(offset?: number, maxCount?: number): Promise<Manga[]>;
     random(): Promise<Manga>;
     get(mangaId: number): Promise<Manga | undefined>;

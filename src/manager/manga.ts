@@ -80,7 +80,7 @@ export class MangaManager extends BaseManager {
     return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
-  public async listTop (filter?: TopMangaFilter, offset?: number, maxCount?: number) {
+  public async listTop (filter?: Partial<TopMangaFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('top/manga', offset, maxCount, { ...filter })
 
     return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))

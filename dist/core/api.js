@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.APIClient = exports.APIError = exports.APIResponseData = void 0;
 const tslib_1 = require("tslib");
-const http_1 = (0, tslib_1.__importDefault)(require("http"));
-const https_1 = (0, tslib_1.__importDefault)(require("https"));
-const path_1 = (0, tslib_1.__importDefault)(require("path"));
+const http_1 = tslib_1.__importDefault(require("http"));
+const https_1 = tslib_1.__importDefault(require("https"));
+const path_1 = tslib_1.__importDefault(require("path"));
 const url_1 = require("url");
 const utils_1 = require("../utils");
 const cache_1 = require("./cache");
@@ -80,7 +80,7 @@ class APIClient {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     awaitNextRequest() {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const { nextRequest } = this;
             if (nextRequest > Date.now()) {
                 this.debug(`Wait ${nextRequest - Date.now()} ms before requesting`);
@@ -91,7 +91,7 @@ class APIClient {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     runQueue() {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             if (this.isQueueRunning) {
                 return;
             }
@@ -156,7 +156,7 @@ class APIClient {
         return url;
     }
     request(requestData) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const { cache } = this;
             if ((requestData.cache !== undefined ? requestData.cache : true) && (cache === null || cache === void 0 ? void 0 : cache.has(requestData))) {
                 return cache.get(requestData);
@@ -167,7 +167,7 @@ class APIClient {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     execReqeust(requestData) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const { client: { options: { secure, requestTimeout, maxApiErrorRetry, retryOnApiError } }, cache } = this;
             const url = this.constructURL(requestData);
             const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true;
@@ -180,12 +180,12 @@ class APIClient {
                 const request = this.newRequestInstance(secure, url, { timeout: requestTimeout });
                 request.on('error', reject);
                 request.on('timeout', () => request.destroy(new Error(`${requestTimeout} ms timeout`)));
-                request.on('response', (response) => { var response_1, response_1_1; return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+                request.on('response', (response) => { var response_1, response_1_1; return tslib_1.__awaiter(this, void 0, void 0, function* () {
                     var e_1, _a;
                     response.on('error', reject);
                     let bufferSink = Buffer.alloc(0);
                     try {
-                        for (response_1 = (0, tslib_1.__asyncValues)(response); response_1_1 = yield response_1.next(), !response_1_1.done;) {
+                        for (response_1 = tslib_1.__asyncValues(response); response_1_1 = yield response_1.next(), !response_1_1.done;) {
                             const buffer = response_1_1.value;
                             bufferSink = Buffer.concat([bufferSink, buffer]);
                         }
@@ -213,7 +213,7 @@ class APIClient {
             });
             return new Promise((resolve, reject) => {
                 let retry = 0;
-                const exec = () => (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+                const exec = () => tslib_1.__awaiter(this, void 0, void 0, function* () {
                     yield this.awaitNextRequest();
                     yield run()
                         .then(resolve)

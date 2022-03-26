@@ -27,7 +27,7 @@ class HeartBeatMonitor extends base_1.BaseClass {
         this.APIClient = client.APIClient;
     }
     check() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const { APIClient, client } = this;
             const responseData = yield APIClient.request({
                 cache: false,

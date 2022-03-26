@@ -8,6 +8,8 @@ import { waitUntil } from '../utils'
 import { CacheManager } from './cache'
 
 export interface APIRequestQuery {
+  disableCaching?: string
+
   [key: string]: string | undefined
 }
 

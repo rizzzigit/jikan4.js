@@ -3,11 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.translateObject = exports.waitUntil = exports.sleep = void 0;
 const tslib_1 = require("tslib");
 function sleep(time) {
-    return tslib_1.__awaiter(this, void 0, void 0, function* () { return yield new Promise((resolve) => setTimeout(resolve, time)); });
+    return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () { return yield new Promise((resolve) => setTimeout(resolve, time)); });
 }
 exports.sleep = sleep;
 function waitUntil(time) {
-    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+    return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
         const now = Date.now();
         if (time > now) {
             yield sleep(time - now);

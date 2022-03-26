@@ -35,7 +35,7 @@ export class ClubManager extends BaseManager {
 
   public async search (searchString: string, filter?: Partial<ClubSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('clubs', offset, maxCount, {
-      disableCaching: true,
+      disableCaching: 'true',
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
       ...filter && translateObject(filter, (key, value) => {
         switch (key) {

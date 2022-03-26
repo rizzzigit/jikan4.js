@@ -21,7 +21,8 @@ export class BaseManager extends BaseClass {
   /** @hidden */
   protected async request (path: string, query?: APIRequestQuery) {
     this.debug(`Get content ${path}`)
-    const responseData = await this.APIClient.request({ path, query })
+
+    const responseData = await this.APIClient.request({ path, cache: query ? !('disableCaching' in query) : true, query })
     switch (responseData.status) {
       case 418: return null
       case 200: return responseData.body.data
@@ -47,7 +48,7 @@ export class BaseManager extends BaseClass {
       page++
       this.debug(`Get content ${path} page #${page}${lastPage !== null ? ` of ${lastPage}` : ''}`)
 
-      const responseData = await this.APIClient.request({ path, query: { ...query, page: `${page}` } })
+      const responseData = await this.APIClient.request({ path, cache: query ? !('disableCaching' in query) : true, query: { ...query, page: `${page}` } })
       const { pagination, body, status } = responseData
       is200 = status === 200
 

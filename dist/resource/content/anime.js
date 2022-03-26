@@ -6,7 +6,7 @@ const base_1 = require("./base");
 const base_2 = require("../base");
 const misc_1 = require("../misc");
 const meta_1 = require("../meta");
-const parse_duration_1 = tslib_1.__importDefault(require("parse-duration"));
+const parse_duration_1 = (0, tslib_1.__importDefault)(require("parse-duration"));
 const genre_1 = require("../../manager/genre");
 class AnimeAirInformation extends base_2.BaseClass {
     constructor(client, data) {

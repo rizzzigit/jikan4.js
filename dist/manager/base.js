@@ -16,9 +16,9 @@ class BaseManager extends base_1.BaseClass {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     request(path, query) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             this.debug(`Get content ${path}`);
-            const responseData = yield this.APIClient.request({ path, query });
+            const responseData = yield this.APIClient.request({ path, cache: query ? !('disableCaching' in query) : true, query });
             switch (responseData.status) {
                 case 418: return null;
                 case 200: return responseData.body.data;
@@ -29,7 +29,7 @@ class BaseManager extends base_1.BaseClass {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     requestPaginated(path, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const data = [];
             const maxCountValid = maxCount > 0;
             const fetchEnd = () => maxCountValid ? offset + maxCount : undefined;
@@ -40,7 +40,7 @@ class BaseManager extends base_1.BaseClass {
             do {
                 page++;
                 this.debug(`Get content ${path} page #${page}${lastPage !== null ? ` of ${lastPage}` : ''}`);
-                const responseData = yield this.APIClient.request({ path, query: Object.assign(Object.assign({}, query), { page: `${page}` }) });
+                const responseData = yield this.APIClient.request({ path, cache: query ? !('disableCaching' in query) : true, query: Object.assign(Object.assign({}, query), { page: `${page}` }) });
                 const { pagination, body, status } = responseData;
                 is200 = status === 200;
                 if (Array.isArray(body.data)) {

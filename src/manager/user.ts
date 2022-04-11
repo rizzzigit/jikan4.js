@@ -87,7 +87,7 @@ export class UserManager extends BaseManager {
     return rawData.map((friend) => new UserFriend(this.client, friend))
   }
 
-  public async getReviews (username: string, offset?: number, maxCount?: number) {
+  public async getReviews (username: string, offset?: number, maxCount?: number): Promise<Array<AnimeReview | MangaReview>> {
     const rawData = <Array<any>> await this.requestPaginated(`users/${username}/reviews`, offset, maxCount)
 
     return rawData.map((review) => {

@@ -19,7 +19,7 @@ export declare class UserManager extends BaseManager {
     getAbout(username: string): Promise<string | null | undefined>;
     getHistory(username: string, type?: 'anime' | 'manga' | 'all'): Promise<(UserMangaHistory | UserAnimeHistory)[]>;
     getFriends(username: string, offset?: number, maxCount?: number): Promise<UserFriend[]>;
-    getReviews(username: string, offset?: number, maxCount?: number): Promise<(MangaReview | AnimeReview)[]>;
+    getReviews(username: string, offset?: number, maxCount?: number): Promise<Array<AnimeReview | MangaReview>>;
     getRecommendations(username: string, offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
     getClubs(username: string, offset?: number, maxCount?: number): Promise<ClubMeta[]>;
 }

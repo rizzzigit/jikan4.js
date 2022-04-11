@@ -16,7 +16,7 @@ class BaseManager extends base_1.BaseClass {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     request(path, query) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             this.debug(`Get content ${path}`);
             const responseData = yield this.APIClient.request({ path, cache: query ? !('disableCaching' in query) : true, query });
             switch (responseData.status) {
@@ -29,7 +29,7 @@ class BaseManager extends base_1.BaseClass {
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     requestPaginated(path, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const data = [];
             const maxCountValid = maxCount > 0;
             const fetchEnd = () => maxCountValid ? offset + maxCount : undefined;

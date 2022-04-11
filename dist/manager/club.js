@@ -12,7 +12,7 @@ class ClubManager extends base_1.BaseManager {
         return super.storeCache({ path: `clubs/${body.mal_id}` }, body);
     }
     search(searchString, filter, offset, maxCount) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('clubs', offset, maxCount, Object.assign({ disableCaching: 'true', [searchString.length === 1 ? 'letter' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
                 switch (key) {
                     case 'orderBy': return ['order_by', value];
@@ -23,7 +23,7 @@ class ClubManager extends base_1.BaseManager {
         });
     }
     get(clubId) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`clubs/${clubId}`);
             if (rawData) {
                 return new club_1.Club(this.client, rawData);
@@ -34,7 +34,7 @@ class ClubManager extends base_1.BaseManager {
         });
     }
     getMembers(clubId) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`clubs/${clubId}/members`);
             return rawData ? rawData.map((member) => new club_1.ClubMember(this.client, clubId, member)) : undefined;
         });

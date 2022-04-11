@@ -18,7 +18,7 @@ class TopManager extends base_1.BaseManager {
         return this.client.characters.listTop(offset, maxCount);
     }
     listReviews(offset = 0, maxCount = this.client.options.dataPaginationMaxSize) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('top/reviews', offset, maxCount);
             return rawData.map((data) => {
                 switch (data.type) {

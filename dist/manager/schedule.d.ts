@@ -6,5 +6,6 @@ export interface ScheduleFilter {
     kids: boolean;
 }
 export declare class ScheduleManager extends BaseManager {
-    list(day?: ScheduleDay, filter?: Partial<ScheduleFilter>, offset?: number, maxCount?: number): Promise<Anime[]>;
+    list(day?: ScheduleDay, offset?: number, maxCount?: number): Promise<Array<Anime>>;
+    list(day?: ScheduleDay, filter?: Partial<ScheduleFilter>, offset?: number, maxCount?: number): Promise<Array<Anime>>;
 }

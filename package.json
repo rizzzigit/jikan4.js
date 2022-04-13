@@ -53,6 +53,6 @@
   "engineStrict": true,
   "engines": {
     "node": ">=12.0.0",
-    "vscode": "^1.22.0"
+    "vscode": "^1.66.2"
   }
 }

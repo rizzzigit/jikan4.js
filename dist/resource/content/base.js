@@ -16,8 +16,8 @@ class ContentTitle extends base_1.BaseClass {
         var _a;
         super(client);
         this.default = data.title;
-        this.english = data.english || null;
-        this.japanese = data.japanese || null;
+        this.english = data.title_english || null;
+        this.japanese = data.title_japanese || null;
         this.synonyms = ((_a = data.synonyms) === null || _a === void 0 ? void 0 : _a.map((synonym) => synonym || null).filter((synonym) => !!synonym)) || [];
     }
     toString() {

@@ -29,8 +29,8 @@ export class ContentTitle extends BaseClass {
     super(client)
 
     this.default = data.title
-    this.english = data.english || null
-    this.japanese = data.japanese || null
+    this.english = data.title_english || null
+    this.japanese = data.title_japanese || null
     this.synonyms = data.synonyms?.map((synonym: any) => synonym || null).filter((synonym: any) => !!synonym) || []
   }
 }

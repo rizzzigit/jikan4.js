@@ -2,9 +2,7 @@
 import { Client } from '../core/client';
 import { URL } from 'url';
 export declare class BaseClass {
-    /** @hidden */
     static parseDate<IsNullable extends boolean = false>(input: any, nullable?: IsNullable): IsNullable extends false ? Date : (Date | null);
-    /** @hidden */
     static parseURL<IsNullable extends boolean = false>(input: any, nullable?: IsNullable): IsNullable extends false ? URL : (URL | null);
     readonly client: Client;
     constructor(client: Client);

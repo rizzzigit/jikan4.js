@@ -23,27 +23,28 @@ export declare class Person extends BaseResource {
     getVoiceActors(): Promise<PersonVoiceActorReference[]>;
     getManga(): Promise<PersonMangaReference[]>;
     getPictures(): Promise<Image[]>;
+    getFull(): Promise<PersonFull>;
     constructor(client: Client, data: any);
 }
 export declare class PersonAnimeReference extends BaseClass {
-    readonly personId: number;
     readonly position: string;
     readonly anime: AnimeMeta;
-    getPerson(): Promise<Person>;
-    constructor(client: Client, personId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class PersonVoiceActorReference extends BaseClass {
-    readonly personId: number;
     readonly role: string;
     readonly anime: AnimeMeta;
     readonly character: CharacterMeta;
-    getPerson(): Promise<Person>;
-    constructor(client: Client, personId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class PersonMangaReference extends BaseClass {
-    readonly personId: number;
     readonly position: string;
     readonly manga: MangaMeta;
-    getPerson(): Promise<Person>;
-    constructor(client: Client, personId: number, data: any);
+    constructor(client: Client, data: any);
+}
+export declare class PersonFull extends Person {
+    readonly anime: Array<PersonAnimeReference>;
+    readonly manga: Array<PersonMangaReference>;
+    readonly voices: Array<PersonVoiceActorReference>;
+    constructor(client: Client, data: any);
 }

@@ -48,22 +48,28 @@ class PersonManager extends base_1.BaseManager {
             return rawData ? new person_1.Person(this.client, rawData) : undefined;
         });
     }
+    getFull(personId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.request(`people/${personId}/full`);
+            return rawData ? new person_1.PersonFull(this.client, rawData) : undefined;
+        });
+    }
     getAnime(personId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`people/${personId}/anime`);
-            return rawData ? rawData.map((animeReference) => new person_1.PersonAnimeReference(this.client, personId, animeReference)) : undefined;
+            return rawData ? rawData.map((animeReference) => new person_1.PersonAnimeReference(this.client, animeReference)) : undefined;
         });
     }
     getVoiceActors(personId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`people/${personId}/voices`);
-            return rawData ? rawData.map((voiceActorReference) => new person_1.PersonVoiceActorReference(this.client, personId, voiceActorReference)) : undefined;
+            return rawData ? rawData.map((voiceActorReference) => new person_1.PersonVoiceActorReference(this.client, voiceActorReference)) : undefined;
         });
     }
     getManga(personId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`people/${personId}/manga`);
-            return rawData ? rawData.map((mangaReference) => new person_1.PersonMangaReference(this.client, personId, mangaReference)) : undefined;
+            return rawData ? rawData.map((mangaReference) => new person_1.PersonMangaReference(this.client, mangaReference)) : undefined;
         });
     }
     getPictures(personId) {

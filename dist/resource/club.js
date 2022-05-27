@@ -12,7 +12,7 @@ class Club extends base_1.BaseResource {
         this.category = Club.parseCategory(data.category);
         this.created = Club.parseDate(data.created);
         this.type = Club.parseType(data.type);
-        this.staff = ((_c = data.staff) === null || _c === void 0 ? void 0 : _c.map((staff) => new ClubStaff(client, this.id, staff))) || [];
+        this.staff = ((_c = data.staff) === null || _c === void 0 ? void 0 : _c.map((staff) => new ClubStaff(client, staff))) || [];
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
@@ -51,27 +51,19 @@ class Club extends base_1.BaseResource {
 }
 exports.Club = Club;
 class ClubStaff extends base_1.BaseClass {
-    constructor(client, clubId, data) {
+    constructor(client, data) {
         super(client);
-        this.clubId = clubId;
         this.url = ClubStaff.parseURL(data.url);
         this.username = data.username;
-    }
-    getClub() {
-        return this.client.clubs.get(this.clubId);
     }
 }
 exports.ClubStaff = ClubStaff;
 class ClubMember extends base_1.BaseClass {
-    constructor(client, clubId, data) {
+    constructor(client, data) {
         super(client);
-        this.clubId = clubId;
         this.URL = ClubMember.parseURL(data.url);
         this.username = data.username;
         this.imageURL = ClubMember.parseURL(data.image_url, true);
-    }
-    getClub() {
-        return this.client.clubs.get(this.clubId);
     }
 }
 exports.ClubMember = ClubMember;

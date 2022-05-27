@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Client } from '../../core/client';
-import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReviewScores, ContentReview } from './base';
+import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReviewScores, ContentReview, ContentExternal } from './base';
 import { BaseClass, BaseResource } from '../base';
 import { YoutubeVideo, Image } from '../misc';
 import { ProducerMeta, AnimeGenreMeta, PersonMeta, CharacterMeta, AnimeMeta, MangaMeta } from '../meta';
@@ -48,7 +48,7 @@ export declare class Anime extends Content {
     getStaff(): Promise<AnimeStaffReference[]>;
     getEpisodes(offset?: number, maxCount?: number): Promise<AnimePartialEpisode[]>;
     getEpisode(episodeId: number): Promise<AnimeEpisode>;
-    getNews(offset?: number, maxCount?: number): Promise<AnimeNews[]>;
+    getNews(offset?: number, maxCount?: number): Promise<ContentNews[]>;
     getTopics(topic?: 'all' | 'episode' | 'other'): Promise<AnimeTopic[]>;
     getVideos(): Promise<AnimeVideo>;
     getPictures(): Promise<Image[]>;
@@ -62,29 +62,25 @@ export declare class Anime extends Content {
         openings: Array<string>;
         endings: Array<string>;
     }>;
+    getExternal(): Promise<ContentExternal[]>;
+    getFull(): Promise<AnimeFull>;
     constructor(client: Client, data: any);
 }
 export declare class AnimeVoiceActorReference extends BaseClass {
-    readonly animeId: number;
     readonly language: string;
     readonly person: PersonMeta;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeCharacterReference extends BaseClass {
-    readonly animeId: number;
     readonly role: string;
     readonly character: CharacterMeta;
     readonly voiceActors: Array<AnimeVoiceActorReference>;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeStaffReference extends BaseClass {
-    readonly animeId: number;
     readonly positions: Array<string>;
     readonly person: PersonMeta;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeEpisodeTitle extends BaseClass {
     readonly default: string;
@@ -103,7 +99,6 @@ export declare class AnimeEpisode extends BaseClass {
     readonly filler: boolean;
     readonly recap: boolean;
     readonly synopsis: string | null;
-    getAnime(): Promise<Anime>;
     constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimePartialEpisode extends AnimeEpisode {
@@ -113,64 +108,46 @@ export declare class AnimePartialEpisode extends AnimeEpisode {
     constructor(client: Client, animeId: number, data: any);
 }
 export declare class AnimeTopic extends BaseResource {
-    readonly animeId: number;
     readonly title: string;
     readonly date: Date;
     readonly authorUsername: string;
     readonly authorURL: URL;
     readonly comments: number;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimePromo extends BaseClass {
-    readonly animeId: number;
     readonly title: string;
     readonly trailer: YoutubeVideo & {
         image: Image;
     };
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeEpisodeVideo extends BaseResource {
-    readonly animeId: number;
     readonly title: string;
     readonly episode: number;
     readonly imageURL: URL | null;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeVideo extends BaseClass {
-    readonly animeId: number;
     readonly promos: Array<AnimePromo>;
     readonly episodes: Array<AnimeEpisodeVideo>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeStatistics extends ContentStatistics {
-    readonly animeId: number;
     readonly watching: number;
     readonly planToWatch: number;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeRecommendation extends BaseClass {
-    readonly animeId: number;
     readonly entry: AnimeMeta;
     readonly URL: URL | null;
     readonly votes: number;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
-}
-export declare class AnimeNews extends ContentNews {
-    readonly animeId: number;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeUserUpdate extends ContentUserUpdate {
-    readonly animeId: number;
     readonly episodesSeen: number;
     readonly episodesTotal: number;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeReviewScores extends ContentReviewScores {
     readonly animation: number;
@@ -178,15 +155,20 @@ export declare class AnimeReviewScores extends ContentReviewScores {
     constructor(client: Client, data: any);
 }
 export declare class AnimeReview extends ContentReview {
-    readonly animeId: number;
     readonly episodesWatched: number;
     readonly scores: AnimeReviewScores;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
-    readonly animeId: number;
     readonly items: T extends 'Adaptation' ? Array<MangaMeta> : Array<AnimeMeta>;
-    getAnime(): Promise<Anime>;
-    constructor(client: Client, animeId: number, relation: T, data: any);
+    constructor(client: Client, relation: T, data: any);
+}
+export declare class AnimeFull extends Anime {
+    readonly relations: Array<AnimeRelationGroup<ContentRelationType>>;
+    readonly themeSongs: {
+        optenings: Array<string>;
+        endings: Array<string>;
+    };
+    readonly external: Array<ContentExternal>;
+    constructor(client: Client, data: any);
 }

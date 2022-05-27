@@ -62,6 +62,6 @@ export class ClubManager extends BaseManager {
   public async getMembers (clubId: number): Promise<Array<ClubMember> | undefined> {
     const rawData = await this.requestPaginated(`clubs/${clubId}/members`)
 
-    return rawData ? rawData.map((member: any) => new ClubMember(this.client, clubId, member)) : undefined
+    return rawData ? rawData.map((member: any) => new ClubMember(this.client, member)) : undefined
   }
 }

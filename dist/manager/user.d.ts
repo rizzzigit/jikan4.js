@@ -1,4 +1,4 @@
-import { User, UserContentUpdates, UserFavorites, UserFriend, UserMeta, UserRecommendation, UserStats, UserAnimeHistory, UserMangaHistory } from '../resource/user';
+import { User, UserContentUpdates, UserFavorites, UserFriend, UserMeta, UserRecommendation, UserStats, UserAnimeHistory, UserMangaHistory, UserFull } from '../resource/user';
 import { BaseManager } from './base';
 import { AnimeReview } from '../resource/content/anime';
 import { MangaReview } from '../resource/content/manga';
@@ -13,6 +13,7 @@ export declare class UserManager extends BaseManager {
     search(searchString: string, filter?: Partial<UserSearchFilter>, offset?: number, maxCount?: number): Promise<User[]>;
     list(offset?: number, maxCount?: number): Promise<UserMeta[]>;
     get(username: string): Promise<User | undefined>;
+    getFull(username: string): Promise<UserFull | undefined>;
     getStatistics(username: string): Promise<UserStats | undefined>;
     getFavorites(username: string): Promise<UserFavorites | undefined>;
     getUpdates(username: string): Promise<UserContentUpdates | undefined>;

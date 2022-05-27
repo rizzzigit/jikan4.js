@@ -20,17 +20,13 @@ export declare class Club extends BaseResource {
     constructor(client: Client, data: any);
 }
 export declare class ClubStaff extends BaseClass {
-    readonly clubId: number;
     readonly url: URL;
     readonly username: string;
-    getClub(): Promise<Club>;
-    constructor(client: Client, clubId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class ClubMember extends BaseClass {
-    readonly clubId: number;
     readonly URL: URL;
     readonly username: string;
     readonly imageURL: URL | null;
-    getClub(): Promise<Club>;
-    constructor(client: Client, clubId: number, data: any);
+    constructor(client: Client, data: any);
 }

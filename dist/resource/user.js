@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRecommendation = exports.UserFriend = exports.UserMangaHistory = exports.UserAnimeHistory = exports.UserContentUpdates = exports.UserMangaUpdate = exports.UserAnimeUpdate = exports.UserContentUpdate = exports.UserFavorites = exports.UserStats = exports.User = exports.UserMeta = void 0;
+exports.UserFull = exports.UserRecommendation = exports.UserFriend = exports.UserMangaHistory = exports.UserAnimeHistory = exports.UserContentUpdates = exports.UserMangaUpdate = exports.UserAnimeUpdate = exports.UserContentUpdate = exports.UserFavorites = exports.UserStats = exports.User = exports.UserMeta = void 0;
 const base_1 = require("../resource/content/base");
 const base_2 = require("./base");
 const meta_1 = require("./meta");
@@ -23,9 +23,9 @@ class User extends base_2.BaseClass {
         var _a, _b;
         super(client);
         this.username = data.username;
-        this.url = UserMeta.parseURL(data.url);
-        this.imageUrl = UserMeta.parseURL((_b = (_a = data === null || data === void 0 ? void 0 : data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
-        this.lastOnline = UserMeta.parseDate(data.last_online);
+        this.url = User.parseURL(data.url);
+        this.imageUrl = User.parseURL((_b = (_a = data === null || data === void 0 ? void 0 : data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
+        this.lastOnline = User.parseDate(data.last_online);
         this.gender = User.parseGender(data.gender);
         this.birthday = User.parseDate(data.birthday, true);
         this.location = data.location || null;
@@ -65,12 +65,14 @@ class User extends base_2.BaseClass {
     getClubs(offset, maxCount) {
         return this.client.users.getClubs(this.username, offset, maxCount);
     }
+    getFull() {
+        return this.client.users.getFull(this.username);
+    }
 }
 exports.User = User;
 class UserStats extends base_2.BaseClass {
-    constructor(client, username, data) {
+    constructor(client, data) {
         super(client);
-        this.username = username;
         this.anime = {
             daysWatched: data.anime.days_watched,
             meanScore: data.anime.mean_score,
@@ -97,42 +99,31 @@ class UserStats extends base_2.BaseClass {
             volumesRead: data.manga.volumes_read
         };
     }
-    getUser() {
-        return this.client.users.get(this.username);
-    }
 }
 exports.UserStats = UserStats;
 class UserFavorites extends base_2.BaseClass {
-    constructor(client, username, data) {
+    constructor(client, data) {
         var _a, _b, _c, _d;
         super(client);
-        this.username = username;
         this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => Object.assign(new meta_1.AnimeMeta(client, anime), { images: new base_1.ContentImage(client, anime.images) }))) || [];
         this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => Object.assign(new meta_1.MangaMeta(client, manga), { images: new base_1.ContentImage(client, manga.images) }))) || [];
         this.characters = ((_c = data.characters) === null || _c === void 0 ? void 0 : _c.map((character) => Object.assign(new meta_1.CharacterMeta(client, character), { images: new base_1.ContentImage(client, character.images) }))) || [];
         this.people = ((_d = data.people) === null || _d === void 0 ? void 0 : _d.map((person) => Object.assign(new meta_1.PersonMeta(client, person), { images: new base_1.ContentImage(client, person.images) }))) || [];
     }
-    getUser() {
-        return this.client.users.get(this.username);
-    }
 }
 exports.UserFavorites = UserFavorites;
 class UserContentUpdate extends base_2.BaseClass {
-    constructor(client, username, data) {
+    constructor(client, data) {
         super(client);
-        this.username = username;
         this.score = data.score;
         this.status = data.status;
         this.date = UserContentUpdate.parseDate(data.date);
     }
-    getUser() {
-        return this.client.users.get(this.username);
-    }
 }
 exports.UserContentUpdate = UserContentUpdate;
 class UserAnimeUpdate extends UserContentUpdate {
-    constructor(client, username, data) {
-        super(client, username, data);
+    constructor(client, data) {
+        super(client, data);
         this.anime = new meta_1.AnimeMeta(client, data.entry);
         this.episodesSeen = data.episodes_seen;
         this.episodesTotal = data.episodes_total;
@@ -140,8 +131,8 @@ class UserAnimeUpdate extends UserContentUpdate {
 }
 exports.UserAnimeUpdate = UserAnimeUpdate;
 class UserMangaUpdate extends UserContentUpdate {
-    constructor(client, username, data) {
-        super(client, username, data);
+    constructor(client, data) {
+        super(client, data);
         this.manga = new meta_1.MangaMeta(client, data.entry);
         this.chaptersRead = data.chapters_read;
         this.chaptersTotal = data.chapters_total;
@@ -151,41 +142,29 @@ class UserMangaUpdate extends UserContentUpdate {
 }
 exports.UserMangaUpdate = UserMangaUpdate;
 class UserContentUpdates extends base_2.BaseClass {
-    constructor(client, username, data) {
+    constructor(client, data) {
         var _a, _b;
         super(client);
-        this.username = username;
-        this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => new UserAnimeUpdate(client, username, anime))) || [];
-        this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => new UserMangaUpdate(client, username, manga))) || [];
-    }
-    getUser() {
-        return this.client.users.get(this.username);
+        this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => new UserAnimeUpdate(client, anime))) || [];
+        this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => new UserMangaUpdate(client, manga))) || [];
     }
 }
 exports.UserContentUpdates = UserContentUpdates;
 class UserAnimeHistory extends base_2.BaseClass {
-    constructor(client, username, data) {
+    constructor(client, data) {
         super(client);
-        this.username = username;
         this.anime = new meta_1.AnimeMeta(client, data.entry);
         this.increment = data.increment;
         this.date = UserAnimeHistory.parseDate(data.date);
     }
-    getUser() {
-        return this.client.users.get(this.username);
-    }
 }
 exports.UserAnimeHistory = UserAnimeHistory;
 class UserMangaHistory extends base_2.BaseClass {
-    constructor(client, username, data) {
+    constructor(client, data) {
         super(client);
-        this.username = username;
         this.manga = new meta_1.MangaMeta(client, data.entry);
         this.increment = data.increment;
         this.date = UserMangaHistory.parseDate(data.date);
-    }
-    getUser() {
-        return this.client.users.get(this.username);
     }
 }
 exports.UserMangaHistory = UserMangaHistory;
@@ -223,3 +202,10 @@ class UserRecommendation extends base_2.BaseClass {
     }
 }
 exports.UserRecommendation = UserRecommendation;
+class UserFull extends User {
+    constructor(client, data) {
+        super(client, data);
+        this.statistics = new UserStats(client, data.statistics);
+    }
+}
+exports.UserFull = UserFull;

@@ -78,13 +78,17 @@ export class User extends BaseClass {
     return <Promise<Array<ClubMeta>>> this.client.users.getClubs(this.username, offset, maxCount)
   }
 
+  public getFull () {
+    return <Promise<UserFull>> this.client.users.getFull(this.username)
+  }
+
   public constructor (client: Client, data: any) {
     super(client)
 
     this.username = data.username
-    this.url = UserMeta.parseURL(data.url)
-    this.imageUrl = UserMeta.parseURL(data?.images?.jpg?.image_url, true)
-    this.lastOnline = UserMeta.parseDate(data.last_online)
+    this.url = User.parseURL(data.url)
+    this.imageUrl = User.parseURL(data?.images?.jpg?.image_url, true)
+    this.lastOnline = User.parseDate(data.last_online)
     this.gender = User.parseGender(data.gender)
     this.birthday = User.parseDate(data.birthday, true)
     this.location = data.location || null
@@ -93,8 +97,6 @@ export class User extends BaseClass {
 }
 
 export class UserStats extends BaseClass {
-  public readonly username: string
-
   public readonly anime: {
     daysWatched: number
     meanScore: number
@@ -122,14 +124,9 @@ export class UserStats extends BaseClass {
     volumesRead: number
   }
 
-  public getUser () {
-    return <Promise<User>> this.client.users.get(this.username)
-  }
-
-  public constructor (client: Client, username: string, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = username
     this.anime = {
       daysWatched: data.anime.days_watched,
       meanScore: data.anime.mean_score,
@@ -159,20 +156,14 @@ export class UserStats extends BaseClass {
 }
 
 export class UserFavorites extends BaseClass {
-  public readonly username: string
   public readonly anime: Array<AnimeMeta & { images: ContentImage }>
   public readonly manga: Array<MangaMeta & { images: ContentImage }>
   public readonly characters: Array<CharacterMeta & { images: ContentImage }>
   public readonly people: Array<PersonMeta & { images: ContentImage }>
 
-  public getUser () {
-    return <Promise<User>> this.client.users.get(this.username)
-  }
-
-  public constructor (client: Client, username: string, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = username
     this.anime = data.anime?.map((anime: any) => Object.assign(new AnimeMeta(client, anime), { images: new ContentImage(client, anime.images) })) || []
     this.manga = data.manga?.map((manga: any) => Object.assign(new MangaMeta(client, manga), { images: new ContentImage(client, manga.images) })) || []
     this.characters = data.characters?.map((character: any) => Object.assign(new CharacterMeta(client, character), { images: new ContentImage(client, character.images) })) || []
@@ -181,19 +172,13 @@ export class UserFavorites extends BaseClass {
 }
 
 export class UserContentUpdate extends BaseClass {
-  public readonly username: string
   public readonly score: number
   public readonly status: string
   public readonly date: Date
 
-  public getUser () {
-    return <Promise<User>> this.client.users.get(this.username)
-  }
-
-  public constructor (client: Client, username: string, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = username
     this.score = data.score
     this.status = data.status
     this.date = UserContentUpdate.parseDate(data.date)
@@ -205,8 +190,8 @@ export class UserAnimeUpdate extends UserContentUpdate {
   public readonly episodesSeen: number
   public readonly episodesTotal: number
 
-  public constructor (client: Client, username: string, data: any) {
-    super(client, username, data)
+  public constructor (client: Client, data: any) {
+    super(client, data)
 
     this.anime = new AnimeMeta(client, data.entry)
     this.episodesSeen = data.episodes_seen
@@ -221,8 +206,8 @@ export class UserMangaUpdate extends UserContentUpdate {
   public readonly volumesRead: number
   public readonly volumesTotal: number
 
-  public constructor (client: Client, username: string, data: any) {
-    super(client, username, data)
+  public constructor (client: Client, data: any) {
+    super(client, data)
 
     this.manga = new MangaMeta(client, data.entry)
     this.chaptersRead = data.chapters_read
@@ -233,37 +218,25 @@ export class UserMangaUpdate extends UserContentUpdate {
 }
 
 export class UserContentUpdates extends BaseClass {
-  public readonly username: string
   public readonly anime: Array<UserAnimeUpdate>
   public readonly manga: Array<UserMangaUpdate>
 
-  public getUser () {
-    return <Promise<User>> this.client.users.get(this.username)
-  }
-
-  public constructor (client: Client, username: string, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = username
-    this.anime = data.anime?.map((anime: any) => new UserAnimeUpdate(client, username, anime)) || []
-    this.manga = data.manga?.map((manga: any) => new UserMangaUpdate(client, username, manga)) || []
+    this.anime = data.anime?.map((anime: any) => new UserAnimeUpdate(client, anime)) || []
+    this.manga = data.manga?.map((manga: any) => new UserMangaUpdate(client, manga)) || []
   }
 }
 
 export class UserAnimeHistory extends BaseClass {
-  public readonly username: string
   public readonly anime: AnimeMeta
   public readonly increment: number
   public readonly date: Date
 
-  public getUser () {
-    return <Promise<User>> this.client.users.get(this.username)
-  }
-
-  public constructor (client: Client, username: string, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = username
     this.anime = new AnimeMeta(client, data.entry)
     this.increment = data.increment
     this.date = UserAnimeHistory.parseDate(data.date)
@@ -271,19 +244,13 @@ export class UserAnimeHistory extends BaseClass {
 }
 
 export class UserMangaHistory extends BaseClass {
-  public readonly username: string
   public readonly manga: MangaMeta
   public readonly increment: number
   public readonly date: Date
 
-  public getUser () {
-    return <Promise<User>> this.client.users.get(this.username)
-  }
-
-  public constructor (client: Client, username: string, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.username = username
     this.manga = new MangaMeta(client, data.entry)
     this.increment = data.increment
     this.date = UserMangaHistory.parseDate(data.date)
@@ -338,5 +305,15 @@ export class UserRecommendation extends BaseClass {
     }) || [])(data.entry), { images: new ContentImage(client, data.entry.images) })
 
     this.content = data.content
+  }
+}
+
+export class UserFull extends User {
+  public readonly statistics: UserStats
+
+  public constructor (client: Client, data: any) {
+    super(client, data)
+
+    this.statistics = new UserStats(client, data.statistics)
   }
 }

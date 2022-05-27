@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeReviewScores = exports.AnimeUserUpdate = exports.AnimeNews = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
+exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeReviewScores = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
 const tslib_1 = require("tslib");
 const base_1 = require("./base");
 const base_2 = require("../base");
@@ -147,43 +147,37 @@ class Anime extends base_1.Content {
     getThemes() {
         return this.client.anime.getThemes(this.id);
     }
+    getExternal() {
+        return this.client.anime.getExternal(this.id);
+    }
+    getFull() {
+        return this.client.anime.getFull(this.id);
+    }
 }
 exports.Anime = Anime;
 class AnimeVoiceActorReference extends base_2.BaseClass {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         super(client);
-        this.animeId = animeId;
         this.language = data.language;
         this.person = new meta_1.PersonMeta(client, data.person);
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
     }
 }
 exports.AnimeVoiceActorReference = AnimeVoiceActorReference;
 class AnimeCharacterReference extends base_2.BaseClass {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         var _a;
         super(client);
-        this.animeId = animeId;
         this.role = data.role;
         this.character = new meta_1.CharacterMeta(client, data.character);
-        this.voiceActors = ((_a = data.voice_actors) === null || _a === void 0 ? void 0 : _a.map((voiceActor) => new AnimeVoiceActorReference(this.client, this.animeId, voiceActor))) || [];
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
+        this.voiceActors = ((_a = data.voice_actors) === null || _a === void 0 ? void 0 : _a.map((voiceActor) => new AnimeVoiceActorReference(this.client, voiceActor))) || [];
     }
 }
 exports.AnimeCharacterReference = AnimeCharacterReference;
 class AnimeStaffReference extends base_2.BaseClass {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         super(client);
-        this.animeId = animeId;
         this.positions = data.positions.filter((position) => !!position);
         this.person = new meta_1.PersonMeta(client, data.person);
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
     }
 }
 exports.AnimeStaffReference = AnimeStaffReference;
@@ -212,9 +206,6 @@ class AnimeEpisode extends base_2.BaseClass {
         this.recap = !!data.recap;
         this.synopsis = data.synopsis || null;
     }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
-    }
 }
 exports.AnimeEpisode = AnimeEpisode;
 class AnimePartialEpisode extends AnimeEpisode {
@@ -229,100 +220,65 @@ class AnimePartialEpisode extends AnimeEpisode {
 }
 exports.AnimePartialEpisode = AnimePartialEpisode;
 class AnimeTopic extends base_2.BaseResource {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         super(client, data);
-        this.animeId = animeId;
         this.title = data.title;
         this.date = new Date(data.date);
         this.authorUsername = data.author_username;
         this.authorURL = AnimeTopic.parseURL(data.author_url);
         this.comments = data.comments;
     }
-    getAnime() {
-        return this.client.anime.get(this.id);
-    }
 }
 exports.AnimeTopic = AnimeTopic;
 class AnimePromo extends base_2.BaseClass {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         super(client);
-        this.animeId = animeId;
         this.title = data.title;
         this.trailer = Object.assign(new misc_1.YoutubeVideo(client, data.trailer.youtube_id), { image: new misc_1.Image(client, data.trailer.images) });
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
     }
 }
 exports.AnimePromo = AnimePromo;
 class AnimeEpisodeVideo extends base_2.BaseResource {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         var _a, _b, _c;
         super(client, data);
-        this.animeId = animeId;
         this.title = data.title;
         this.episode = typeof (data.episode) === 'string' ? Number((_a = data.episode.toLowerCase().split('episode')[1]) === null || _a === void 0 ? void 0 : _a.trim()) || 0 : 0;
         this.imageURL = AnimeEpisodeVideo.parseURL((_c = (_b = data.images) === null || _b === void 0 ? void 0 : _b.jpg) === null || _c === void 0 ? void 0 : _c.image_url, true);
     }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
-    }
 }
 exports.AnimeEpisodeVideo = AnimeEpisodeVideo;
 class AnimeVideo extends base_2.BaseClass {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         var _a, _b;
         super(client);
-        this.animeId = animeId;
-        this.promos = ((_a = data.promo) === null || _a === void 0 ? void 0 : _a.map((promo) => new AnimePromo(this.client, this.animeId, promo))) || [];
-        this.episodes = ((_b = data.episodes) === null || _b === void 0 ? void 0 : _b.map((episodeVideo) => new AnimeEpisodeVideo(this.client, this.animeId, episodeVideo))) || [];
+        this.promos = ((_a = data.promo) === null || _a === void 0 ? void 0 : _a.map((promo) => new AnimePromo(this.client, promo))) || [];
+        this.episodes = ((_b = data.episodes) === null || _b === void 0 ? void 0 : _b.map((episodeVideo) => new AnimeEpisodeVideo(this.client, episodeVideo))) || [];
     }
 }
 exports.AnimeVideo = AnimeVideo;
 class AnimeStatistics extends base_1.ContentStatistics {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         super(client, data);
-        this.animeId = animeId;
         this.watching = data.watching;
         this.planToWatch = data.plan_to_watch;
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
     }
 }
 exports.AnimeStatistics = AnimeStatistics;
 class AnimeRecommendation extends base_2.BaseClass {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         super(client);
-        this.animeId = animeId;
         this.entry = new meta_1.AnimeMeta(client, data.entry);
         this.URL = AnimeRecommendation.parseURL(data.url);
         this.votes = data.votes;
     }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
-    }
 }
 exports.AnimeRecommendation = AnimeRecommendation;
-class AnimeNews extends base_1.ContentNews {
-    constructor(client, animeId, data) {
-        super(client, data);
-        this.animeId = animeId;
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
-    }
-}
-exports.AnimeNews = AnimeNews;
 class AnimeUserUpdate extends base_1.ContentUserUpdate {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         super(client, data);
-        this.animeId = animeId;
         this.episodesSeen = data.episodes_seen;
         this.episodesTotal = data.episodes_total;
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
     }
 }
 exports.AnimeUserUpdate = AnimeUserUpdate;
@@ -335,26 +291,28 @@ class AnimeReviewScores extends base_1.ContentReviewScores {
 }
 exports.AnimeReviewScores = AnimeReviewScores;
 class AnimeReview extends base_1.ContentReview {
-    constructor(client, animeId, data) {
+    constructor(client, data) {
         super(client, data);
-        this.animeId = animeId;
         this.episodesWatched = data.episodes_watched;
         this.scores = new AnimeReviewScores(client, data.scores);
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
     }
 }
 exports.AnimeReview = AnimeReview;
 class AnimeRelationGroup extends base_1.ContentRelationGroup {
-    constructor(client, animeId, relation, data) {
+    constructor(client, relation, data) {
         var _a;
         super(client, relation, data);
-        this.animeId = animeId;
         this.items = ((_a = data.entry) === null || _a === void 0 ? void 0 : _a.map((item) => new (this.relation === 'Adaptation' ? meta_1.MangaMeta : meta_1.AnimeMeta)(this.client, item))) || [];
-    }
-    getAnime() {
-        return this.client.anime.get(this.animeId);
     }
 }
 exports.AnimeRelationGroup = AnimeRelationGroup;
+class AnimeFull extends Anime {
+    constructor(client, data) {
+        var _a, _b;
+        super(client, data);
+        this.relations = ((_a = data.relations) === null || _a === void 0 ? void 0 : _a.map((relation) => new AnimeRelationGroup(this.client, AnimeRelationGroup.parseRelation(relation.relation), relation))) || [];
+        this.themeSongs = data.theme || data.theme_songs || [];
+        this.external = (_b = data.external) === null || _b === void 0 ? void 0 : _b.map((external) => new base_1.ContentExternal(client, external));
+    }
+}
+exports.AnimeFull = AnimeFull;

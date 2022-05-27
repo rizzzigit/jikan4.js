@@ -81,42 +81,30 @@ export class Club extends BaseResource {
     this.category = Club.parseCategory(data.category)
     this.created = Club.parseDate(data.created)
     this.type = Club.parseType(data.type)
-    this.staff = data.staff?.map((staff: any) => new ClubStaff(client, this.id, staff)) || []
+    this.staff = data.staff?.map((staff: any) => new ClubStaff(client, staff)) || []
   }
 }
 
 export class ClubStaff extends BaseClass {
-  public readonly clubId: number
   public readonly url: URL
   public readonly username: string
 
-  public getClub () {
-    return <Promise<Club>> this.client.clubs.get(this.clubId)
-  }
-
-  public constructor (client: Client, clubId: number, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.clubId = clubId
     this.url = ClubStaff.parseURL(data.url)
     this.username = data.username
   }
 }
 
 export class ClubMember extends BaseClass {
-  public readonly clubId: number
   public readonly URL: URL
   public readonly username: string
   public readonly imageURL: URL | null
 
-  public getClub () {
-    return <Promise<Club>> this.client.clubs.get(this.clubId)
-  }
-
-  public constructor (client: Client, clubId: number, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.clubId = clubId
     this.URL = ClubMember.parseURL(data.url)
     this.username = data.username
     this.imageURL = ClubMember.parseURL(data.image_url, true)

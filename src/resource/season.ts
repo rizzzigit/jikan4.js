@@ -11,7 +11,7 @@ export type SeasonType =
 export class Season extends BaseClass {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  private static parseSeasonType (input: any): SeasonType {
+  public static parseSeasonType (input: any): SeasonType {
     switch (`${input}`.trim()) {
       case 'winter': return 'Winter'
       case 'spring': return 'Spring'

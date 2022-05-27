@@ -8,7 +8,8 @@ import {
   ContentStatistics,
   ContentUserUpdate,
   ContentReviewScores,
-  ContentReview
+  ContentReview,
+  ContentExternal
 } from './base'
 import {
   PersonMeta,
@@ -28,7 +29,7 @@ export type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Disco
 export class MangaPublishInformation extends BaseClass {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  public static parseStatus (input: any): MangaPublishStatus {
+  public static parseMangaPublishStatus (input: any): MangaPublishStatus {
     switch (input?.toLowerCase().trim()) {
       case 'finished': return 'Finished'
       case 'publishing': return 'Publishing'
@@ -48,7 +49,7 @@ export class MangaPublishInformation extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.status = MangaPublishInformation.parseStatus(data.status)
+    this.status = MangaPublishInformation.parseMangaPublishStatus(data.status)
     this.publishing = !!data.publishing
     this.publishedFrom = MangaPublishInformation.parseDate(data.published.from, true)
     this.publishedTo = MangaPublishInformation.parseDate(data.published.to, true)
@@ -94,7 +95,7 @@ export class Manga extends Content {
   }
 
   public getNews (offset?: number, maxCount?: number) {
-    return <Promise<Array<MangaNews>>> this.client.manga.getNews(this.id, offset, maxCount)
+    return <Promise<Array<ContentNews>>> this.client.manga.getNews(this.id, offset, maxCount)
   }
 
   public getTopics () {
@@ -125,6 +126,14 @@ export class Manga extends Content {
     return <Promise<Array<MangaRelationGroup<ContentRelationType>>>> this.client.manga.getRelations(this.id)
   }
 
+  public getExternal () {
+    return <Promise<Array<ContentExternal>>> this.client.manga.getExternal(this.id)
+  }
+
+  public getFull () {
+    return <Promise<MangaFull>> this.client.manga.getFull(this.id)
+  }
+
   public constructor (client: Client, data: any) {
     super(client, data)
 
@@ -142,49 +151,27 @@ export class Manga extends Content {
 }
 
 export class MangaCharacterReference extends BaseClass {
-  public readonly mangaId: number
   public readonly character: CharacterMeta
   public readonly role: string
 
-  public getManga () {
-    return <Promise<Manga>> this.client.manga.get(this.mangaId)
-  }
-
-  public constructor (client: Client, mangaId: number, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.mangaId = mangaId
     this.character = new CharacterMeta(client, data.character)
     this.role = data.role
   }
 }
 
-export class MangaNews extends ContentNews {
-  public readonly mangaId: number
-
-  public getManga () {
-    return <Promise<Manga>> this.client.manga.get(this.mangaId)
-  }
-
-  public constructor (client: Client, mangaId: number, data: any) {
-    super(client, data)
-
-    this.mangaId = mangaId
-  }
-}
-
 export class MangaTopic extends BaseResource {
-  public readonly mangaId: number
   public readonly title: string
   public readonly date: Date
   public readonly authorUsername: string
   public readonly authorURL: URL
   public readonly comments: number
 
-  public constructor (client: Client, mangaId: number, data: any) {
+  public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.mangaId = mangaId
     this.title = data.title
     this.date = MangaTopic.parseDate(data.date)
     this.authorUsername = data.author_username
@@ -194,33 +181,25 @@ export class MangaTopic extends BaseResource {
 }
 
 export class MangaStatistics extends ContentStatistics {
-  public readonly mangaId: number
   public readonly reading: number
   public readonly planToRead: number
 
-  public constructor (client: Client, mangaId: number, data: any) {
+  public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.mangaId = mangaId
     this.reading = data.reading
     this.planToRead = data.plan_to_read
   }
 }
 
 export class MangaRecommendation extends BaseClass {
-  public readonly mangaId: number
   public readonly entry: MangaMeta
   public readonly URL: URL
   public readonly votes: number
 
-  public getManga () {
-    return <Promise<Manga>> this.client.manga.get(this.mangaId)
-  }
-
-  public constructor (client: Client, mangaId: number, data: any) {
+  public constructor (client: Client, data: any) {
     super(client)
 
-    this.mangaId = mangaId
     this.entry = new MangaMeta(client, data.entry)
     this.URL = MangaRecommendation.parseURL(data.url)
     this.votes = data.votes
@@ -228,20 +207,14 @@ export class MangaRecommendation extends BaseClass {
 }
 
 export class MangaUserUpdate extends ContentUserUpdate {
-  public readonly mangaId: number
   public readonly volumesRead: number
   public readonly volumesTotal: number
   public readonly chaptersRead: number
   public readonly chaptersTotal: number
 
-  public getManga () {
-    return <Promise<Manga>> this.client.manga.get(this.mangaId)
-  }
-
-  public constructor (client: Client, mangaId: number, data: any) {
+  public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.mangaId = mangaId
     this.volumesRead = data.volumes_read
     this.volumesTotal = data.volumes_total
     this.chaptersRead = data.chapters_read
@@ -260,35 +233,35 @@ export class MangaReviewScores extends ContentReviewScores {
 }
 
 export class MangaReview extends ContentReview {
-  public readonly mangaId: number
   public readonly chaptersRead: number
   public readonly scores: MangaReviewScores
 
-  public getManga () {
-    return <Promise<Manga>> this.client.manga.get(this.mangaId)
-  }
-
-  public constructor (client: Client, mangaId: number, data: any) {
+  public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.mangaId = mangaId
     this.chaptersRead = data.chapters_read
     this.scores = new MangaReviewScores(client, data.scores)
   }
 }
 
 export class MangaRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
-  public readonly mangaId: number
   public readonly items: T extends 'Adaptation' ? Array<AnimeMeta> : Array<MangaMeta>
 
-  public getManga () {
-    return <Promise<Manga>> this.client.manga.get(this.mangaId)
-  }
-
-  public constructor (client: Client, mangaId: number, relation: T, data: any) {
+  public constructor (client: Client, relation: T, data: any) {
     super(client, relation, data)
 
-    this.mangaId = mangaId
     this.items = data.entry?.map((item: any) => new (this.relation === 'Adaptation' ? AnimeMeta : MangaMeta)(this.client, item)) || []
+  }
+}
+
+export class MangaFull extends Manga {
+  public readonly relations: Array<MangaRelationGroup<ContentRelationType>>
+  public readonly external: Array<ContentExternal>
+
+  public constructor (client: Client, data: any) {
+    super(client, data)
+
+    this.relations = data.relations?.map((relation: any) => new MangaRelationGroup(client, MangaRelationGroup.parseRelation(relation.relation), relation)) || []
+    this.external = data.external?.map((external: any) => new ContentExternal(client, external)) || []
   }
 }

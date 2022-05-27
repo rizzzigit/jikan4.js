@@ -1,6 +1,6 @@
 import { BaseManager } from './base';
-import { ContentRelationType } from '../resource/content/base';
-import { Manga, MangaCharacterReference, MangaNews, MangaTopic, MangaStatistics, MangaUserUpdate, MangaReview, MangaRelationGroup } from '../resource/content/manga';
+import { ContentExternal, ContentNews, ContentRelationType } from '../resource/content/base';
+import { Manga, MangaCharacterReference, MangaTopic, MangaStatistics, MangaUserUpdate, MangaReview, MangaRelationGroup, MangaFull } from '../resource/content/manga';
 import { Image } from '../resource/misc';
 import { MangaGenreMeta, MagazineMeta, GenreType } from '../resource/meta';
 export interface MangaSearchFilter {
@@ -29,8 +29,9 @@ export declare class MangaManager extends BaseManager {
     listRecommended(offset?: number, maxCount?: number): Promise<Manga[]>;
     random(): Promise<Manga>;
     get(mangaId: number): Promise<Manga | undefined>;
+    getFull(mangaId: number): Promise<MangaFull | undefined>;
     getCharacters(mangaId: number): Promise<Array<MangaCharacterReference> | undefined>;
-    getNews(mangaId: number, offset?: number, maxCount?: number): Promise<Array<MangaNews> | undefined>;
+    getNews(mangaId: number, offset?: number, maxCount?: number): Promise<Array<ContentNews> | undefined>;
     getTopics(mangaId: number): Promise<Array<MangaTopic> | undefined>;
     getPictures(mangaId: number): Promise<Array<Image> | undefined>;
     getStatistics(mangaId: number): Promise<MangaStatistics | undefined>;
@@ -38,4 +39,5 @@ export declare class MangaManager extends BaseManager {
     getUserUpdates(mangaId: number): Promise<Array<MangaUserUpdate> | undefined>;
     getReviews(mangaId: number): Promise<Array<MangaReview> | undefined>;
     getRelations(mangaId: number): Promise<Array<MangaRelationGroup<ContentRelationType>> | undefined>;
+    getExternal(mangaId: number): Promise<Array<ContentExternal> | undefined>;
 }

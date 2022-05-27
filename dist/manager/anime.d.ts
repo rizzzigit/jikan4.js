@@ -1,6 +1,6 @@
 import { BaseManager } from '../manager/base';
-import { ContentRelationType } from '../resource/content/base';
-import { Anime, AnimeCharacterReference, AnimeStaffReference, AnimePartialEpisode, AnimeEpisode, AnimeNews, AnimeTopic, AnimeVideo, AnimeStatistics, AnimeRecommendation, AnimeUserUpdate, AnimeReview, AnimeRelationGroup } from '../resource/content/anime';
+import { ContentExternal, ContentNews, ContentRelationType } from '../resource/content/base';
+import { Anime, AnimeCharacterReference, AnimeStaffReference, AnimePartialEpisode, AnimeEpisode, AnimeTopic, AnimeVideo, AnimeStatistics, AnimeRecommendation, AnimeUserUpdate, AnimeReview, AnimeRelationGroup, AnimeFull } from '../resource/content/anime';
 import { Image } from '../resource/misc';
 import { AnimeGenreMeta, ProducerMeta, GenreType } from '../resource/meta';
 export interface AnimeSearchFilter {
@@ -32,11 +32,12 @@ export declare class AnimeManager extends BaseManager {
     listScheduled(offset?: number, maxCount?: number): Promise<Anime[]>;
     random(): Promise<Anime>;
     get(animeId: number): Promise<Anime | undefined>;
+    getFull(animeId: number): Promise<AnimeFull | undefined>;
     getCharacters(animeId: number): Promise<Array<AnimeCharacterReference> | undefined>;
     getStaff(animeId: number): Promise<Array<AnimeStaffReference> | undefined>;
     getEpisodes(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimePartialEpisode> | undefined>;
     getEpisode(animeId: number, episodeId: number): Promise<AnimeEpisode | undefined>;
-    getNews(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeNews> | undefined>;
+    getNews(animeId: number, offset?: number, maxCount?: number): Promise<Array<ContentNews> | undefined>;
     getTopics(animeId: number, topic?: 'all' | 'episode' | 'other'): Promise<Array<AnimeTopic> | undefined>;
     getVideos(animeId: number): Promise<AnimeVideo | undefined>;
     getPictures(animeId: number): Promise<Array<Image> | undefined>;
@@ -50,4 +51,5 @@ export declare class AnimeManager extends BaseManager {
         openings: Array<string>;
         endings: Array<string>;
     } | undefined>;
+    getExternal(animeId: number): Promise<Array<ContentExternal> | undefined>;
 }

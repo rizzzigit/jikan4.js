@@ -1,5 +1,5 @@
 import { Image } from '../resource/misc'
-import { Person, PersonAnimeReference, PersonVoiceActorReference, PersonMangaReference } from '../resource/person'
+import { Person, PersonAnimeReference, PersonVoiceActorReference, PersonMangaReference, PersonFull } from '../resource/person'
 import { BaseManager } from '../manager/base'
 import { translateObject } from '../utils'
 
@@ -56,22 +56,28 @@ export class PersonManager extends BaseManager {
     return rawData ? new Person(this.client, rawData) : undefined
   }
 
+  public async getFull (personId: number): Promise<PersonFull | undefined> {
+    const rawData = await this.request(`people/${personId}/full`)
+
+    return rawData ? new PersonFull(this.client, rawData) : undefined
+  }
+
   public async getAnime (personId: number): Promise<Array<PersonAnimeReference> | undefined> {
     const rawData = await this.request(`people/${personId}/anime`)
 
-    return rawData ? rawData.map((animeReference: any) => new PersonAnimeReference(this.client, personId, animeReference)) : undefined
+    return rawData ? rawData.map((animeReference: any) => new PersonAnimeReference(this.client, animeReference)) : undefined
   }
 
   public async getVoiceActors (personId: number): Promise<Array<PersonVoiceActorReference> | undefined> {
     const rawData = await this.request(`people/${personId}/voices`)
 
-    return rawData ? rawData.map((voiceActorReference: any) => new PersonVoiceActorReference(this.client, personId, voiceActorReference)) : undefined
+    return rawData ? rawData.map((voiceActorReference: any) => new PersonVoiceActorReference(this.client, voiceActorReference)) : undefined
   }
 
   public async getManga (personId: number): Promise<Array<PersonMangaReference> | undefined> {
     const rawData = await this.request(`people/${personId}/manga`)
 
-    return rawData ? rawData.map((mangaReference: any) => new PersonMangaReference(this.client, personId, mangaReference)) : undefined
+    return rawData ? rawData.map((mangaReference: any) => new PersonMangaReference(this.client, mangaReference)) : undefined
   }
 
   public async getPictures (personId: number): Promise<Array<Image> | undefined> {

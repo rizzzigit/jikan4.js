@@ -27,22 +27,28 @@ class UserManager extends base_1.BaseManager {
             return rawData ? new user_1.User(this.client, rawData) : undefined;
         });
     }
+    getFull(username) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.request(`users/${username}/full`);
+            return rawData ? new user_1.UserFull(this.client, rawData) : undefined;
+        });
+    }
     getStatistics(username) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`users/${username}/statistics`);
-            return rawData ? new user_1.UserStats(this.client, username, rawData) : undefined;
+            return rawData ? new user_1.UserStats(this.client, rawData) : undefined;
         });
     }
     getFavorites(username) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`users/${username}/favorites`);
-            return rawData ? new user_1.UserFavorites(this.client, username, rawData) : undefined;
+            return rawData ? new user_1.UserFavorites(this.client, rawData) : undefined;
         });
     }
     getUpdates(username) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`users/${username}/userupdates`);
-            return rawData ? new user_1.UserContentUpdates(this.client, username, rawData) : undefined;
+            return rawData ? new user_1.UserContentUpdates(this.client, rawData) : undefined;
         });
     }
     getAbout(username) {
@@ -56,8 +62,8 @@ class UserManager extends base_1.BaseManager {
             const rawData = yield this.request(`users/${username}/history${type !== 'all' ? `/${type}` : ''}`);
             return rawData.map((data) => {
                 switch (data.entry.type) {
-                    case 'manga': return new user_1.UserMangaHistory(this.client, username, data);
-                    case 'anime': return new user_1.UserAnimeHistory(this.client, username, data);
+                    case 'manga': return new user_1.UserMangaHistory(this.client, data);
+                    case 'anime': return new user_1.UserAnimeHistory(this.client, data);
                     default: throw new Error(`Unknown entry type: ${data.entry.type}`);
                 }
             });
@@ -74,10 +80,10 @@ class UserManager extends base_1.BaseManager {
             const rawData = yield this.requestPaginated(`users/${username}/reviews`, offset, maxCount);
             return rawData.map((review) => {
                 if ('episodes_watched' in review) {
-                    return new anime_1.AnimeReview(this.client, review.anime.mal_id, review);
+                    return new anime_1.AnimeReview(this.client, review);
                 }
                 else {
-                    return new manga_1.MangaReview(this.client, review.manga.mal_id, review);
+                    return new manga_1.MangaReview(this.client, review);
                 }
             });
         });

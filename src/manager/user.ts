@@ -6,7 +6,8 @@ import {
   UserRecommendation,
   UserStats,
   UserAnimeHistory,
-  UserMangaHistory
+  UserMangaHistory,
+  UserFull
 } from '../resource/user'
 import { translateObject } from '../utils'
 import { BaseManager } from './base'
@@ -44,22 +45,28 @@ export class UserManager extends BaseManager {
     return rawData ? new User(this.client, rawData) : undefined
   }
 
+  public async getFull (username: string) {
+    const rawData = await this.request(`users/${username}/full`)
+
+    return rawData ? new UserFull(this.client, rawData) : undefined
+  }
+
   public async getStatistics (username: string) {
     const rawData = await this.request(`users/${username}/statistics`)
 
-    return rawData ? new UserStats(this.client, username, rawData) : undefined
+    return rawData ? new UserStats(this.client, rawData) : undefined
   }
 
   public async getFavorites (username: string) {
     const rawData = await this.request(`users/${username}/favorites`)
 
-    return rawData ? new UserFavorites(this.client, username, rawData) : undefined
+    return rawData ? new UserFavorites(this.client, rawData) : undefined
   }
 
   public async getUpdates (username: string) {
     const rawData = await this.request(`users/${username}/userupdates`)
 
-    return rawData ? new UserContentUpdates(this.client, username, rawData) : undefined
+    return rawData ? new UserContentUpdates(this.client, rawData) : undefined
   }
 
   public async getAbout (username: string) {
@@ -73,8 +80,8 @@ export class UserManager extends BaseManager {
 
     return rawData.map((data) => {
       switch (data.entry.type) {
-        case 'manga': return new UserMangaHistory(this.client, username, data)
-        case 'anime': return new UserAnimeHistory(this.client, username, data)
+        case 'manga': return new UserMangaHistory(this.client, data)
+        case 'anime': return new UserAnimeHistory(this.client, data)
 
         default: throw new Error(`Unknown entry type: ${data.entry.type}`)
       }
@@ -92,9 +99,9 @@ export class UserManager extends BaseManager {
 
     return rawData.map((review) => {
       if ('episodes_watched' in review) {
-        return new AnimeReview(this.client, review.anime.mal_id, review)
+        return new AnimeReview(this.client, review)
       } else {
-        return new MangaReview(this.client, review.manga.mal_id, review)
+        return new MangaReview(this.client, review)
       }
     })
   }

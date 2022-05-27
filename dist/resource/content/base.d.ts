@@ -90,3 +90,8 @@ export declare class ContentRelationGroup<T extends ContentRelationType> extends
     readonly relation: T;
     constructor(client: Client, relation: T, data: any);
 }
+export declare class ContentExternal extends BaseClass {
+    readonly name: string;
+    readonly url: URL;
+    constructor(client: Client, data: any);
+}

@@ -7,8 +7,6 @@ class BaseClass {
         this.client = client;
         Object.defineProperty(this, 'client', { enumerable: false, value: client });
     }
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
     static parseDate(input, nullable = false) {
         const date = new Date(input || '');
         if (Number.isNaN(date.getTime())) {
@@ -21,36 +19,6 @@ class BaseClass {
         }
         return date;
     }
-    // // eslint-disable-next-line tsdoc/syntax
-    // /** @hidden */
-    // public static parseString<IsNullable extends boolean = false> (input: any, nullable: IsNullable = <any> false): IsNullable extends false ? string : (string | null) {
-    //   input = input?.trim()
-    //   if (!input) {
-    //     if (nullable) {
-    //       return <any> null
-    //     } else {
-    //       throw new Error('Invalid string')
-    //     }
-    //   } else {
-    //     return input
-    //   }
-    // }
-    // // eslint-disable-next-line tsdoc/syntax
-    // /** @hidden */
-    // public static parseNumber<IsNullable extends boolean = false> (input: any, nullable: IsNullable = <any> false): IsNullable extends false ? number : (number | null) {
-    //   const number = Number(input)
-    //   if (Number.isNaN(number)) {
-    //     if (nullable) {
-    //       return <any> null
-    //     } else {
-    //       throw new Error('Invalid number')
-    //     }
-    //   } else {
-    //     return Number(input)
-    //   }
-    // }
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
     static parseURL(input, nullable = false) {
         let url = null;
         try {

@@ -219,3 +219,15 @@ export class ContentRelationGroup <T extends ContentRelationType> extends BaseCl
     this.relation = relation
   }
 }
+
+export class ContentExternal extends BaseClass {
+  public readonly name: string
+  public readonly url: URL
+
+  public constructor (client: Client, data: any) {
+    super(client)
+
+    this.name = data.name
+    this.url = data.url && new URL(data.url)
+  }
+}

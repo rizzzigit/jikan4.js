@@ -1,5 +1,5 @@
 import { BaseManager } from '../manager/base'
-import { Character, CharacterAnimeReference, CharacterMangaReference, CharacterVoiceActorReference } from '../resource/character'
+import { Character, CharacterAnimeReference, CharacterFull, CharacterMangaReference, CharacterVoiceActorReference } from '../resource/character'
 import { Image } from '../resource/misc'
 import { translateObject } from '../utils'
 
@@ -54,22 +54,28 @@ export class CharacterManager extends BaseManager {
     return rawData ? new Character(this.client, rawData) : undefined
   }
 
+  public async getFull (characterId: number): Promise<CharacterFull | undefined> {
+    const rawData = await this.request(`characters/${characterId}/full`)
+
+    return rawData ? new CharacterFull(this.client, rawData) : undefined
+  }
+
   public async getAnime (characterId: number): Promise<Array<CharacterAnimeReference> | undefined> {
     const rawData = await this.request(`characters/${characterId}/anime`)
 
-    return rawData ? rawData.map((animeReference: any) => new CharacterAnimeReference(this.client, characterId, animeReference)) : undefined
+    return rawData ? rawData.map((animeReference: any) => new CharacterAnimeReference(this.client, animeReference)) : undefined
   }
 
   public async getManga (characterId: number): Promise<Array<CharacterMangaReference> | undefined> {
     const rawData = await this.request(`characters/${characterId}/manga`)
 
-    return rawData ? rawData.map((mangaReference: any) => new CharacterMangaReference(this.client, characterId, mangaReference)) : undefined
+    return rawData ? rawData.map((mangaReference: any) => new CharacterMangaReference(this.client, mangaReference)) : undefined
   }
 
   public async getVoiceActors (characterId: number): Promise<Array<CharacterVoiceActorReference> | undefined> {
     const rawData = await this.request(`characters/${characterId}/voices`)
 
-    return rawData ? rawData.map((voiceActorReference: any) => new CharacterVoiceActorReference(this.client, characterId, voiceActorReference)) : undefined
+    return rawData ? rawData.map((voiceActorReference: any) => new CharacterVoiceActorReference(this.client, voiceActorReference)) : undefined
   }
 
   public async getPictures (characterId: number): Promise<Array<Image> | undefined> {

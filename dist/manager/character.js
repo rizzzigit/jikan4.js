@@ -47,22 +47,28 @@ class CharacterManager extends base_1.BaseManager {
             return rawData ? new character_1.Character(this.client, rawData) : undefined;
         });
     }
+    getFull(characterId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.request(`characters/${characterId}/full`);
+            return rawData ? new character_1.CharacterFull(this.client, rawData) : undefined;
+        });
+    }
     getAnime(characterId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`characters/${characterId}/anime`);
-            return rawData ? rawData.map((animeReference) => new character_1.CharacterAnimeReference(this.client, characterId, animeReference)) : undefined;
+            return rawData ? rawData.map((animeReference) => new character_1.CharacterAnimeReference(this.client, animeReference)) : undefined;
         });
     }
     getManga(characterId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`characters/${characterId}/manga`);
-            return rawData ? rawData.map((mangaReference) => new character_1.CharacterMangaReference(this.client, characterId, mangaReference)) : undefined;
+            return rawData ? rawData.map((mangaReference) => new character_1.CharacterMangaReference(this.client, mangaReference)) : undefined;
         });
     }
     getVoiceActors(characterId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`characters/${characterId}/voices`);
-            return rawData ? rawData.map((voiceActorReference) => new character_1.CharacterVoiceActorReference(this.client, characterId, voiceActorReference)) : undefined;
+            return rawData ? rawData.map((voiceActorReference) => new character_1.CharacterVoiceActorReference(this.client, voiceActorReference)) : undefined;
         });
     }
     getPictures(characterId) {

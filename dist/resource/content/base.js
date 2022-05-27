@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContentRelationGroup = exports.ContentUserUpdate = exports.ContentReview = exports.ContentReviewScores = exports.ContentUser = exports.ContentNews = exports.ContentStatistics = exports.ContentStatisticsScore = exports.Content = exports.ContentTitle = exports.ContentImage = void 0;
+exports.ContentExternal = exports.ContentRelationGroup = exports.ContentUserUpdate = exports.ContentReview = exports.ContentReviewScores = exports.ContentUser = exports.ContentNews = exports.ContentStatistics = exports.ContentStatisticsScore = exports.Content = exports.ContentTitle = exports.ContentImage = void 0;
 const base_1 = require("../base");
 const misc_1 = require("../misc");
+const url_1 = require("url");
 class ContentImage extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
@@ -145,3 +146,11 @@ class ContentRelationGroup extends base_1.BaseClass {
     }
 }
 exports.ContentRelationGroup = ContentRelationGroup;
+class ContentExternal extends base_1.BaseClass {
+    constructor(client, data) {
+        super(client);
+        this.name = data.name;
+        this.url = data.url && new url_1.URL(data.url);
+    }
+}
+exports.ContentExternal = ContentExternal;

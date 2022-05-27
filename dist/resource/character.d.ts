@@ -14,26 +14,27 @@ export declare class Character extends BaseResource {
     getManga(): Promise<CharacterMangaReference[]>;
     getVoiceActors(): Promise<CharacterVoiceActorReference[]>;
     getPictures(): Promise<Image[]>;
+    getFull(): Promise<CharacterFull>;
     constructor(client: Client, data: any);
 }
 export declare class CharacterAnimeReference extends BaseClass {
-    readonly characterId: number;
     readonly role: string;
     readonly anime: AnimeMeta;
-    getCharacter(): Promise<Character>;
-    constructor(client: Client, characterId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class CharacterMangaReference extends BaseClass {
-    readonly characterId: number;
     readonly role: string;
     readonly manga: MangaMeta;
-    getCharacter(): Promise<Character>;
-    constructor(client: Client, characterId: number, data: any);
+    constructor(client: Client, data: any);
 }
 export declare class CharacterVoiceActorReference extends BaseClass {
-    readonly characterId: number;
     readonly language: string;
     readonly person: PersonMeta;
-    getCharacter(): Promise<Character>;
-    constructor(client: Client, characterId: number, data: any);
+    constructor(client: Client, data: any);
+}
+export declare class CharacterFull extends Character {
+    readonly anime: Array<CharacterAnimeReference>;
+    readonly manga: Array<CharacterMangaReference>;
+    readonly voices: Array<CharacterVoiceActorReference>;
+    constructor(client: Client, data: any);
 }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MangaRelationGroup = exports.MangaReview = exports.MangaReviewScores = exports.MangaUserUpdate = exports.MangaRecommendation = exports.MangaStatistics = exports.MangaTopic = exports.MangaNews = exports.MangaCharacterReference = exports.Manga = exports.MangaPublishInformation = void 0;
+exports.MangaFull = exports.MangaRelationGroup = exports.MangaReview = exports.MangaReviewScores = exports.MangaUserUpdate = exports.MangaRecommendation = exports.MangaStatistics = exports.MangaTopic = exports.MangaCharacterReference = exports.Manga = exports.MangaPublishInformation = void 0;
 const base_1 = require("../base");
 const base_2 = require("./base");
 const meta_1 = require("../meta");
@@ -8,14 +8,14 @@ const genre_1 = require("../../manager/genre");
 class MangaPublishInformation extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
-        this.status = MangaPublishInformation.parseStatus(data.status);
+        this.status = MangaPublishInformation.parseMangaPublishStatus(data.status);
         this.publishing = !!data.publishing;
         this.publishedFrom = MangaPublishInformation.parseDate(data.published.from, true);
         this.publishedTo = MangaPublishInformation.parseDate(data.published.to, true);
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
-    static parseStatus(input) {
+    static parseMangaPublishStatus(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
             case 'finished': return 'Finished';
             case 'publishing': return 'Publishing';
@@ -88,34 +88,25 @@ class Manga extends base_2.Content {
     getRelations() {
         return this.client.manga.getRelations(this.id);
     }
+    getExternal() {
+        return this.client.manga.getExternal(this.id);
+    }
+    getFull() {
+        return this.client.manga.getFull(this.id);
+    }
 }
 exports.Manga = Manga;
 class MangaCharacterReference extends base_1.BaseClass {
-    constructor(client, mangaId, data) {
+    constructor(client, data) {
         super(client);
-        this.mangaId = mangaId;
         this.character = new meta_1.CharacterMeta(client, data.character);
         this.role = data.role;
     }
-    getManga() {
-        return this.client.manga.get(this.mangaId);
-    }
 }
 exports.MangaCharacterReference = MangaCharacterReference;
-class MangaNews extends base_2.ContentNews {
-    constructor(client, mangaId, data) {
-        super(client, data);
-        this.mangaId = mangaId;
-    }
-    getManga() {
-        return this.client.manga.get(this.mangaId);
-    }
-}
-exports.MangaNews = MangaNews;
 class MangaTopic extends base_1.BaseResource {
-    constructor(client, mangaId, data) {
+    constructor(client, data) {
         super(client, data);
-        this.mangaId = mangaId;
         this.title = data.title;
         this.date = MangaTopic.parseDate(data.date);
         this.authorUsername = data.author_username;
@@ -125,38 +116,29 @@ class MangaTopic extends base_1.BaseResource {
 }
 exports.MangaTopic = MangaTopic;
 class MangaStatistics extends base_2.ContentStatistics {
-    constructor(client, mangaId, data) {
+    constructor(client, data) {
         super(client, data);
-        this.mangaId = mangaId;
         this.reading = data.reading;
         this.planToRead = data.plan_to_read;
     }
 }
 exports.MangaStatistics = MangaStatistics;
 class MangaRecommendation extends base_1.BaseClass {
-    constructor(client, mangaId, data) {
+    constructor(client, data) {
         super(client);
-        this.mangaId = mangaId;
         this.entry = new meta_1.MangaMeta(client, data.entry);
         this.URL = MangaRecommendation.parseURL(data.url);
         this.votes = data.votes;
     }
-    getManga() {
-        return this.client.manga.get(this.mangaId);
-    }
 }
 exports.MangaRecommendation = MangaRecommendation;
 class MangaUserUpdate extends base_2.ContentUserUpdate {
-    constructor(client, mangaId, data) {
+    constructor(client, data) {
         super(client, data);
-        this.mangaId = mangaId;
         this.volumesRead = data.volumes_read;
         this.volumesTotal = data.volumes_total;
         this.chaptersRead = data.chapters_read;
         this.chaptersTotal = data.chapters_total;
-    }
-    getManga() {
-        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaUserUpdate = MangaUserUpdate;
@@ -168,26 +150,27 @@ class MangaReviewScores extends base_2.ContentReviewScores {
 }
 exports.MangaReviewScores = MangaReviewScores;
 class MangaReview extends base_2.ContentReview {
-    constructor(client, mangaId, data) {
+    constructor(client, data) {
         super(client, data);
-        this.mangaId = mangaId;
         this.chaptersRead = data.chapters_read;
         this.scores = new MangaReviewScores(client, data.scores);
-    }
-    getManga() {
-        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaReview = MangaReview;
 class MangaRelationGroup extends base_2.ContentRelationGroup {
-    constructor(client, mangaId, relation, data) {
+    constructor(client, relation, data) {
         var _a;
         super(client, relation, data);
-        this.mangaId = mangaId;
         this.items = ((_a = data.entry) === null || _a === void 0 ? void 0 : _a.map((item) => new (this.relation === 'Adaptation' ? meta_1.AnimeMeta : meta_1.MangaMeta)(this.client, item))) || [];
-    }
-    getManga() {
-        return this.client.manga.get(this.mangaId);
     }
 }
 exports.MangaRelationGroup = MangaRelationGroup;
+class MangaFull extends Manga {
+    constructor(client, data) {
+        var _a, _b;
+        super(client, data);
+        this.relations = ((_a = data.relations) === null || _a === void 0 ? void 0 : _a.map((relation) => new MangaRelationGroup(client, MangaRelationGroup.parseRelation(relation.relation), relation))) || [];
+        this.external = ((_b = data.external) === null || _b === void 0 ? void 0 : _b.map((external) => new base_2.ContentExternal(client, external))) || [];
+    }
+}
+exports.MangaFull = MangaFull;

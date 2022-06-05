@@ -32,19 +32,19 @@ export interface AnimeSearchFilter {
   excludeGenres: Array<number | AnimeGenreMeta<GenreType>>
   producers: Array<number | ProducerMeta>
   orderBy:
-    | 'mal_id'
-    | 'title'
-    | 'type'
-    | 'rating'
-    | 'start_date'
-    | 'end_date'
-    | 'episodes'
-    | 'score'
-    | 'scored_by'
-    | 'rank'
-    | 'popularity'
-    | 'members'
-    | 'favorites'
+  | 'mal_id'
+  | 'title'
+  | 'type'
+  | 'rating'
+  | 'start_date'
+  | 'end_date'
+  | 'episodes'
+  | 'score'
+  | 'scored_by'
+  | 'rank'
+  | 'popularity'
+  | 'members'
+  | 'favorites'
   sort: 'desc' | 'asc'
 }
 
@@ -70,9 +70,9 @@ export class AnimeManager extends BaseManager {
           case 'minScore': return ['min_score', `${value}`]
           case 'maxScore': return ['max_score', `${value}`]
           case 'sfw': return [key, '']
-          case 'genres': return [key, `${(<Array<any>> value).map((value: any) => value instanceof AnimeGenreMeta ? value.id : value)}`]
-          case 'excludeGenres': return ['genres_exclude', `${(<Array<any>> value).map((value: any) => value instanceof AnimeGenreMeta ? value.id : value)}`]
-          case 'producers': return [key, `${(<Array<any>> value).map((value: any) => value instanceof ProducerMeta ? value.id : value)}`]
+          case 'genres': return [key, `${(<Array<any>>value).map((value: any) => value instanceof AnimeGenreMeta ? value.id : value)}`]
+          case 'excludeGenres': return ['genres_exclude', `${(<Array<any>>value).map((value: any) => value instanceof AnimeGenreMeta ? value.id : value)}`]
+          case 'producers': return [key, `${(<Array<any>>value).map((value: any) => value instanceof ProducerMeta ? value.id : value)}`]
           case 'orderBy': return ['order_by', `${value}`]
           default: return [key, `${value}`]
         }
@@ -106,8 +106,13 @@ export class AnimeManager extends BaseManager {
     return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
   }
 
-  public async random (): Promise<Anime> {
-    const rawData = await this.request('random/anime', { disableCaching: 'true' })
+  public async random (sfw?: boolean): Promise<Anime> {
+    let rawData
+    if (sfw) {
+      rawData = await this.request('random/anime', { disableCaching: 'true', sfw: '' })
+    } else {
+      rawData = await this.request('random/anime', { disableCaching: 'true' })
+    }
 
     return new Anime(this.client, this.storeCache(rawData))
   }

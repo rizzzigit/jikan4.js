@@ -56,9 +56,15 @@ class AnimeManager extends base_1.BaseManager {
             return rawData.map((anime) => new anime_1.Anime(this.client, this.storeCache(anime)));
         });
     }
-    random() {
+    random(sfw) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const rawData = yield this.request('random/anime', { disableCaching: 'true' });
+            let rawData;
+            if (sfw) {
+                rawData = yield this.request('random/anime', { disableCaching: 'true', sfw: '' });
+            }
+            else {
+                rawData = yield this.request('random/anime', { disableCaching: 'true' });
+            }
             return new anime_1.Anime(this.client, this.storeCache(rawData));
         });
     }

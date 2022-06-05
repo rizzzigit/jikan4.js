@@ -17,7 +17,7 @@ export interface MangaSearchFilter {
     sort: 'desc' | 'asc';
 }
 export interface TopMangaFilter {
-    type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'mahua';
+    type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'manhua';
     filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite';
 }
 export declare class MangaManager extends BaseManager {
@@ -27,7 +27,7 @@ export declare class MangaManager extends BaseManager {
     list(offset?: number, maxCount?: number): Promise<Manga[]>;
     listTop(filter?: Partial<TopMangaFilter>, offset?: number, maxCount?: number): Promise<Manga[]>;
     listRecommended(offset?: number, maxCount?: number): Promise<Manga[]>;
-    random(): Promise<Manga>;
+    random(sfw?: boolean): Promise<Manga>;
     get(mangaId: number): Promise<Manga | undefined>;
     getFull(mangaId: number): Promise<MangaFull | undefined>;
     getCharacters(mangaId: number): Promise<Array<MangaCharacterReference> | undefined>;

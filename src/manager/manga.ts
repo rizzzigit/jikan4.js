@@ -25,23 +25,23 @@ export interface MangaSearchFilter {
   excludeGenres: Array<number | MangaGenreMeta<GenreType>>
   magazines: Array<number | MagazineMeta>
   orderBy:
-    | 'mal_id'
-    | 'title'
-    | 'start_date'
-    | 'end_date'
-    | 'chapters'
-    | 'volumes'
-    | 'score'
-    | 'scored_by'
-    | 'rank'
-    | 'popularity'
-    | 'members'
-    | 'favorites'
+  | 'mal_id'
+  | 'title'
+  | 'start_date'
+  | 'end_date'
+  | 'chapters'
+  | 'volumes'
+  | 'score'
+  | 'scored_by'
+  | 'rank'
+  | 'popularity'
+  | 'members'
+  | 'favorites'
   sort: 'desc' | 'asc'
 }
 
 export interface TopMangaFilter {
-  type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'mahua'
+  type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'manhua'
   filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite'
 }
 
@@ -62,9 +62,9 @@ export class MangaManager extends BaseManager {
           case 'minScore': return ['min_score', `${value}`]
           case 'maxScore': return ['max_score', `${value}`]
           case 'sfw': return [key, '']
-          case 'genres': return [key, `${(<Array<any>> value).map((value: any) => value instanceof MangaGenreMeta ? value.id : value)}`]
-          case 'excludeGenres': return ['genres_exclude', `${(<Array<any>> value).map((value: any) => value instanceof MangaGenreMeta ? value.id : value)}`]
-          case 'magazines': return [key, `${(<Array<any>> value).map((value: any) => value instanceof MagazineMeta ? value.id : value)}`]
+          case 'genres': return [key, `${(<Array<any>>value).map((value: any) => value instanceof MangaGenreMeta ? value.id : value)}`]
+          case 'excludeGenres': return ['genres_exclude', `${(<Array<any>>value).map((value: any) => value instanceof MangaGenreMeta ? value.id : value)}`]
+          case 'magazines': return [key, `${(<Array<any>>value).map((value: any) => value instanceof MagazineMeta ? value.id : value)}`]
           case 'orderBy': return ['order_by', `${value}`]
           default: return [key, `${value}`]
         }
@@ -92,8 +92,10 @@ export class MangaManager extends BaseManager {
     return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
   }
 
-  public async random (): Promise<Manga> {
-    const rawData = await this.request('random/manga', { disableCaching: 'true' })
+  public async random (sfw?: boolean): Promise<Manga> {
+    let rawData
+    if (sfw) rawData = await this.request('random/manga', { disableCaching: 'true', sfw: '' })
+    else rawData = await this.request('random/manga', { disableCaching: 'true' })
 
     return new Manga(this.client, rawData)
   }

@@ -21,7 +21,7 @@ class AnimeAirInformation extends base_2.BaseClass {
     static parseStatus(input) {
         const status = input === null || input === void 0 ? void 0 : input.toLowerCase().trim();
         switch (status) {
-            case 'finished airing': return 'FinishedAiring';
+            case 'finished airing': return 'Finished Airing';
             case 'currently airing': return 'Airing';
             case 'not yet aired': return 'NotYetAired';
             default: return 'Unknown';

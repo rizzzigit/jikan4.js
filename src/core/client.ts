@@ -80,7 +80,7 @@ export interface ClientOptions {
 
   /**
    * Whether to disable cache or not. It's recommended that this option is disabled
-   * to avoid sending multiple requests for the same content to
+   * to avoid sending multiple requests for the same content.
   */
   disableCaching: boolean
 
@@ -97,7 +97,7 @@ export interface ClientOptions {
   /**
    * Keep sockets around in a pool to be used by other requests in the future.
 
-  * Default value: `true`
+   * Default value: `true`
   */
   keepAlive: boolean
 
@@ -109,6 +109,9 @@ export interface ClientOptions {
   */
   keepAliveMsecs: number
 
+  /**
+   * Where to store cache from Jikan API
+  */
   dataPath: string
 }
 

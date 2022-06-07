@@ -121,14 +121,6 @@ export type ClientEventNames = keyof ClientEvents
 export class Client {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  private static setGlobalClient (client: Client) {
-    const window: globalThis.NodeJS.Global & { jikanClient?: Client } = Object.assign(global, { jikanClient: client })
-
-    return window
-  }
-
-  // eslint-disable-next-line tsdoc/syntax
-  /** @hidden */
   private static setOptions (options?: Partial<ClientOptions>): ClientOptions {
     const defaultOptions: ClientOptions = {
       dataPath: join(__dirname, '..', '..', '.Jikan'),
@@ -154,14 +146,6 @@ export class Client {
     }
 
     return Object.assign(defaultOptions, options)
-  }
-
-  // eslint-disable-next-line tsdoc/syntax
-  /** @hidden */
-  public static getClient () {
-    const window: globalThis.NodeJS.Global & { jikanClient?: Client } = global
-
-    return window.jikanClient || (window.jikanClient = new Client())
   }
 
   /**
@@ -384,7 +368,5 @@ export class Client {
     this.heartbeat = new HeartBeatMonitor(this)
 
     this.events = new EventEmitter()
-
-    Client.setGlobalClient(this)
   }
 }

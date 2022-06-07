@@ -103,11 +103,7 @@ export interface ClientEvents {
 export declare type ClientEventNames = keyof ClientEvents;
 export declare class Client {
     /** @hidden */
-    private static setGlobalClient;
-    /** @hidden */
     private static setOptions;
-    /** @hidden */
-    static getClient(): Client;
     /**
      * Current options of the client.
      *

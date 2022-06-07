@@ -47,13 +47,6 @@ class Client {
         this.schedules = new schedule_1.ScheduleManager(this);
         this.heartbeat = new heartbeat_1.HeartBeatMonitor(this);
         this.events = new events_1.EventEmitter();
-        Client.setGlobalClient(this);
-    }
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    static setGlobalClient(client) {
-        const window = Object.assign(global, { jikanClient: client });
-        return window;
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
@@ -75,12 +68,6 @@ class Client {
             disableCaching: false
         };
         return Object.assign(defaultOptions, options);
-    }
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    static getClient() {
-        const window = global;
-        return window.jikanClient || (window.jikanClient = new Client());
     }
     /**
      * Listen to client events.

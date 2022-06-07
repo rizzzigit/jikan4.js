@@ -93,9 +93,7 @@ export class MangaManager extends BaseManager {
   }
 
   public async random (sfw?: boolean): Promise<Manga> {
-    let rawData
-    if (sfw) rawData = await this.request('random/manga', { disableCaching: 'true', sfw: '' })
-    else rawData = await this.request('random/manga', { disableCaching: 'true' })
+    const rawData = await this.request('random/manga', { disableCaching: 'true', sfw: sfw ? 'true' : '' })
 
     return new Manga(this.client, rawData)
   }

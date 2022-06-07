@@ -52,11 +52,7 @@ class MangaManager extends base_1.BaseManager {
     }
     random(sfw) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            let rawData;
-            if (sfw)
-                rawData = yield this.request('random/manga', { disableCaching: 'true', sfw: '' });
-            else
-                rawData = yield this.request('random/manga', { disableCaching: 'true' });
+            const rawData = yield this.request('random/manga', { disableCaching: 'true', sfw: sfw ? 'true' : '' });
             return new manga_1.Manga(this.client, rawData);
         });
     }

@@ -265,7 +265,7 @@ export class APIClient {
         }
 
         const body = JSON.parse(bufferSink.toString('utf-8'))
-        const responseData = new APIResponseData(body.status || response.statusCode, url, response.headers, body)
+        const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body)
 
         if ([418, 200, 404].includes(responseData.status)) {
           if (cachingEnabled) {
@@ -273,6 +273,12 @@ export class APIClient {
           }
 
           resolve(responseData)
+        } else if (responseData.status === 429) {
+          reject(new APIError(Object.assign(responseData, {
+            body: Object.assign(responseData.body, {
+              error: 'Rate limited'
+            })
+          })))
         } else {
           reject(new APIError(responseData))
         }

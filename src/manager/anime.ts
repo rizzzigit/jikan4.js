@@ -107,12 +107,7 @@ export class AnimeManager extends BaseManager {
   }
 
   public async random (sfw?: boolean): Promise<Anime> {
-    let rawData
-    if (sfw) {
-      rawData = await this.request('random/anime', { disableCaching: 'true', sfw: '' })
-    } else {
-      rawData = await this.request('random/anime', { disableCaching: 'true' })
-    }
+    const rawData = await this.request('random/anime', { disableCaching: 'true', sfw: sfw ? 'true' : '' })
 
     return new Anime(this.client, this.storeCache(rawData))
   }

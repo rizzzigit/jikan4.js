@@ -25,7 +25,7 @@ import ParseDuration from 'parse-duration'
 import { animeExplicitGenres } from '../../manager/genre'
 
 export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown'
-export type AnimeAirStatus = 'Finished Airing' | 'Airing' | 'NotYetAired' | 'Unknown'
+export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown'
 export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown'
 export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown'
 
@@ -36,7 +36,7 @@ export class AnimeAirInformation extends BaseClass {
     const status = input?.toLowerCase().trim()
 
     switch (status) {
-      case 'finished airing': return 'Finished Airing'
+      case 'finished airing': return 'FinishedAiring'
       case 'currently airing': return 'Airing'
       case 'not yet aired': return 'NotYetAired'
 

@@ -80,7 +80,7 @@ export interface ClientOptions {
 
   /**
    * Whether to disable cache or not. It's recommended that this option is disabled
-   * to avoid sending multiple requests for the same content to
+   * to avoid sending multiple requests for the same content.
   */
   disableCaching: boolean
 
@@ -97,7 +97,7 @@ export interface ClientOptions {
   /**
    * Keep sockets around in a pool to be used by other requests in the future.
 
-  * Default value: `true`
+   * Default value: `true`
   */
   keepAlive: boolean
 
@@ -109,6 +109,9 @@ export interface ClientOptions {
   */
   keepAliveMsecs: number
 
+  /**
+   * Where to store cache from Jikan API
+  */
   dataPath: string
 }
 
@@ -119,14 +122,6 @@ export interface ClientEvents {
 export type ClientEventNames = keyof ClientEvents
 
 export class Client {
-  // eslint-disable-next-line tsdoc/syntax
-  /** @hidden */
-  private static setGlobalClient (client: Client) {
-    const window: globalThis.NodeJS.Global & { jikanClient?: Client } = Object.assign(global, { jikanClient: client })
-
-    return window
-  }
-
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private static setOptions (options?: Partial<ClientOptions>): ClientOptions {
@@ -154,14 +149,6 @@ export class Client {
     }
 
     return Object.assign(defaultOptions, options)
-  }
-
-  // eslint-disable-next-line tsdoc/syntax
-  /** @hidden */
-  public static getClient () {
-    const window: globalThis.NodeJS.Global & { jikanClient?: Client } = global
-
-    return window.jikanClient || (window.jikanClient = new Client())
   }
 
   /**
@@ -384,7 +371,5 @@ export class Client {
     this.heartbeat = new HeartBeatMonitor(this)
 
     this.events = new EventEmitter()
-
-    Client.setGlobalClient(this)
   }
 }

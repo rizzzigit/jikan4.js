@@ -41,7 +41,7 @@ export interface MangaSearchFilter {
 }
 
 export interface TopMangaFilter {
-  type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'mahua'
+  type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'manhua'
   filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite'
 }
 

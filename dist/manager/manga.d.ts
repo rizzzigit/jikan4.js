@@ -17,7 +17,7 @@ export interface MangaSearchFilter {
     sort: 'desc' | 'asc';
 }
 export interface TopMangaFilter {
-    type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'mahua';
+    type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'manhua';
     filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite';
 }
 export declare class MangaManager extends BaseManager {

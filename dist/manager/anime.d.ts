@@ -30,7 +30,7 @@ export declare class AnimeManager extends BaseManager {
     listTop(filter?: Partial<TopAnimeFilter>, offset?: number, maxCount?: number): Promise<Anime[]>;
     listRecommended(offset?: number, maxCount?: number): Promise<Anime[]>;
     listScheduled(offset?: number, maxCount?: number): Promise<Anime[]>;
-    random(): Promise<Anime>;
+    random(sfw?: boolean): Promise<Anime>;
     get(animeId: number): Promise<Anime | undefined>;
     getFull(animeId: number): Promise<AnimeFull | undefined>;
     getCharacters(animeId: number): Promise<Array<AnimeCharacterReference> | undefined>;

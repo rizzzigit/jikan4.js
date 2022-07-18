@@ -4,15 +4,19 @@ import { Client } from '../core/client'
 
 export class Image extends BaseClass {
   public readonly small: URL | null
+  public readonly default: URL | null
   public readonly medium: URL | null
   public readonly large: URL | null
+  public readonly maximum: URL | null
 
   public constructor (client: Client, data: any) {
     super(client)
 
     this.small = Image.parseURL(data?.small_image_url, true)
-    this.medium = Image.parseURL(data?.image_url || data?.medium_image_url, true)
-    this.large = Image.parseURL(data?.maximum_image_url || data?.large_image_url, true)
+    this.default = Image.parseURL(data?.image_url, true)
+    this.medium = Image.parseURL(data?.medium_image_url, true)
+    this.large = Image.parseURL(data?.large_image_url, true)
+    this.maximum = Image.parseURL(data?.maximum_image_url, true)
   }
 }
 

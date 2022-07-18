@@ -20,12 +20,14 @@ export class YoutubeVideo extends BaseClass {
   public readonly id: string
   public readonly url: URL
   public readonly embedUrl: URL
+  public readonly image: Image
 
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.id = data
-    this.url = new URL(`https://youtu.be/${this.id}`)
+    this.id = data.youtube_id
+    this.url = new URL(`https://youtu.be/${data.youtube_id}`)
     this.embedUrl = new URL(`https://www.youtube.com/embed/${this.id}`)
+    this.image = new Image(client, data.images)
   }
 }

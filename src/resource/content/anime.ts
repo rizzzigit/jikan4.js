@@ -62,14 +62,6 @@ export class AnimeAirInformation extends BaseClass {
 export class Anime extends Content {
   // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
-  public static parseTrailer (client: Client, input: any) {
-    const youtubeId = input?.youtube_id
-
-    return youtubeId ? new YoutubeVideo(client, youtubeId) : null
-  }
-
-  // eslint-disable-next-line tsdoc/syntax
-  /** @hidden */
   public static parseType (input: any): AnimeType {
     switch (input?.toLowerCase().trim()) {
       case 'tv': return 'TV'
@@ -211,7 +203,7 @@ export class Anime extends Content {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.trailer = Anime.parseTrailer(client, data.trailer)
+    this.trailer = data.trailer ? new YoutubeVideo(client, data.trailer) : null
     this.type = Anime.parseType(data.type)
     this.source = data.source || null
     this.episodes = data.episodes || null
@@ -348,13 +340,13 @@ export class AnimeTopic extends BaseResource {
 
 export class AnimePromo extends BaseClass {
   public readonly title: string
-  public readonly trailer: YoutubeVideo & { image: Image }
+  public readonly trailer: YoutubeVideo
 
   public constructor (client: Client, data: any) {
     super(client)
 
     this.title = data.title
-    this.trailer = Object.assign(new YoutubeVideo(client, data.trailer.youtube_id), { image: new Image(client, data.trailer.images) })
+    this.trailer = new YoutubeVideo(client, data.trailer)
   }
 }
 

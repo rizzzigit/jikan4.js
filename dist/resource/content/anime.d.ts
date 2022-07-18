@@ -20,8 +20,6 @@ export declare class AnimeAirInformation extends BaseClass {
 }
 export declare class Anime extends Content {
     /** @hidden */
-    static parseTrailer(client: Client, input: any): YoutubeVideo | null;
-    /** @hidden */
     static parseType(input: any): AnimeType;
     /** @hidden */
     static parseRating(input: any): AnimeRating;
@@ -117,9 +115,7 @@ export declare class AnimeTopic extends BaseResource {
 }
 export declare class AnimePromo extends BaseClass {
     readonly title: string;
-    readonly trailer: YoutubeVideo & {
-        image: Image;
-    };
+    readonly trailer: YoutubeVideo;
     constructor(client: Client, data: any);
 }
 export declare class AnimeEpisodeVideo extends BaseResource {

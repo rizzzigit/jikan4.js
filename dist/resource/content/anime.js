@@ -33,7 +33,7 @@ class Anime extends base_1.Content {
     constructor(client, data) {
         var _a, _b, _c, _d, _e, _f, _g;
         super(client, data);
-        this.trailer = Anime.parseTrailer(client, data.trailer);
+        this.trailer = data.trailer ? new misc_1.YoutubeVideo(client, data.trailer) : null;
         this.type = Anime.parseType(data.type);
         this.source = data.source || null;
         this.episodes = data.episodes || null;
@@ -49,12 +49,6 @@ class Anime extends base_1.Content {
         this.explicitGenres = ((_e = data.explicit_genres) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
         this.demographics = ((_f = data.demographics) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
         this.themes = ((_g = data.themes) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
-    }
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    static parseTrailer(client, input) {
-        const youtubeId = input === null || input === void 0 ? void 0 : input.youtube_id;
-        return youtubeId ? new misc_1.YoutubeVideo(client, youtubeId) : null;
     }
     // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
@@ -234,7 +228,7 @@ class AnimePromo extends base_2.BaseClass {
     constructor(client, data) {
         super(client);
         this.title = data.title;
-        this.trailer = Object.assign(new misc_1.YoutubeVideo(client, data.trailer.youtube_id), { image: new misc_1.Image(client, data.trailer.images) });
+        this.trailer = new misc_1.YoutubeVideo(client, data.trailer);
     }
 }
 exports.AnimePromo = AnimePromo;

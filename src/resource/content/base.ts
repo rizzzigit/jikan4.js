@@ -46,6 +46,7 @@ export class Content extends BaseResource {
   public readonly favorites: number
   public readonly synopsis: string | null
   public readonly background: string | null
+  public readonly approved: boolean
 
   public constructor (client: Client, data: any) {
     super(client, data)
@@ -60,6 +61,7 @@ export class Content extends BaseResource {
     this.favorites = data.favorites
     this.synopsis = data.synopsis || null
     this.background = data.background || null
+    this.approved = data.approved
   }
 }
 

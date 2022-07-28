@@ -27,6 +27,7 @@ export declare class Content extends BaseResource {
     readonly favorites: number;
     readonly synopsis: string | null;
     readonly background: string | null;
+    readonly approved: boolean;
     constructor(client: Client, data: any);
 }
 export declare class ContentStatisticsScore extends BaseClass {

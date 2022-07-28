@@ -39,6 +39,7 @@ class Content extends base_1.BaseResource {
         this.favorites = data.favorites;
         this.synopsis = data.synopsis || null;
         this.background = data.background || null;
+        this.approved = data.approved;
     }
 }
 exports.Content = Content;

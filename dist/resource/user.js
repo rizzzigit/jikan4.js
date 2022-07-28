@@ -26,7 +26,7 @@ class User extends base_2.BaseClass {
         this.username = data.username;
         this.url = User.parseURL(data.url);
         this.imageUrl = User.parseURL((_b = (_a = data === null || data === void 0 ? void 0 : data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
-        this.lastOnline = User.parseDate(data.last_online);
+        this.lastOnline = User.parseDate(data.last_online, true);
         this.gender = User.parseGender(data.gender);
         this.birthday = User.parseDate(data.birthday, true);
         this.location = data.location || null;
@@ -179,7 +179,7 @@ class UserFriend extends base_2.BaseClass {
         this.username = data.user.username;
         this.url = UserFriend.parseURL(data.user.url);
         this.imageUrl = UserFriend.parseURL((_b = (_a = data.user.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
-        this.lastOnline = UserFriend.parseDate(data.last_online);
+        this.lastOnline = UserFriend.parseDate(data.last_online, true);
         this.friendsSince = UserFriend.parseDate(data.friends_since, true);
     }
     getUser() {

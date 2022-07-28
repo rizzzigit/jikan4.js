@@ -122,7 +122,7 @@ export declare class UserFriend extends BaseClass {
     readonly username: string;
     readonly url: URL;
     readonly imageUrl: URL | null;
-    readonly lastOnline: Date;
+    readonly lastOnline: Date | null;
     readonly friendsSince: Date | null;
     getUser(): Promise<User>;
     constructor(client: Client, data: any);

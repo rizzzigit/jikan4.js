@@ -92,7 +92,7 @@ export class User extends BaseClass {
     this.username = data.username
     this.url = User.parseURL(data.url)
     this.imageUrl = User.parseURL(data?.images?.jpg?.image_url, true)
-    this.lastOnline = User.parseDate(data.last_online)
+    this.lastOnline = User.parseDate(data.last_online, true)
     this.gender = User.parseGender(data.gender)
     this.birthday = User.parseDate(data.birthday, true)
     this.location = data.location || null
@@ -265,7 +265,7 @@ export class UserFriend extends BaseClass {
   public readonly username: string
   public readonly url: URL
   public readonly imageUrl: URL | null
-  public readonly lastOnline: Date
+  public readonly lastOnline: Date | null
   public readonly friendsSince: Date | null
 
   public getUser () {
@@ -278,7 +278,7 @@ export class UserFriend extends BaseClass {
     this.username = data.user.username
     this.url = UserFriend.parseURL(data.user.url)
     this.imageUrl = UserFriend.parseURL(data.user.images?.jpg?.image_url, true)
-    this.lastOnline = UserFriend.parseDate(data.last_online)
+    this.lastOnline = UserFriend.parseDate(data.last_online, true)
     this.friendsSince = UserFriend.parseDate(data.friends_since, true)
   }
 }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserFull = exports.UserRecommendation = exports.UserFriend = exports.UserMangaHistory = exports.UserAnimeHistory = exports.UserContentUpdates = exports.UserMangaUpdate = exports.UserAnimeUpdate = exports.UserContentUpdate = exports.UserFavorites = exports.UserStats = exports.User = exports.UserMeta = void 0;
+const url_1 = require("url");
 const base_1 = require("../resource/content/base");
 const base_2 = require("./base");
 const meta_1 = require("./meta");
@@ -64,6 +65,9 @@ class User extends base_2.BaseClass {
     }
     getClubs(offset, maxCount) {
         return this.client.users.getClubs(this.username, offset, maxCount);
+    }
+    getExternal() {
+        return this.client.users.getExternal(this.username);
     }
     getFull() {
         return this.client.users.getFull(this.username);
@@ -206,6 +210,7 @@ class UserFull extends User {
     constructor(client, data) {
         super(client, data);
         this.statistics = new UserStats(client, data.statistics);
+        this.external = data.external.map((data) => Object.assign(data, { url: new url_1.URL(data.url) }));
     }
 }
 exports.UserFull = UserFull;

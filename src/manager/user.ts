@@ -14,6 +14,7 @@ import { BaseManager } from './base'
 import { AnimeReview } from '../resource/content/anime'
 import { MangaReview } from '../resource/content/manga'
 import { ClubMeta } from '../resource/meta'
+import { URL } from 'url'
 
 export interface UserSearchFilter {
   gender: 'any' | 'male' | 'female' | 'nonbinary'
@@ -91,30 +92,38 @@ export class UserManager extends BaseManager {
   public async getFriends (username: string, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated(`users/${username}/friends`, offset, maxCount)
 
-    return rawData.map((friend) => new UserFriend(this.client, friend))
+    return rawData ? rawData.map((friend) => new UserFriend(this.client, friend)) : undefined
   }
 
-  public async getReviews (username: string, offset?: number, maxCount?: number): Promise<Array<AnimeReview | MangaReview>> {
+  public async getReviews (username: string, offset?: number, maxCount?: number): Promise<Array<AnimeReview | MangaReview> | undefined> {
     const rawData = <Array<any>> await this.requestPaginated(`users/${username}/reviews`, offset, maxCount)
 
-    return rawData.map((review) => {
-      if ('episodes_watched' in review) {
-        return new AnimeReview(this.client, review)
-      } else {
-        return new MangaReview(this.client, review)
-      }
-    })
+    return rawData
+      ? rawData.map((review) => {
+        if ('episodes_watched' in review) {
+          return new AnimeReview(this.client, review)
+        } else {
+          return new MangaReview(this.client, review)
+        }
+      })
+      : undefined
   }
 
   public async getRecommendations (username: string, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated(`users/${username}/recommendations`, offset, maxCount)
 
-    return rawData.map((recommendation) => new UserRecommendation(this.client, recommendation))
+    return rawData ? rawData.map((recommendation) => new UserRecommendation(this.client, recommendation)) : undefined
   }
 
   public async getClubs (username: string, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated(`users/${username}/clubs`, offset, maxCount)
 
-    return rawData.map((club) => new ClubMeta(this.client, club))
+    return rawData ? rawData.map((club) => new ClubMeta(this.client, club)) : undefined
+  }
+
+  public async getExternal (username: string): Promise<Array<{ name: string, url: URL }> | undefined> {
+    const rawData = <Array<any>> await this.request(`users/${username}/external`)
+
+    return rawData ? rawData.map((data) => Object.assign(data, { url: new URL(data.url) })) : undefined
   }
 }

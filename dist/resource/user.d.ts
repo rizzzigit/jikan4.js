@@ -31,6 +31,10 @@ export declare class User extends BaseClass {
     getFriends(offset?: number, maxCount?: number): Promise<UserFriend[]>;
     getRecommendations(offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
     getClubs(offset?: number, maxCount?: number): Promise<ClubMeta[]>;
+    getExternal(): Promise<{
+        name: string;
+        url: URL;
+    }[]>;
     getFull(): Promise<UserFull>;
     constructor(client: Client, data: any);
 }
@@ -136,5 +140,9 @@ export declare class UserRecommendation extends BaseClass {
 }
 export declare class UserFull extends User {
     readonly statistics: UserStats;
+    readonly external: Array<{
+        name: string;
+        url: URL;
+    }>;
     constructor(client: Client, data: any);
 }

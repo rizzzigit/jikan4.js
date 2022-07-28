@@ -8,6 +8,7 @@ const base_1 = require("./base");
 const anime_1 = require("../resource/content/anime");
 const manga_1 = require("../resource/content/manga");
 const meta_1 = require("../resource/meta");
+const url_1 = require("url");
 class UserManager extends base_1.BaseManager {
     search(searchString, filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -72,32 +73,40 @@ class UserManager extends base_1.BaseManager {
     getFriends(username, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`users/${username}/friends`, offset, maxCount);
-            return rawData.map((friend) => new user_1.UserFriend(this.client, friend));
+            return rawData ? rawData.map((friend) => new user_1.UserFriend(this.client, friend)) : undefined;
         });
     }
     getReviews(username, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`users/${username}/reviews`, offset, maxCount);
-            return rawData.map((review) => {
-                if ('episodes_watched' in review) {
-                    return new anime_1.AnimeReview(this.client, review);
-                }
-                else {
-                    return new manga_1.MangaReview(this.client, review);
-                }
-            });
+            return rawData
+                ? rawData.map((review) => {
+                    if ('episodes_watched' in review) {
+                        return new anime_1.AnimeReview(this.client, review);
+                    }
+                    else {
+                        return new manga_1.MangaReview(this.client, review);
+                    }
+                })
+                : undefined;
         });
     }
     getRecommendations(username, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`users/${username}/recommendations`, offset, maxCount);
-            return rawData.map((recommendation) => new user_1.UserRecommendation(this.client, recommendation));
+            return rawData ? rawData.map((recommendation) => new user_1.UserRecommendation(this.client, recommendation)) : undefined;
         });
     }
     getClubs(username, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`users/${username}/clubs`, offset, maxCount);
-            return rawData.map((club) => new meta_1.ClubMeta(this.client, club));
+            return rawData ? rawData.map((club) => new meta_1.ClubMeta(this.client, club)) : undefined;
+        });
+    }
+    getExternal(username) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.request(`users/${username}/external`);
+            return rawData ? rawData.map((data) => Object.assign(data, { url: new url_1.URL(data.url) })) : undefined;
         });
     }
 }

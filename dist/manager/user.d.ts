@@ -1,8 +1,10 @@
+/// <reference types="node" />
 import { User, UserContentUpdates, UserFavorites, UserFriend, UserMeta, UserRecommendation, UserStats, UserAnimeHistory, UserMangaHistory, UserFull } from '../resource/user';
 import { BaseManager } from './base';
 import { AnimeReview } from '../resource/content/anime';
 import { MangaReview } from '../resource/content/manga';
 import { ClubMeta } from '../resource/meta';
+import { URL } from 'url';
 export interface UserSearchFilter {
     gender: 'any' | 'male' | 'female' | 'nonbinary';
     location: string;
@@ -19,8 +21,12 @@ export declare class UserManager extends BaseManager {
     getUpdates(username: string): Promise<UserContentUpdates | undefined>;
     getAbout(username: string): Promise<string | null | undefined>;
     getHistory(username: string, type?: 'anime' | 'manga' | 'all'): Promise<(UserMangaHistory | UserAnimeHistory)[]>;
-    getFriends(username: string, offset?: number, maxCount?: number): Promise<UserFriend[]>;
-    getReviews(username: string, offset?: number, maxCount?: number): Promise<Array<AnimeReview | MangaReview>>;
-    getRecommendations(username: string, offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
-    getClubs(username: string, offset?: number, maxCount?: number): Promise<ClubMeta[]>;
+    getFriends(username: string, offset?: number, maxCount?: number): Promise<UserFriend[] | undefined>;
+    getReviews(username: string, offset?: number, maxCount?: number): Promise<Array<AnimeReview | MangaReview> | undefined>;
+    getRecommendations(username: string, offset?: number, maxCount?: number): Promise<UserRecommendation[] | undefined>;
+    getClubs(username: string, offset?: number, maxCount?: number): Promise<ClubMeta[] | undefined>;
+    getExternal(username: string): Promise<Array<{
+        name: string;
+        url: URL;
+    }> | undefined>;
 }

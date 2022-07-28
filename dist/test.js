@@ -29,7 +29,8 @@ const run = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
         title: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const anime = yield client.anime.get(20);
             console.log(anime === null || anime === void 0 ? void 0 : anime.title);
-        })
+        }),
+        external: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () { return yield client.users.getFull('lamaw'); })
     };
     const funcKey = process.argv[2];
     return yield func[funcKey]();

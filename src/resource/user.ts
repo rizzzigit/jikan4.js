@@ -78,6 +78,10 @@ export class User extends BaseClass {
     return <Promise<Array<ClubMeta>>> this.client.users.getClubs(this.username, offset, maxCount)
   }
 
+  public getExternal () {
+    return <Promise<Array<{ name: string, url: URL }>>> this.client.users.getExternal(this.username)
+  }
+
   public getFull () {
     return <Promise<UserFull>> this.client.users.getFull(this.username)
   }
@@ -310,10 +314,12 @@ export class UserRecommendation extends BaseClass {
 
 export class UserFull extends User {
   public readonly statistics: UserStats
+  public readonly external: Array<{ name: string, url: URL }>
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
     this.statistics = new UserStats(client, data.statistics)
+    this.external = data.external.map((data: any) => Object.assign(data, { url: new URL(data.url) }))
   }
 }

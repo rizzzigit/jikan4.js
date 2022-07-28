@@ -34,7 +34,9 @@ const run = async () => {
     title: async () => {
       const anime = await client.anime.get(20)
       console.log(anime?.title)
-    }
+    },
+
+    external: async () => await client.users.getFull('lamaw')
   }
 
   const funcKey = <keyof typeof func> process.argv[2]

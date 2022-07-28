@@ -28,10 +28,34 @@ export class ContentTitle extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.default = data.title
-    this.english = data.title_english || null
-    this.japanese = data.title_japanese || null
-    this.synonyms = data.synonyms?.map((synonym: any) => synonym || null).filter((synonym: any) => !!synonym) || []
+    this.synonyms = []
+    this.english = null
+    this.japanese = null
+    this.default = '(no title)'
+    for (const { type, title } of data) {
+      const titleTrimmed = title.trim()
+      if (!titleTrimmed) {
+        continue
+      }
+
+      switch (type) {
+        case 'Default':
+          this.default = titleTrimmed
+          break
+
+        case 'Japanese':
+          this.japanese = titleTrimmed
+          break
+
+        case 'English':
+          this.english = titleTrimmed
+          break
+
+        case 'Synonym':
+          this.synonyms.push(titleTrimmed)
+          break
+      }
+    }
   }
 }
 
@@ -52,7 +76,7 @@ export class Content extends BaseResource {
     super(client, data)
 
     this.image = new ContentImage(client, data.images)
-    this.title = new ContentTitle(client, data)
+    this.title = new ContentTitle(client, data.titles)
     this.score = data.score || data.scored || null
     this.scoredBy = data.scored_by || null
     this.rank = data.rank
@@ -192,7 +216,6 @@ export type ContentRelationType =
   'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory' | 'Unknown'
 
 export class ContentRelationGroup <T extends ContentRelationType> extends BaseClass {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseRelation (data: any): ContentRelationType {
     switch (data?.toLowerCase().trim() || 'any') {

@@ -14,12 +14,31 @@ class ContentImage extends base_1.BaseClass {
 exports.ContentImage = ContentImage;
 class ContentTitle extends base_1.BaseClass {
     constructor(client, data) {
-        var _a;
         super(client);
-        this.default = data.title;
-        this.english = data.title_english || null;
-        this.japanese = data.title_japanese || null;
-        this.synonyms = ((_a = data.synonyms) === null || _a === void 0 ? void 0 : _a.map((synonym) => synonym || null).filter((synonym) => !!synonym)) || [];
+        this.synonyms = [];
+        this.english = null;
+        this.japanese = null;
+        this.default = '(no title)';
+        for (const { type, title } of data) {
+            const titleTrimmed = title.trim();
+            if (!titleTrimmed) {
+                continue;
+            }
+            switch (type) {
+                case 'Default':
+                    this.default = titleTrimmed;
+                    break;
+                case 'Japanese':
+                    this.japanese = titleTrimmed;
+                    break;
+                case 'English':
+                    this.english = titleTrimmed;
+                    break;
+                case 'Synonym':
+                    this.synonyms.push(titleTrimmed);
+                    break;
+            }
+        }
     }
     toString() {
         return this.default;
@@ -30,7 +49,7 @@ class Content extends base_1.BaseResource {
     constructor(client, data) {
         super(client, data);
         this.image = new ContentImage(client, data.images);
-        this.title = new ContentTitle(client, data);
+        this.title = new ContentTitle(client, data.titles);
         this.score = data.score || data.scored || null;
         this.scoredBy = data.scored_by || null;
         this.rank = data.rank;
@@ -126,7 +145,6 @@ class ContentRelationGroup extends base_1.BaseClass {
         super(client);
         this.relation = relation;
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseRelation(data) {
         switch ((data === null || data === void 0 ? void 0 : data.toLowerCase().trim()) || 'any') {

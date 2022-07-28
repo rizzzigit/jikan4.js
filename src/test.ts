@@ -29,6 +29,11 @@ const run = async () => {
       const videosEpisodes = await client.anime.getVideosEpisodes(20, 0, 0)
 
       return { anime, videosEpisodes }
+    },
+
+    title: async () => {
+      const anime = await client.anime.get(20)
+      console.log(anime?.title)
     }
   }
 

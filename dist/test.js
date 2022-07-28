@@ -25,6 +25,10 @@ const run = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const anime = yield ((_b = (yield client.anime.get(20))) === null || _b === void 0 ? void 0 : _b.getVideosEpisodes(0, 0));
             const videosEpisodes = yield client.anime.getVideosEpisodes(20, 0, 0);
             return { anime, videosEpisodes };
+        }),
+        title: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const anime = yield client.anime.get(20);
+            console.log(anime === null || anime === void 0 ? void 0 : anime.title);
         })
     };
     const funcKey = process.argv[2];

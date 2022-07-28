@@ -116,6 +116,12 @@ class AnimeManager extends base_1.BaseManager {
             return rawData ? new anime_1.AnimeVideo(this.client, rawData) : undefined;
         });
     }
+    getVideosEpisodes(animeId, offset, maxCount) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.requestPaginated(`anime/${animeId}/videos/episodes`, offset, maxCount);
+            return rawData ? rawData.map((episode) => new anime_1.AnimeEpisodeVideo(this.client, episode)) : undefined;
+        });
+    }
     getPictures(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/pictures`);

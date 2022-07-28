@@ -49,6 +49,7 @@ export declare class Anime extends Content {
     getNews(offset?: number, maxCount?: number): Promise<ContentNews[]>;
     getTopics(topic?: 'all' | 'episode' | 'other'): Promise<AnimeTopic[]>;
     getVideos(): Promise<AnimeVideo>;
+    getVideosEpisodes(offset?: number, maxCount?: number): Promise<AnimeEpisodeVideo[]>;
     getPictures(): Promise<Image[]>;
     getStatistics(): Promise<AnimeStatistics>;
     getMoreInfo(): Promise<string | null>;

@@ -117,6 +117,9 @@ class Anime extends base_1.Content {
     getVideos() {
         return this.client.anime.getVideos(this.id);
     }
+    getVideosEpisodes(offset, maxCount) {
+        return this.client.anime.getVideosEpisodes(this.id, offset, maxCount);
+    }
     getPictures() {
         return this.client.anime.getPictures(this.id);
     }

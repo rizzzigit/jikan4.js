@@ -5,25 +5,15 @@ client.on('debug', (scope, message) => console.log(`[${scope}] ${message}`))
 
 const run = async () => {
   const func = {
-    streaming1: async () => {
-      const streaming = await client.anime.getStreamingLinks(1)
+    streaming: async () => {
+      const streamingLinks = await client.anime.getStreamingLinks(1)
+      const anime = await (await client.anime.get(1))?.getStreamingLinks()
+      const animeFull = await client.anime.getFull(1)
 
-      return streaming
+      return { streamingLinks, anime, animeFull }
     },
 
-    streaming2: async () => {
-      const anime = await client.anime.get(1)
-
-      return await anime?.getStreamingLinks()
-    },
-
-    streaming3: async () => {
-      const fullAnime = await client.anime.getFull(1)
-
-      return fullAnime
-    },
-
-    musicVideo1: async () => {
+    musicVideo: async () => {
       const videos = await client.anime.getVideos(20)
 
       // const data = await (await fetch('https://api.jikan.moe/v4/anime/20/videos')).json()
@@ -32,6 +22,13 @@ const run = async () => {
       // console.log(video.musicVideos)
 
       return videos
+    },
+
+    videosEpisodes: async () => {
+      const anime = await (await client.anime.get(20))?.getVideosEpisodes(0, 0)
+      const videosEpisodes = await client.anime.getVideosEpisodes(20, 0, 0)
+
+      return { anime, videosEpisodes }
     }
   }
 

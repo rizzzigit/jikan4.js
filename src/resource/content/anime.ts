@@ -160,6 +160,10 @@ export class Anime extends Content {
     return <Promise<AnimeVideo>> this.client.anime.getVideos(this.id)
   }
 
+  public getVideosEpisodes (offset?: number, maxCount?: number) {
+    return <Promise<Array<AnimeEpisodeVideo>>> this.client.anime.getVideosEpisodes(this.id, offset, maxCount)
+  }
+
   public getPictures () {
     return <Promise<Array<Image>>> this.client.anime.getPictures(this.id)
   }

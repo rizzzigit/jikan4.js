@@ -13,7 +13,8 @@ import {
   AnimeUserUpdate,
   AnimeReview,
   AnimeRelationGroup,
-  AnimeFull
+  AnimeFull,
+  AnimeEpisodeVideo
 } from '../resource/content/anime'
 import { Image, StreamingLink } from '../resource/misc'
 import { translateObject } from '../utils'
@@ -164,6 +165,12 @@ export class AnimeManager extends BaseManager {
     const rawData = await this.request(`anime/${animeId}/videos`)
 
     return rawData ? new AnimeVideo(this.client, rawData) : undefined
+  }
+
+  public async getVideosEpisodes (animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeEpisodeVideo> | undefined> {
+    const rawData = await this.requestPaginated(`anime/${animeId}/videos/episodes`, offset, maxCount)
+
+    return rawData ? rawData.map((episode) => new AnimeEpisodeVideo(this.client, episode)) : undefined
   }
 
   public async getPictures (animeId: number): Promise<Array<Image> | undefined> {

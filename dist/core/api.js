@@ -183,11 +183,11 @@ class APIClient {
                 request.on('response', (response) => { var response_1, response_1_1; return tslib_1.__awaiter(this, void 0, void 0, function* () {
                     var e_1, _a;
                     response.on('error', reject);
-                    let bufferSink = Buffer.alloc(0);
+                    const bufferSink = [];
                     try {
                         for (response_1 = tslib_1.__asyncValues(response); response_1_1 = yield response_1.next(), !response_1_1.done;) {
                             const buffer = response_1_1.value;
-                            bufferSink = Buffer.concat([bufferSink, buffer]);
+                            bufferSink.push(buffer);
                         }
                     }
                     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -197,7 +197,7 @@ class APIClient {
                         }
                         finally { if (e_1) throw e_1.error; }
                     }
-                    const body = JSON.parse(bufferSink.toString('utf-8'));
+                    const body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'));
                     const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body);
                     if ([418, 200, 404].includes(responseData.status)) {
                         if (cachingEnabled) {

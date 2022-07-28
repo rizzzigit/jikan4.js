@@ -258,13 +258,13 @@ export class APIClient {
       request.on('timeout', () => request.destroy(new Error(`${requestTimeout} ms timeout`)))
       request.on('response', async (response) => {
         response.on('error', reject)
-        let bufferSink = Buffer.alloc(0)
+        const bufferSink: Array<Buffer> = []
 
         for await (const buffer of response) {
-          bufferSink = Buffer.concat([bufferSink, buffer])
+          bufferSink.push(buffer)
         }
 
-        const body = JSON.parse(bufferSink.toString('utf-8'))
+        const body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'))
         const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body)
 
         if ([418, 200, 404].includes(responseData.status)) {

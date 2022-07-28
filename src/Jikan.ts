@@ -30,5 +30,6 @@ export * from './resource/person'
 export * from './resource/season'
 export * from './resource/top'
 export * from './resource/user'
+export * from './resource/producer'
 
 export * from './utils'

@@ -30,7 +30,13 @@ const run = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const anime = yield client.anime.get(20);
             console.log(anime === null || anime === void 0 ? void 0 : anime.title);
         }),
-        external: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () { return yield client.users.getFull('lamaw'); })
+        external: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () { return yield client.users.getFull('lamaw'); }),
+        producer: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const list = yield client.producers.list(0, 10);
+            const producer = yield client.producers.getFull(1);
+            const external = yield client.producers.getExternal(1);
+            return { list, producer, external };
+        })
     };
     const funcKey = process.argv[2];
     return yield func[funcKey]();

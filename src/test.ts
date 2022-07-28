@@ -36,7 +36,15 @@ const run = async () => {
       console.log(anime?.title)
     },
 
-    external: async () => await client.users.getFull('lamaw')
+    external: async () => await client.users.getFull('lamaw'),
+
+    producer: async () => {
+      const list = await client.producers.list(0, 10)
+      const producer = await client.producers.getFull(1)
+      const external = await client.producers.getExternal(1)
+
+      return { list, producer, external }
+    }
   }
 
   const funcKey = <keyof typeof func> process.argv[2]

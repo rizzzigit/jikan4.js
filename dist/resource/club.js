@@ -14,7 +14,6 @@ class Club extends base_1.BaseResource {
         this.type = Club.parseType(data.type);
         this.staff = ((_c = data.staff) === null || _c === void 0 ? void 0 : _c.map((staff) => new ClubStaff(client, staff))) || [];
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseCategory(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
@@ -35,7 +34,6 @@ class Club extends base_1.BaseResource {
             default: return 'Unknown';
         }
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseType(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {

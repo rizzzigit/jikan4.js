@@ -9,7 +9,6 @@ export type SeasonType =
   | 'Unknown'
 
 export class Season extends BaseClass {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseSeasonType (input: any): SeasonType {
     switch (`${input}`.trim()) {

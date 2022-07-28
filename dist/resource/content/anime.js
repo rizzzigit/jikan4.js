@@ -16,7 +16,6 @@ class AnimeAirInformation extends base_2.BaseClass {
         this.airedFrom = AnimeAirInformation.parseDate(data.aired.from, true);
         this.airedTo = AnimeAirInformation.parseDate(data.aired.to, true);
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseStatus(input) {
         const status = input === null || input === void 0 ? void 0 : input.toLowerCase().trim();
@@ -50,7 +49,6 @@ class Anime extends base_1.Content {
         this.demographics = ((_f = data.demographics) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
         this.themes = ((_g = data.themes) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseType(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
@@ -66,7 +64,6 @@ class Anime extends base_1.Content {
             default: return 'Unknown';
         }
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseRating(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
@@ -81,7 +78,6 @@ class Anime extends base_1.Content {
             default: return 'Unknown';
         }
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseSeason(input) {
         switch (input) {

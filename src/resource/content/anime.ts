@@ -30,7 +30,6 @@ export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx'
 export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown'
 
 export class AnimeAirInformation extends BaseClass {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseStatus (input: any): AnimeAirStatus {
     const status = input?.toLowerCase().trim()
@@ -60,7 +59,6 @@ export class AnimeAirInformation extends BaseClass {
 }
 
 export class Anime extends Content {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseType (input: any): AnimeType {
     switch (input?.toLowerCase().trim()) {
@@ -78,7 +76,6 @@ export class Anime extends Content {
     }
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseRating (input: any): AnimeRating {
     switch (input?.toLowerCase().trim()) {
@@ -95,7 +92,6 @@ export class Anime extends Content {
     }
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseSeason (input: any): AnimeSeason | null {
     switch (input) {

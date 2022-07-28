@@ -9,7 +9,6 @@ class Season extends base_1.BaseClass {
         this.year = rawData.year;
         this.seasons = ((_a = rawData.seasons) === null || _a === void 0 ? void 0 : _a.map((season) => Season.parseSeasonType(season))) || [];
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseSeasonType(input) {
         switch (`${input}`.trim()) {

@@ -27,7 +27,6 @@ export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinsh
 export type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished' | 'Unknown'
 
 export class MangaPublishInformation extends BaseClass {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseMangaPublishStatus (input: any): MangaPublishStatus {
     switch (input?.toLowerCase().trim()) {
@@ -57,7 +56,6 @@ export class MangaPublishInformation extends BaseClass {
 }
 
 export class Manga extends Content {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseType (input: any): MangaType {
     switch (input?.toLowerCase().trim()) {

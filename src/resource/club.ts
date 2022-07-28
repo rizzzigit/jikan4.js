@@ -25,7 +25,6 @@ export type ClubType =
   | 'Unknown'
 
 export class Club extends BaseResource {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseCategory (input: any): ClubCategory {
     switch (input?.toLowerCase().trim()) {
@@ -48,7 +47,6 @@ export class Club extends BaseResource {
     }
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public static parseType (input: any): ClubType {
     switch (input?.toLowerCase().trim()) {

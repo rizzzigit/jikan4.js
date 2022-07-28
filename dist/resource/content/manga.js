@@ -13,7 +13,6 @@ class MangaPublishInformation extends base_1.BaseClass {
         this.publishedFrom = MangaPublishInformation.parseDate(data.published.from, true);
         this.publishedTo = MangaPublishInformation.parseDate(data.published.to, true);
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseMangaPublishStatus(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
@@ -42,7 +41,6 @@ class Manga extends base_2.Content {
         this.demographics = ((_e = data.demographics) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Demographic'))) || [];
         this.themes = ((_f = data.themes) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Theme'))) || [];
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static parseType(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {

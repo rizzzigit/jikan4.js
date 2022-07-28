@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeReviewScores = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
+exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeReviewScores = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeMusicVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
 const tslib_1 = require("tslib");
 const base_1 = require("./base");
 const base_2 = require("../base");
@@ -245,12 +245,22 @@ class AnimeEpisodeVideo extends base_2.BaseResource {
     }
 }
 exports.AnimeEpisodeVideo = AnimeEpisodeVideo;
+class AnimeMusicVideo extends base_2.BaseClass {
+    constructor(client, data) {
+        super(client);
+        this.title = data.title;
+        this.video = new misc_1.YoutubeVideo(client, data.video);
+        this.meta = data.meta;
+    }
+}
+exports.AnimeMusicVideo = AnimeMusicVideo;
 class AnimeVideo extends base_2.BaseClass {
     constructor(client, data) {
-        var _a, _b;
+        var _a, _b, _c;
         super(client);
         this.promos = ((_a = data.promo) === null || _a === void 0 ? void 0 : _a.map((promo) => new AnimePromo(this.client, promo))) || [];
         this.episodes = ((_b = data.episodes) === null || _b === void 0 ? void 0 : _b.map((episodeVideo) => new AnimeEpisodeVideo(this.client, episodeVideo))) || [];
+        this.musicVideos = ((_c = data.music_videos) === null || _c === void 0 ? void 0 : _c.map((musicVideo) => new AnimeMusicVideo(client, musicVideo))) || [];
     }
 }
 exports.AnimeVideo = AnimeVideo;

@@ -125,9 +125,19 @@ export declare class AnimeEpisodeVideo extends BaseResource {
     readonly imageURL: URL | null;
     constructor(client: Client, data: any);
 }
+export declare class AnimeMusicVideo extends BaseClass {
+    constructor(client: Client, data: any);
+    readonly title: string;
+    readonly video: YoutubeVideo;
+    readonly meta: {
+        title: string;
+        author: string;
+    };
+}
 export declare class AnimeVideo extends BaseClass {
     readonly promos: Array<AnimePromo>;
     readonly episodes: Array<AnimeEpisodeVideo>;
+    readonly musicVideos: Array<AnimeMusicVideo>;
     constructor(client: Client, data: any);
 }
 export declare class AnimeStatistics extends ContentStatistics {

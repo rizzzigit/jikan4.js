@@ -368,15 +368,34 @@ export class AnimeEpisodeVideo extends BaseResource {
   }
 }
 
+export class AnimeMusicVideo extends BaseClass {
+  public constructor (client: Client, data: any) {
+    super(client)
+
+    this.title = data.title
+    this.video = new YoutubeVideo(client, data.video)
+    this.meta = data.meta
+  }
+
+  public readonly title: string
+  public readonly video: YoutubeVideo
+  public readonly meta: {
+    title: string
+    author: string
+  }
+}
+
 export class AnimeVideo extends BaseClass {
   public readonly promos: Array<AnimePromo>
   public readonly episodes: Array<AnimeEpisodeVideo>
+  public readonly musicVideos: Array<AnimeMusicVideo>
 
   public constructor (client: Client, data: any) {
     super(client)
 
     this.promos = data.promo?.map((promo: any) => new AnimePromo(this.client, promo)) || []
     this.episodes = data.episodes?.map((episodeVideo: any) => new AnimeEpisodeVideo(this.client, episodeVideo)) || []
+    this.musicVideos = data.music_videos?.map((musicVideo: any) => new AnimeMusicVideo(client, musicVideo)) || []
   }
 }
 

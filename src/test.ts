@@ -21,6 +21,17 @@ const run = async () => {
       const fullAnime = await client.anime.getFull(1)
 
       return fullAnime
+    },
+
+    musicVideo1: async () => {
+      const videos = await client.anime.getVideos(20)
+
+      // const data = await (await fetch('https://api.jikan.moe/v4/anime/20/videos')).json()
+      // const video = new AnimeVideo(client, data.data)
+
+      // console.log(video.musicVideos)
+
+      return videos
     }
   }
 
@@ -29,4 +40,4 @@ const run = async () => {
   return await func[funcKey]()
 }
 
-run().then(console.log)
+run().then((data) => data !== undefined ? console.log(data) : undefined)

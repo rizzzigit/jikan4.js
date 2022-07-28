@@ -17,9 +17,16 @@ const run = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
         streaming3: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const fullAnime = yield client.anime.getFull(1);
             return fullAnime;
+        }),
+        musicVideo1: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const videos = yield client.anime.getVideos(20);
+            // const data = await (await fetch('https://api.jikan.moe/v4/anime/20/videos')).json()
+            // const video = new AnimeVideo(client, data.data)
+            // console.log(video.musicVideos)
+            return videos;
         })
     };
     const funcKey = process.argv[2];
     return yield func[funcKey]();
 });
-run().then(console.log);
+run().then((data) => data !== undefined ? console.log(data) : undefined);

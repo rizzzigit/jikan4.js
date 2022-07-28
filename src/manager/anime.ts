@@ -15,7 +15,7 @@ import {
   AnimeRelationGroup,
   AnimeFull
 } from '../resource/content/anime'
-import { Image } from '../resource/misc'
+import { Image, StreamingLink } from '../resource/misc'
 import { translateObject } from '../utils'
 import { AnimeGenreMeta, ProducerMeta, GenreType } from '../resource/meta'
 
@@ -219,5 +219,9 @@ export class AnimeManager extends BaseManager {
     const rawData = await this.request(`anime/${animeId}/external`)
 
     return rawData ? rawData.map((external: any) => new ContentExternal(this.client, external)) : undefined
+  }
+
+  public async getStreamingLinks (animeId: number): Promise<Array<StreamingLink> | undefined> {
+    return await this.request(`anime/${animeId}/streaming`)
   }
 }

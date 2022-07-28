@@ -144,6 +144,9 @@ class Anime extends base_1.Content {
     getExternal() {
         return this.client.anime.getExternal(this.id);
     }
+    getStreamingLinks() {
+        return this.client.anime.getStreamingLinks(this.id);
+    }
     getFull() {
         return this.client.anime.getFull(this.id);
     }
@@ -307,6 +310,7 @@ class AnimeFull extends Anime {
         this.relations = ((_a = data.relations) === null || _a === void 0 ? void 0 : _a.map((relation) => new AnimeRelationGroup(this.client, AnimeRelationGroup.parseRelation(relation.relation), relation))) || [];
         this.themeSongs = data.theme || data.theme_songs || [];
         this.external = (_b = data.external) === null || _b === void 0 ? void 0 : _b.map((external) => new base_1.ContentExternal(client, external));
+        this.streamingLinks = data.streaming;
     }
 }
 exports.AnimeFull = AnimeFull;

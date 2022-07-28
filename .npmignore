@@ -7,3 +7,6 @@ tsconfig.json
 .eslintrc.json
 .gitignore
 .npmignore
+
+dist/test.js
+dist/test.d.ts

@@ -11,7 +11,7 @@ import {
   ContentExternal
 } from './base'
 import { BaseClass, BaseResource } from '../base'
-import { YoutubeVideo, Image } from '../misc'
+import { YoutubeVideo, Image, StreamingLink } from '../misc'
 import {
   ProducerMeta,
   AnimeGenreMeta,
@@ -194,6 +194,10 @@ export class Anime extends Content {
 
   public getExternal () {
     return <Promise<Array<ContentExternal>>> this.client.anime.getExternal(this.id)
+  }
+
+  public getStreamingLinks () {
+    return <Promise<Array<StreamingLink>>> this.client.anime.getStreamingLinks(this.id)
   }
 
   public getFull () {
@@ -456,6 +460,7 @@ export class AnimeFull extends Anime {
   }
 
   public readonly external: Array<ContentExternal>
+  public readonly streamingLinks: Array<StreamingLink>
 
   public constructor (client: Client, data: any) {
     super(client, data)
@@ -463,5 +468,6 @@ export class AnimeFull extends Anime {
     this.relations = data.relations?.map((relation: any) => new AnimeRelationGroup(this.client, AnimeRelationGroup.parseRelation(relation.relation), relation)) || []
     this.themeSongs = data.theme || data.theme_songs || []
     this.external = data.external?.map((external: any) => new ContentExternal(client, external))
+    this.streamingLinks = data.streaming
   }
 }

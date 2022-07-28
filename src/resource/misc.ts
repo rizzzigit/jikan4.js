@@ -35,3 +35,8 @@ export class YoutubeVideo extends BaseClass {
     this.image = new Image(client, data.images)
   }
 }
+
+export interface StreamingLink {
+  name: string
+  url: URL
+}

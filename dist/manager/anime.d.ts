@@ -1,7 +1,7 @@
 import { BaseManager } from '../manager/base';
 import { ContentExternal, ContentNews, ContentRelationType } from '../resource/content/base';
 import { Anime, AnimeCharacterReference, AnimeStaffReference, AnimePartialEpisode, AnimeEpisode, AnimeTopic, AnimeVideo, AnimeStatistics, AnimeRecommendation, AnimeUserUpdate, AnimeReview, AnimeRelationGroup, AnimeFull } from '../resource/content/anime';
-import { Image } from '../resource/misc';
+import { Image, StreamingLink } from '../resource/misc';
 import { AnimeGenreMeta, ProducerMeta, GenreType } from '../resource/meta';
 export interface AnimeSearchFilter {
     type: 'tv' | 'movie' | 'ova' | 'special' | 'ona' | 'music';
@@ -52,4 +52,5 @@ export declare class AnimeManager extends BaseManager {
         endings: Array<string>;
     } | undefined>;
     getExternal(animeId: number): Promise<Array<ContentExternal> | undefined>;
+    getStreamingLinks(animeId: number): Promise<Array<StreamingLink> | undefined>;
 }

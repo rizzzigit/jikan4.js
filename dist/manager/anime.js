@@ -169,5 +169,10 @@ class AnimeManager extends base_1.BaseManager {
             return rawData ? rawData.map((external) => new base_2.ContentExternal(this.client, external)) : undefined;
         });
     }
+    getStreamingLinks(animeId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return yield this.request(`anime/${animeId}/streaming`);
+        });
+    }
 }
 exports.AnimeManager = AnimeManager;

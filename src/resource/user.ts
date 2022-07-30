@@ -3,6 +3,7 @@ import { Client } from '../core/client'
 import { ContentImage } from '../resource/content/base'
 import { BaseClass } from './base'
 import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta'
+import { Link } from './misc'
 
 export type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary'
 
@@ -79,7 +80,7 @@ export class User extends BaseClass {
   }
 
   public getExternal () {
-    return <Promise<Array<{ name: string, url: URL }>>> this.client.users.getExternal(this.username)
+    return <Promise<Array<Link>>> this.client.users.getExternal(this.username)
   }
 
   public getFull () {
@@ -314,7 +315,7 @@ export class UserRecommendation extends BaseClass {
 
 export class UserFull extends User {
   public readonly statistics: UserStats
-  public readonly external: Array<{ name: string, url: URL }>
+  public readonly external: Array<Link>
 
   public constructor (client: Client, data: any) {
     super(client, data)

@@ -2,6 +2,7 @@ import { URL } from 'url'
 import { Client } from '../core/client'
 import { BaseResource } from './base'
 import { ContentTitle, ContentImage } from './content/base'
+import { Link } from './misc'
 
 export class Producer extends BaseResource {
   public constructor (client: Client, data: any) {
@@ -23,7 +24,7 @@ export class Producer extends BaseResource {
   }
 
   public async getExternal () {
-    return <Promise<Array<{ name: string, url: URL }>>> this.client.producers.getExternal(this.id)
+    return <Promise<Array<Link>>> this.client.producers.getExternal(this.id)
   }
 }
 
@@ -34,5 +35,5 @@ export class ProducerFull extends Producer {
     this.external = data.external?.map((entry: any) => Object.assign(entry, { url: new URL(entry.url) })) || []
   }
 
-  public readonly external: Array<{ name: string, url: URL }>
+  public readonly external: Array<Link>
 }

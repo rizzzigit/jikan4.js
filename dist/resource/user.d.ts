@@ -4,6 +4,7 @@ import { Client } from '../core/client';
 import { ContentImage } from '../resource/content/base';
 import { BaseClass } from './base';
 import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta';
+import { Link } from './misc';
 export declare type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
 export declare class UserMeta extends BaseClass {
     readonly username: string;
@@ -31,10 +32,7 @@ export declare class User extends BaseClass {
     getFriends(offset?: number, maxCount?: number): Promise<UserFriend[]>;
     getRecommendations(offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
     getClubs(offset?: number, maxCount?: number): Promise<ClubMeta[]>;
-    getExternal(): Promise<{
-        name: string;
-        url: URL;
-    }[]>;
+    getExternal(): Promise<Link[]>;
     getFull(): Promise<UserFull>;
     constructor(client: Client, data: any);
 }
@@ -140,9 +138,6 @@ export declare class UserRecommendation extends BaseClass {
 }
 export declare class UserFull extends User {
     readonly statistics: UserStats;
-    readonly external: Array<{
-        name: string;
-        url: URL;
-    }>;
+    readonly external: Array<Link>;
     constructor(client: Client, data: any);
 }

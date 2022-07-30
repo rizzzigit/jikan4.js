@@ -36,7 +36,7 @@ export class YoutubeVideo extends BaseClass {
   }
 }
 
-export interface StreamingLink {
+export interface Link {
   name: string
   url: URL
 }

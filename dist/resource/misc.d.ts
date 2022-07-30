@@ -17,7 +17,7 @@ export declare class YoutubeVideo extends BaseClass {
     readonly image: Image;
     constructor(client: Client, data: any);
 }
-export interface StreamingLink {
+export interface Link {
     name: string;
     url: URL;
 }

@@ -15,6 +15,7 @@ import { AnimeReview } from '../resource/content/anime'
 import { MangaReview } from '../resource/content/manga'
 import { ClubMeta } from '../resource/meta'
 import { URL } from 'url'
+import { Link } from '../Jikan'
 
 export interface UserSearchFilter {
   gender: 'any' | 'male' | 'female' | 'nonbinary'
@@ -121,7 +122,7 @@ export class UserManager extends BaseManager {
     return rawData ? rawData.map((club) => new ClubMeta(this.client, club)) : undefined
   }
 
-  public async getExternal (username: string): Promise<Array<{ name: string, url: URL }> | undefined> {
+  public async getExternal (username: string): Promise<Array<Link> | undefined> {
     const rawData = <Array<any>> await this.request(`users/${username}/external`)
 
     return rawData ? rawData.map((data) => Object.assign(data, { url: new URL(data.url) })) : undefined

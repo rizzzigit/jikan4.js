@@ -11,7 +11,7 @@ import {
   ContentExternal
 } from './base'
 import { BaseClass, BaseResource } from '../base'
-import { YoutubeVideo, Image, StreamingLink } from '../misc'
+import { YoutubeVideo, Image, Link } from '../misc'
 import {
   ProducerMeta,
   AnimeGenreMeta,
@@ -197,7 +197,7 @@ export class Anime extends Content {
   }
 
   public getStreamingLinks () {
-    return <Promise<Array<StreamingLink>>> this.client.anime.getStreamingLinks(this.id)
+    return <Promise<Array<Link>>> this.client.anime.getStreamingLinks(this.id)
   }
 
   public getFull () {
@@ -479,7 +479,7 @@ export class AnimeFull extends Anime {
   }
 
   public readonly external: Array<ContentExternal>
-  public readonly streamingLinks: Array<StreamingLink>
+  public readonly streamingLinks: Array<Link>
 
   public constructor (client: Client, data: any) {
     super(client, data)

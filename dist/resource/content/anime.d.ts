@@ -2,7 +2,7 @@
 import { Client } from '../../core/client';
 import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReviewScores, ContentReview, ContentExternal } from './base';
 import { BaseClass, BaseResource } from '../base';
-import { YoutubeVideo, Image, StreamingLink } from '../misc';
+import { YoutubeVideo, Image, Link } from '../misc';
 import { ProducerMeta, AnimeGenreMeta, PersonMeta, CharacterMeta, AnimeMeta, MangaMeta } from '../meta';
 import { URL } from 'url';
 export declare type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown';
@@ -62,7 +62,7 @@ export declare class Anime extends Content {
         endings: Array<string>;
     }>;
     getExternal(): Promise<ContentExternal[]>;
-    getStreamingLinks(): Promise<StreamingLink[]>;
+    getStreamingLinks(): Promise<Link[]>;
     getFull(): Promise<AnimeFull>;
     constructor(client: Client, data: any);
 }
@@ -178,6 +178,6 @@ export declare class AnimeFull extends Anime {
         endings: Array<string>;
     };
     readonly external: Array<ContentExternal>;
-    readonly streamingLinks: Array<StreamingLink>;
+    readonly streamingLinks: Array<Link>;
     constructor(client: Client, data: any);
 }

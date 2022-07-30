@@ -1,8 +1,7 @@
-/// <reference types="node" />
-import { URL } from 'url';
 import { Client } from '../core/client';
 import { BaseResource } from './base';
 import { ContentTitle, ContentImage } from './content/base';
+import { Link } from './misc';
 export declare class Producer extends BaseResource {
     constructor(client: Client, data: any);
     readonly title: ContentTitle;
@@ -10,15 +9,9 @@ export declare class Producer extends BaseResource {
     readonly favorites: number;
     readonly established: Date;
     getFull(): Promise<ProducerFull>;
-    getExternal(): Promise<{
-        name: string;
-        url: URL;
-    }[]>;
+    getExternal(): Promise<Link[]>;
 }
 export declare class ProducerFull extends Producer {
     constructor(client: Client, data: any);
-    readonly external: Array<{
-        name: string;
-        url: URL;
-    }>;
+    readonly external: Array<Link>;
 }

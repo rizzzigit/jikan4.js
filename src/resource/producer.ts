@@ -12,6 +12,7 @@ export class Producer extends BaseResource {
     this.titles = data.titles
     this.image = new ContentImage(client, data.images)
     this.favorites = data.favorites
+    this.established = Producer.parseDate(data.established, true)
     this.about = data.about
     this.count = data.count
   }
@@ -20,6 +21,7 @@ export class Producer extends BaseResource {
   public readonly titles: TitleArray
   public readonly image: ContentImage
   public readonly favorites: number
+  public readonly established: Date | null
   public readonly about: string | null
   public readonly count: number
 

@@ -12,6 +12,7 @@ class Producer extends base_1.BaseResource {
         this.titles = data.titles;
         this.image = new base_2.ContentImage(client, data.images);
         this.favorites = data.favorites;
+        this.established = Producer.parseDate(data.established, true);
         this.about = data.about;
         this.count = data.count;
     }

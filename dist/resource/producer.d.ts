@@ -8,6 +8,7 @@ export declare class Producer extends BaseResource {
     readonly titles: TitleArray;
     readonly image: ContentImage;
     readonly favorites: number;
+    readonly established: Date | null;
     readonly about: string | null;
     readonly count: number;
     getFull(): Promise<ProducerFull>;

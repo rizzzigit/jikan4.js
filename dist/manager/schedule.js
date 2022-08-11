@@ -24,7 +24,7 @@ class ScheduleManager extends base_1.BaseManager {
                 }
                 return { day, filter, offset, maxCount };
             })();
-            const rawData = yield this.requestPaginated(`schedules${day ? `/${day}` : ''}`, offset, maxCount, Object.assign({ disableCaching: 'true' }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
+            const rawData = yield this.requestPaginated(`schedules${day ? `/${day}` : ''}`, offset, maxCount, Object.assign({}, filter && (0, utils_1.translateObject)(filter, (key, value) => {
                 switch (key) {
                     case 'kids':
                     case 'sfw':

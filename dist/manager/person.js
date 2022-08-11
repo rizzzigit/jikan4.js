@@ -7,14 +7,9 @@ const person_1 = require("../resource/person");
 const base_1 = require("../manager/base");
 const utils_1 = require("../utils");
 class PersonManager extends base_1.BaseManager {
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    storeCache(body) {
-        return super.storeCache({ path: `people/${body.mal_id}` }, body);
-    }
     search(searchString, filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginated('people', offset, maxCount, Object.assign({ disableCaching: 'true', [searchString.length === 1 ? 'letter' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
+            const rawData = yield this.requestPaginated('people', offset, maxCount, Object.assign({ [searchString.length === 1 ? 'letter' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
                 switch (key) {
                     case 'orderBy': return ['order_by', value];
                     default: return [key, `${value}`];

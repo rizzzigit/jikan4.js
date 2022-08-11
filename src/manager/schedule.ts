@@ -39,7 +39,6 @@ export class ScheduleManager extends BaseManager {
     })()
 
     const rawData = <Array<any>> await this.requestPaginated(`schedules${day ? `/${day}` : ''}`, offset, maxCount, {
-      disableCaching: 'true',
       ...filter && translateObject(filter, (key, value) => {
         switch (key) {
           case 'kids':

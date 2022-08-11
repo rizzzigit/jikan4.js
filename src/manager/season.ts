@@ -10,7 +10,7 @@ export class SeasonManager extends BaseManager {
   }
 
   public async getUpcoming (offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginated('seasons/upcoming', offset, maxCount, { disableCaching: 'true' })
+    const rawData = <Array<any>> await this.requestPaginated('seasons/upcoming', offset, maxCount)
 
     return rawData.map((data: any) => new Anime(this.client, data))
   }
@@ -22,7 +22,7 @@ export class SeasonManager extends BaseManager {
   }
 
   public async getNow (offset?: number, maxCount?: number) {
-    const rawData = <Array<any>> await this.requestPaginated('seasons/now', offset, maxCount, { disableCaching: 'true' })
+    const rawData = <Array<any>> await this.requestPaginated('seasons/now', offset, maxCount)
 
     return rawData.map((data: any) => this.client.anime.storeCache(data)).map((data: any) => new Anime(this.client, data))
   }

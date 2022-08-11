@@ -27,7 +27,6 @@ export interface UserSearchFilter {
 export class UserManager extends BaseManager {
   public async search (searchString: string, filter?: Partial<UserSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('users', offset, maxCount, {
-      disableCaching: 'true',
       q: searchString,
       ...filter && translateObject(filter, (key, value) => [key, value])
     })

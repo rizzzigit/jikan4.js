@@ -53,7 +53,6 @@ export class MangaManager extends BaseManager {
 
   public async search (searchString: string, filter?: Partial<MangaSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('manga', offset, maxCount, {
-      disableCaching: 'true',
       [searchString.length === 1 ? 'length' : 'q']: searchString,
       ...filter && translateObject(filter, (key, value) => {
         switch (key) {

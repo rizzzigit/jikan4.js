@@ -16,7 +16,7 @@ class MangaManager extends base_1.BaseManager {
     }
     search(searchString, filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const rawData = yield this.requestPaginated('manga', offset, maxCount, Object.assign({ disableCaching: 'true', [searchString.length === 1 ? 'length' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
+            const rawData = yield this.requestPaginated('manga', offset, maxCount, Object.assign({ [searchString.length === 1 ? 'length' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
                 switch (key) {
                     case 'score': return [key, `${value}`];
                     case 'minScore': return ['min_score', `${value}`];

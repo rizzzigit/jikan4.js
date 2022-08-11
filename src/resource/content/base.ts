@@ -59,9 +59,15 @@ export class ContentTitle extends BaseClass {
   }
 }
 
+export type TitleArray = Array<{
+  type: string
+  title: string
+}>
+
 export class Content extends BaseResource {
   public readonly image: ContentImage
   public readonly title: ContentTitle
+  public readonly titles: TitleArray
   public readonly score: number | null
   public readonly scoredBy: number | null
   public readonly rank: number
@@ -77,6 +83,7 @@ export class Content extends BaseResource {
 
     this.image = new ContentImage(client, data.images)
     this.title = new ContentTitle(client, data.titles)
+    this.titles = data.titles
     this.score = data.score || data.scored || null
     this.scoredBy = data.scored_by || null
     this.rank = data.rank

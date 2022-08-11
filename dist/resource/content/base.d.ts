@@ -16,9 +16,14 @@ export declare class ContentTitle extends BaseClass {
     toString(): string;
     constructor(client: Client, data: any);
 }
+export declare type TitleArray = Array<{
+    type: string;
+    title: string;
+}>;
 export declare class Content extends BaseResource {
     readonly image: ContentImage;
     readonly title: ContentTitle;
+    readonly titles: TitleArray;
     readonly score: number | null;
     readonly scoredBy: number | null;
     readonly rank: number;

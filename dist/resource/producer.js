@@ -9,6 +9,7 @@ class Producer extends base_1.BaseResource {
     constructor(client, data) {
         super(client, data);
         this.title = new base_2.ContentTitle(client, data.titles);
+        this.titles = data.titles;
         this.image = new base_2.ContentImage(client, data.images);
         this.favorites = data.favorites;
         this.established = Producer.parseDate(data.established);

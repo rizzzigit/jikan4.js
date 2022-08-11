@@ -50,6 +50,7 @@ class Content extends base_1.BaseResource {
         super(client, data);
         this.image = new ContentImage(client, data.images);
         this.title = new ContentTitle(client, data.titles);
+        this.titles = data.titles;
         this.score = data.score || data.scored || null;
         this.scoredBy = data.scored_by || null;
         this.rank = data.rank;

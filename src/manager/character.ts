@@ -9,7 +9,6 @@ export interface CharacterSearchFilter {
 }
 
 export class CharacterManager extends BaseManager {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public storeCache (body: any) {
     return super.storeCache({ path: `characters/${body.mal_id}` }, body)

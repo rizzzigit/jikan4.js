@@ -54,7 +54,6 @@ export const mangaDemographics: Array<[number, string]> = [
 ]
 
 export class GenreManager extends BaseManager {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private generateGenre <T extends 'anime' | 'manga', E extends GenreType> (type: T, id: number, name: string, genreType: E):
     T extends 'anime' ? AnimeGenreMeta<E> :

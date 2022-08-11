@@ -9,7 +9,6 @@ export interface PersonSearchFilter {
 }
 
 export class PersonManager extends BaseManager {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public storeCache (body: any) {
     return super.storeCache({ path: `people/${body.mal_id}` }, body)

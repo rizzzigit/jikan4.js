@@ -27,7 +27,6 @@ export interface ClubSearchFilter {
 }
 
 export class ClubManager extends BaseManager {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public storeCache (body: any) {
     return super.storeCache({ path: `clubs/${body.mal_id}` }, body)

@@ -55,7 +55,6 @@ export interface TopAnimeFilter {
 }
 
 export class AnimeManager extends BaseManager {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public storeCache (body: any) {
     return super.storeCache({ path: `anime/${body.mal_id}` }, body)

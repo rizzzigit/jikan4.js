@@ -46,7 +46,6 @@ export interface TopMangaFilter {
 }
 
 export class MangaManager extends BaseManager {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public storeCache (body: any) {
     return super.storeCache({ path: `manga/${body.mal_id}` }, body)

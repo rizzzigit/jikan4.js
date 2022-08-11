@@ -8,12 +8,10 @@ class BaseManager extends base_1.BaseClass {
         super(client);
         this.APIClient = client.APIClient;
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     debug(message) {
         this.client.debug('Content Manager', message);
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     request(path, query) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -26,7 +24,6 @@ class BaseManager extends base_1.BaseClass {
             }
         });
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     requestPaginated(path, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -55,15 +52,6 @@ class BaseManager extends base_1.BaseClass {
             } while (is200 && hasNext);
             return data.length || is200 ? data.slice(offset, fetchEnd()) : undefined;
         });
-    }
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    storeCache(requestData, body) {
-        var _a;
-        if ((requestData.cache !== undefined) ? requestData.cache : true) {
-            return body;
-        }
-        return ((_a = this.APIClient.cache) === null || _a === void 0 ? void 0 : _a.set(requestData, body)) || body;
     }
 }
 exports.BaseManager = BaseManager;

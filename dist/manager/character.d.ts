@@ -6,8 +6,6 @@ export interface CharacterSearchFilter {
     sort: 'desc' | 'asc';
 }
 export declare class CharacterManager extends BaseManager {
-    /** @hidden */
-    storeCache(body: any): any;
     search(searchString: string, filter?: Partial<CharacterSearchFilter>, offset?: number, maxCount?: number): Promise<Character[]>;
     list(offset?: number, maxCount?: number): Promise<Array<Character>>;
     listTop(offset?: number, maxCount?: number): Promise<Character[]>;

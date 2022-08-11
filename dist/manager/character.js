@@ -7,11 +7,6 @@ const character_1 = require("../resource/character");
 const misc_1 = require("../resource/misc");
 const utils_1 = require("../utils");
 class CharacterManager extends base_1.BaseManager {
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    storeCache(body) {
-        return super.storeCache({ path: `characters/${body.mal_id}` }, body);
-    }
     search(searchString, filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('characters', offset, maxCount, Object.assign({ [searchString.length === 1 ? 'letter' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
@@ -20,25 +15,25 @@ class CharacterManager extends base_1.BaseManager {
                     default: return [key, `${value}`];
                 }
             })));
-            return rawData.map((character) => new character_1.Character(this.client, this.storeCache(character)));
+            return rawData.map((character) => new character_1.Character(this.client, character));
         });
     }
     list(offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('characters', offset, maxCount);
-            return rawData.map((character) => new character_1.Character(this.client, this.storeCache(character)));
+            return rawData.map((character) => new character_1.Character(this.client, character));
         });
     }
     listTop(offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('top/characters', offset, maxCount);
-            return rawData.map((character) => new character_1.Character(this.client, this.storeCache(character)));
+            return rawData.map((character) => new character_1.Character(this.client, character));
         });
     }
     random() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request('random/characters', { disableCaching: 'true' });
-            return new character_1.Character(this.client, this.storeCache(rawData));
+            return new character_1.Character(this.client, rawData);
         });
     }
     get(characterId) {

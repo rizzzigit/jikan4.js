@@ -48,7 +48,6 @@ exports.mangaDemographics = [
     [42, 'Josei']
 ];
 class GenreManager extends base_1.BaseManager {
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     generateGenre(type, id, name, genreType) {
         const data = {

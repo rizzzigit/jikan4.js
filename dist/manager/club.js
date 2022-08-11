@@ -14,7 +14,7 @@ class ClubManager extends base_1.BaseManager {
                     default: return [key, `${value}`];
                 }
             })));
-            return rawData.map((club) => new club_1.Club(this.client, this.storeCache(club)));
+            return rawData.map((club) => new club_1.Club(this.client, club));
         });
     }
     get(clubId) {

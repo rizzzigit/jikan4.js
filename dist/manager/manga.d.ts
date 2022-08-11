@@ -21,8 +21,6 @@ export interface TopMangaFilter {
     filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite';
 }
 export declare class MangaManager extends BaseManager {
-    /** @hidden */
-    storeCache(body: any): any;
     search(searchString: string, filter?: Partial<MangaSearchFilter>, offset?: number, maxCount?: number): Promise<Manga[]>;
     list(offset?: number, maxCount?: number): Promise<Manga[]>;
     listTop(filter?: Partial<TopMangaFilter>, offset?: number, maxCount?: number): Promise<Manga[]>;

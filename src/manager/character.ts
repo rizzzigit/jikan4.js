@@ -9,11 +9,6 @@ export interface CharacterSearchFilter {
 }
 
 export class CharacterManager extends BaseManager {
-  /** @hidden */
-  public storeCache (body: any) {
-    return super.storeCache({ path: `characters/${body.mal_id}` }, body)
-  }
-
   public async search (searchString: string, filter?: Partial<CharacterSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('characters', offset, maxCount, {
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
@@ -25,25 +20,25 @@ export class CharacterManager extends BaseManager {
       })
     })
 
-    return rawData.map((character) => new Character(this.client, this.storeCache(character)))
+    return rawData.map((character) => new Character(this.client, character))
   }
 
   public async list (offset?: number, maxCount?: number): Promise<Array<Character>> {
     const rawData = <Array<any>> await this.requestPaginated('characters', offset, maxCount)
 
-    return rawData.map((character: any) => new Character(this.client, this.storeCache(character)))
+    return rawData.map((character: any) => new Character(this.client, character))
   }
 
   public async listTop (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('top/characters', offset, maxCount)
 
-    return rawData.map((character: any) => new Character(this.client, this.storeCache(character)))
+    return rawData.map((character: any) => new Character(this.client, character))
   }
 
   public async random (): Promise<Character> {
     const rawData = await this.request('random/characters', { disableCaching: 'true' })
 
-    return new Character(this.client, this.storeCache(rawData))
+    return new Character(this.client, rawData)
   }
 
   public async get (characterId: number): Promise<Character | undefined> {

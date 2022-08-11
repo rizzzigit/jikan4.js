@@ -27,11 +27,6 @@ export interface ClubSearchFilter {
 }
 
 export class ClubManager extends BaseManager {
-  /** @hidden */
-  public storeCache (body: any) {
-    return super.storeCache({ path: `clubs/${body.mal_id}` }, body)
-  }
-
   public async search (searchString: string, filter?: Partial<ClubSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('clubs', offset, maxCount, {
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
@@ -44,7 +39,7 @@ export class ClubManager extends BaseManager {
       })
     })
 
-    return rawData.map((club) => new Club(this.client, this.storeCache(club)))
+    return rawData.map((club) => new Club(this.client, club))
   }
 
   public async get (clubId: number): Promise<Club | null | undefined> {

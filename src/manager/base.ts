@@ -1,6 +1,6 @@
 import { Client } from '../core/client'
 import { BaseClass } from '../resource/base'
-import { APIClient, APIRequestQuery, APIRequestData } from '../core/api'
+import { APIClient, APIRequestQuery } from '../core/api'
 
 export interface Result<Paginated extends boolean = false> {
   path: string
@@ -11,13 +11,11 @@ export interface Result<Paginated extends boolean = false> {
 export class BaseManager extends BaseClass {
   protected APIClient: APIClient
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private debug (message: string) {
     this.client.debug('Content Manager', message)
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   protected async request (path: string, query?: APIRequestQuery) {
     this.debug(`Get content ${path}`)
@@ -31,7 +29,6 @@ export class BaseManager extends BaseClass {
     }
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   protected async requestPaginated (path: string, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query?: APIRequestQuery) {
     const data: Array<any> = []
@@ -67,16 +64,6 @@ export class BaseManager extends BaseClass {
     } while (is200 && hasNext)
 
     return data.length || is200 ? data.slice(offset, fetchEnd()) : undefined
-  }
-
-  // eslint-disable-next-line tsdoc/syntax
-  /** @hidden */
-  public storeCache (requestData: APIRequestData, body: any) {
-    if ((requestData.cache !== undefined) ? requestData.cache : true) {
-      return body
-    }
-
-    return this.APIClient.cache?.set(requestData, body) || body
   }
 
   public constructor (client: Client) {

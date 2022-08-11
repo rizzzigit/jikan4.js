@@ -46,11 +46,6 @@ export interface TopMangaFilter {
 }
 
 export class MangaManager extends BaseManager {
-  /** @hidden */
-  public storeCache (body: any) {
-    return super.storeCache({ path: `manga/${body.mal_id}` }, body)
-  }
-
   public async search (searchString: string, filter?: Partial<MangaSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('manga', offset, maxCount, {
       [searchString.length === 1 ? 'length' : 'q']: searchString,
@@ -69,25 +64,25 @@ export class MangaManager extends BaseManager {
       })
     })
 
-    return rawData.map((manga) => new Manga(this.client, this.storeCache(manga)))
+    return rawData.map((manga) => new Manga(this.client, manga))
   }
 
   public async list (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('manga', offset, maxCount)
 
-    return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
+    return rawData.map((manga: any) => new Manga(this.client, manga))
   }
 
   public async listTop (filter?: Partial<TopMangaFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('top/manga', offset, maxCount, { ...filter })
 
-    return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
+    return rawData.map((manga: any) => new Manga(this.client, manga))
   }
 
   public async listRecommended (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('recommendations/manga', offset, maxCount)
 
-    return rawData.map((manga: any) => new Manga(this.client, this.storeCache(manga)))
+    return rawData.map((manga: any) => new Manga(this.client, manga))
   }
 
   public async random (sfw?: boolean): Promise<Manga> {

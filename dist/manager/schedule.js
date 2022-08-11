@@ -31,7 +31,7 @@ class ScheduleManager extends base_1.BaseManager {
                         return value && [key, 'true'];
                 }
             })));
-            return rawData.map((data) => new anime_1.Anime(this.client, this.client.anime.storeCache(data)));
+            return rawData.map((data) => new anime_1.Anime(this.client, data));
         });
     }
 }

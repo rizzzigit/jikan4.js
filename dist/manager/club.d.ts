@@ -7,8 +7,6 @@ export interface ClubSearchFilter {
     sort: 'desc' | 'asc';
 }
 export declare class ClubManager extends BaseManager {
-    /** @hidden */
-    storeCache(body: any): any;
     search(searchString: string, filter?: Partial<ClubSearchFilter>, offset?: number, maxCount?: number): Promise<Club[]>;
     get(clubId: number): Promise<Club | null | undefined>;
     getMembers(clubId: number): Promise<Array<ClubMember> | undefined>;

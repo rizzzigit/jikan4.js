@@ -48,6 +48,6 @@ export class ScheduleManager extends BaseManager {
       })
     })
 
-    return rawData.map((data: any) => new Anime(this.client, this.client.anime.storeCache(data)))
+    return rawData.map((data: any) => new Anime(this.client, data))
   }
 }

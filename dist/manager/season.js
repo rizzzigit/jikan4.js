@@ -27,7 +27,7 @@ class SeasonManager extends base_1.BaseManager {
     getNow(offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('seasons/now', offset, maxCount);
-            return rawData.map((data) => this.client.anime.storeCache(data)).map((data) => new anime_1.Anime(this.client, data));
+            return rawData.map((data) => new anime_1.Anime(this.client, data));
         });
     }
 }

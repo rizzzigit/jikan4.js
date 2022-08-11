@@ -9,11 +9,6 @@ const misc_1 = require("../resource/misc");
 const utils_1 = require("../utils");
 const meta_1 = require("../resource/meta");
 class MangaManager extends base_1.BaseManager {
-    // eslint-disable-next-line tsdoc/syntax
-    /** @hidden */
-    storeCache(body) {
-        return super.storeCache({ path: `manga/${body.mal_id}` }, body);
-    }
     search(searchString, filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('manga', offset, maxCount, Object.assign({ [searchString.length === 1 ? 'length' : 'q']: searchString }, filter && (0, utils_1.translateObject)(filter, (key, value) => {
@@ -29,25 +24,25 @@ class MangaManager extends base_1.BaseManager {
                     default: return [key, `${value}`];
                 }
             })));
-            return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
+            return rawData.map((manga) => new manga_1.Manga(this.client, manga));
         });
     }
     list(offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('manga', offset, maxCount);
-            return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
+            return rawData.map((manga) => new manga_1.Manga(this.client, manga));
         });
     }
     listTop(filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('top/manga', offset, maxCount, Object.assign({}, filter));
-            return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
+            return rawData.map((manga) => new manga_1.Manga(this.client, manga));
         });
     }
     listRecommended(offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated('recommendations/manga', offset, maxCount);
-            return rawData.map((manga) => new manga_1.Manga(this.client, this.storeCache(manga)));
+            return rawData.map((manga) => new manga_1.Manga(this.client, manga));
         });
     }
     random(sfw) {

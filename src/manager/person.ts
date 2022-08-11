@@ -9,11 +9,6 @@ export interface PersonSearchFilter {
 }
 
 export class PersonManager extends BaseManager {
-  /** @hidden */
-  public storeCache (body: any) {
-    return super.storeCache({ path: `people/${body.mal_id}` }, body)
-  }
-
   public async search (searchString: string, filter?: Partial<PersonSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('people', offset, maxCount, {
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
@@ -26,25 +21,24 @@ export class PersonManager extends BaseManager {
       })
     })
 
-    return rawData.map((person) => new Person(this.client, this.storeCache(person)))
+    return rawData.map((person) => new Person(this.client, person))
   }
 
   public async list (offset?: number, maxCount?: number): Promise<Array<Person>> {
     const rawData = <Array<any>> await this.requestPaginated('people', offset, maxCount)
 
-    return rawData.map((person: any) => new Person(this.client, this.storeCache(person)))
+    return rawData.map((person: any) => new Person(this.client, person))
   }
 
   public async listTop (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('top/people', offset, maxCount)
 
-    return rawData.map((person: any) => new Person(this.client, this.storeCache(person)))
+    return rawData.map((person: any) => new Person(this.client, person))
   }
 
   public async random (): Promise<Person> {
     const rawData = await this.request('random/people', { disableCaching: 'true' })
 
-    this.storeCache(rawData)
     return new Person(this.client, rawData)
   }
 

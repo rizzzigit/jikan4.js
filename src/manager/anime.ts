@@ -55,11 +55,6 @@ export interface TopAnimeFilter {
 }
 
 export class AnimeManager extends BaseManager {
-  /** @hidden */
-  public storeCache (body: any) {
-    return super.storeCache({ path: `anime/${body.mal_id}` }, body)
-  }
-
   public async search (searchString: string, filter?: Partial<AnimeSearchFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('anime', offset, maxCount, {
       [searchString.length === 1 ? 'letter' : 'q']: searchString,
@@ -78,37 +73,37 @@ export class AnimeManager extends BaseManager {
       })
     })
 
-    return rawData.map((anime) => this.storeCache(anime)).map((anime) => new Anime(this.client, anime))
+    return rawData.map((anime) => anime).map((anime) => new Anime(this.client, anime))
   }
 
   public async list (offset?: number, maxCount?: number): Promise<Array<Anime>> {
     const rawData = <Array<any>> await this.requestPaginated('anime', offset, maxCount)
 
-    return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
+    return rawData.map((anime: any) => new Anime(this.client, anime))
   }
 
   public async listTop (filter?: Partial<TopAnimeFilter>, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('top/anime', offset, maxCount, { ...filter })
 
-    return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
+    return rawData.map((anime: any) => new Anime(this.client, anime))
   }
 
   public async listRecommended (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('recommendations/anime', offset, maxCount)
 
-    return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
+    return rawData.map((anime: any) => new Anime(this.client, anime))
   }
 
   public async listScheduled (offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated('schedules', offset, maxCount)
 
-    return rawData.map((anime: any) => new Anime(this.client, this.storeCache(anime)))
+    return rawData.map((anime: any) => new Anime(this.client, anime))
   }
 
   public async random (sfw?: boolean): Promise<Anime> {
     const rawData = await this.request('random/anime', { disableCaching: 'true', sfw: sfw ? 'true' : '' })
 
-    return new Anime(this.client, this.storeCache(rawData))
+    return new Anime(this.client, rawData)
   }
 
   public async get (animeId: number): Promise<Anime | undefined> {

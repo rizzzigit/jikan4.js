@@ -19,6 +19,9 @@ export class ContentTitle extends BaseClass {
   public readonly default: string
   public readonly english: string | null
   public readonly japanese: string | null
+  public readonly german: string | null
+  public readonly spanish: string | null
+  public readonly french: string | null
   public readonly synonyms: Array<string>
 
   public toString () {
@@ -31,6 +34,9 @@ export class ContentTitle extends BaseClass {
     this.synonyms = []
     this.english = null
     this.japanese = null
+    this.german = null
+    this.spanish = null
+    this.french = null
     this.default = '(no title)'
     for (const { type, title } of data) {
       const titleTrimmed = title.trim()
@@ -49,6 +55,18 @@ export class ContentTitle extends BaseClass {
 
         case 'English':
           this.english = titleTrimmed
+          break
+
+        case 'German':
+          this.german = titleTrimmed
+          break
+
+        case 'Spanish':
+          this.spanish = titleTrimmed
+          break
+
+        case 'French':
+          this.french = titleTrimmed
           break
 
         case 'Synonym':

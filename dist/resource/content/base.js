@@ -18,6 +18,9 @@ class ContentTitle extends base_1.BaseClass {
         this.synonyms = [];
         this.english = null;
         this.japanese = null;
+        this.german = null;
+        this.spanish = null;
+        this.french = null;
         this.default = '(no title)';
         for (const { type, title } of data) {
             const titleTrimmed = title.trim();
@@ -33,6 +36,15 @@ class ContentTitle extends base_1.BaseClass {
                     break;
                 case 'English':
                     this.english = titleTrimmed;
+                    break;
+                case 'German':
+                    this.german = titleTrimmed;
+                    break;
+                case 'Spanish':
+                    this.spanish = titleTrimmed;
+                    break;
+                case 'French':
+                    this.french = titleTrimmed;
                     break;
                 case 'Synonym':
                     this.synonyms.push(titleTrimmed);

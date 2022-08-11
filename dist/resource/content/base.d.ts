@@ -12,6 +12,9 @@ export declare class ContentTitle extends BaseClass {
     readonly default: string;
     readonly english: string | null;
     readonly japanese: string | null;
+    readonly german: string | null;
+    readonly spanish: string | null;
+    readonly french: string | null;
     readonly synonyms: Array<string>;
     toString(): string;
     constructor(client: Client, data: any);

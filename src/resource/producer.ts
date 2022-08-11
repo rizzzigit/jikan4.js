@@ -12,14 +12,16 @@ export class Producer extends BaseResource {
     this.titles = data.titles
     this.image = new ContentImage(client, data.images)
     this.favorites = data.favorites
-    this.established = Producer.parseDate(data.established)
+    this.about = data.about
+    this.count = data.count
   }
 
   public readonly title: ContentTitle
   public readonly titles: TitleArray
   public readonly image: ContentImage
   public readonly favorites: number
-  public readonly established: Date
+  public readonly about: string | null
+  public readonly count: number
 
   public async getFull () {
     return <Promise<ProducerFull>> this.client.producers.getFull(this.id)

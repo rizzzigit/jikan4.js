@@ -113,7 +113,6 @@ export class APIClient {
     https: HTTPS.Agent
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private newRequestInstance (secure: boolean, url: URL, options: HTTP.RequestOptions | HTTPS.RequestOptions) {
     const { agent } = this
@@ -125,11 +124,9 @@ export class APIClient {
     return HTTP.request(url, { ...options, agent: agent.http })
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private lastRequest: number
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private get nextRequest (): number {
     const { client: { options: { dataRateLimit } }, lastRequest } = this
@@ -137,7 +134,6 @@ export class APIClient {
     return lastRequest + dataRateLimit
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private async awaitNextRequest () {
     const { nextRequest } = this
@@ -148,11 +144,9 @@ export class APIClient {
     }
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private isQueueRunning: boolean
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private async runQueue () {
     if (this.isQueueRunning) {
@@ -192,7 +186,6 @@ export class APIClient {
     }
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private addQueue (requestData: APIRequestData, resolve: (data: APIResponseData) => void, reject: (error: Error | APIError) => void) {
     const { queue } = this
@@ -204,7 +197,6 @@ export class APIClient {
     }
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private debug (message: string) {
     return this.client.debug('API Client', message)
@@ -239,7 +231,6 @@ export class APIClient {
     return await new Promise<APIResponseData>((resolve, reject) => this.addQueue(requestData, resolve, reject))
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private async execReqeust (requestData: APIRequestData) {
     const { client: { options: { secure, requestTimeout, maxApiErrorRetry, retryOnApiError } }, cache } = this

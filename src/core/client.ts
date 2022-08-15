@@ -122,7 +122,6 @@ export interface ClientEvents {
 export type ClientEventNames = keyof ClientEvents
 
 export class Client {
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private static setOptions (options?: Partial<ClientOptions>): ClientOptions {
     const defaultOptions: ClientOptions = {
@@ -158,7 +157,6 @@ export class Client {
   */
   public readonly options: ClientOptions
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public readonly APIClient: APIClient
 
@@ -293,7 +291,6 @@ export class Client {
   */
   public readonly heartbeat: HeartBeatMonitor
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public readonly events: EventEmitter
 
@@ -327,13 +324,11 @@ export class Client {
     return this
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public emit <T extends ClientEventNames> (event: T, ...args: ClientEvents[T]): boolean {
     return this.events.emit(event, ...args)
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   public debug (scope: string, message: string) {
     return this.emit('debug', scope, message)

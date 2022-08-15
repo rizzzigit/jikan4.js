@@ -48,7 +48,6 @@ class Client {
         this.heartbeat = new heartbeat_1.HeartBeatMonitor(this);
         this.events = new events_1.EventEmitter();
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     static setOptions(options) {
         const defaultOptions = {
@@ -93,12 +92,10 @@ class Client {
         this.events.once(event, listener);
         return this;
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     emit(event, ...args) {
         return this.events.emit(event, ...args);
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     debug(scope, message) {
         return this.emit('debug', scope, message);

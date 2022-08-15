@@ -8,13 +8,11 @@ class CacheManager {
     constructor(client) {
         this.client = client;
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     get cacheDir() {
         const { client: { options: { dataPath } } } = this;
         return (0, path_1.join)(dataPath, 'cache');
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     file(path, query) {
         const pathArray = [this.cacheDir, path];
@@ -34,7 +32,6 @@ class CacheManager {
         }
         return `${(0, path_1.join)(...pathArray)}.json`;
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     isExpired(date) {
         const { client: { options } } = this;

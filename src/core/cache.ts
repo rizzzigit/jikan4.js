@@ -7,7 +7,6 @@ import { APIRequestData, APIRequestQuery, APIResponseData } from './api'
 export class CacheManager {
   public readonly client: Client
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private get cacheDir () {
     const { client: { options: { dataPath } } } = this
@@ -15,7 +14,6 @@ export class CacheManager {
     return join(dataPath, 'cache')
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private file (path: string, query?: APIRequestQuery) {
     const pathArray: Array<string> = [this.cacheDir, path]
@@ -40,7 +38,6 @@ export class CacheManager {
     return `${join(...pathArray)}.json`
   }
 
-  // eslint-disable-next-line tsdoc/syntax
   /** @hidden */
   private isExpired (date: number): boolean {
     const { client: { options } } = this

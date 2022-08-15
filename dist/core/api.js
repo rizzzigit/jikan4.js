@@ -62,7 +62,6 @@ class APIClient {
             };
         })();
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     newRequestInstance(secure, url, options) {
         const { agent } = this;
@@ -71,13 +70,11 @@ class APIClient {
         }
         return http_1.default.request(url, Object.assign(Object.assign({}, options), { agent: agent.http }));
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     get nextRequest() {
         const { client: { options: { dataRateLimit } }, lastRequest } = this;
         return lastRequest + dataRateLimit;
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     awaitNextRequest() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -88,7 +85,6 @@ class APIClient {
             }
         });
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     runQueue() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -125,7 +121,6 @@ class APIClient {
             }
         });
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     addQueue(requestData, resolve, reject) {
         const { queue } = this;
@@ -135,7 +130,6 @@ class APIClient {
             this.runQueue();
         }
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     debug(message) {
         return this.client.debug('API Client', message);
@@ -164,7 +158,6 @@ class APIClient {
             return yield new Promise((resolve, reject) => this.addQueue(requestData, resolve, reject));
         });
     }
-    // eslint-disable-next-line tsdoc/syntax
     /** @hidden */
     execReqeust(requestData) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {

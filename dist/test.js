@@ -36,6 +36,10 @@ const run = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const producer = yield client.producers.getFull(1);
             const external = yield client.producers.getExternal(1);
             return { list, producer, external };
+        }),
+        fullUserUpdate: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const user = yield client.users.getFull('fullbellydragon');
+            return user === null || user === void 0 ? void 0 : user.updates;
         })
     };
     const funcKey = process.argv[2];

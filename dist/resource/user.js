@@ -208,9 +208,14 @@ class UserRecommendation extends base_2.BaseClass {
 exports.UserRecommendation = UserRecommendation;
 class UserFull extends User {
     constructor(client, data) {
+        var _a, _b, _c, _d;
         super(client, data);
         this.statistics = new UserStats(client, data.statistics);
         this.external = data.external.map((data) => Object.assign(data, { url: new url_1.URL(data.url) }));
+        this.updates = {
+            manga: ((_b = (_a = data.updates) === null || _a === void 0 ? void 0 : _a.manga) === null || _b === void 0 ? void 0 : _b.map((update) => new UserMangaUpdate(client, update))) || [],
+            anime: ((_d = (_c = data.updates) === null || _c === void 0 ? void 0 : _c.anime) === null || _d === void 0 ? void 0 : _d.map((update) => new UserAnimeUpdate(client, update))) || []
+        };
     }
 }
 exports.UserFull = UserFull;

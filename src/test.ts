@@ -44,6 +44,12 @@ const run = async () => {
       const external = await client.producers.getExternal(1)
 
       return { list, producer, external }
+    },
+
+    fullUserUpdate: async () => {
+      const user = await client.users.getFull('fullbellydragon')
+
+      return user?.updates
     }
   }
 

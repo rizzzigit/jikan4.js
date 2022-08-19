@@ -5,10 +5,10 @@ import { BaseClass, BaseResource } from '../base';
 import { YoutubeVideo, Image, Link } from '../misc';
 import { ProducerMeta, AnimeGenreMeta, PersonMeta, CharacterMeta, AnimeMeta, MangaMeta } from '../meta';
 import { URL } from 'url';
-export declare type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown';
-export declare type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown';
-export declare type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown';
-export declare type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown';
+export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown';
+export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown';
+export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown';
+export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown';
 export declare class AnimeAirInformation extends BaseClass {
     /** @hidden */
     static parseStatus(input: any): AnimeAirStatus;

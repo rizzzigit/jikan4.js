@@ -5,7 +5,7 @@ import { ContentImage } from '../resource/content/base';
 import { BaseClass } from './base';
 import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta';
 import { Link } from './misc';
-export declare type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
+export type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
 export declare class UserMeta extends BaseClass {
     readonly username: string;
     readonly url: URL;
@@ -139,5 +139,9 @@ export declare class UserRecommendation extends BaseClass {
 export declare class UserFull extends User {
     readonly statistics: UserStats;
     readonly external: Array<Link>;
+    readonly updates: {
+        manga: UserMangaUpdate;
+        anime: UserAnimeUpdate;
+    };
     constructor(client: Client, data: any);
 }

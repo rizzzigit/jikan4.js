@@ -1,7 +1,7 @@
 <p align="center"><img src="https://github.com/rizzzigit/jikan4.js/raw/main/Banner.png"/></p>
 
 # Jikan4.js
-  A Node.js wrapper for Jikan API v4.
+  A Node.js wrapper for Jikan API v4. Supports data caching and rate-limit handling.
 
 ## Installation
   > **Important:**

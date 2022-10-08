@@ -18,40 +18,12 @@ const events_1 = require("events");
 const schedule_1 = require("../manager/schedule");
 const user_1 = require("../manager/user");
 class Client {
-    /**
-     * Instantiate new Jikan client
-     *
-     * @param options - Client options
-     * @example
-     * ```ts
-     *  const Jikan = require('jikan4.js')
-     *  const client = new Client()
-     *
-     *  console.log(await client.anime.get(5))
-     * ```
-    */
-    constructor(options) {
-        this.options = Client.setOptions(options);
-        this.APIClient = new api_1.APIClient(this);
-        this.anime = new anime_1.AnimeManager(this);
-        this.manga = new manga_1.MangaManager(this);
-        this.clubs = new club_1.ClubManager(this);
-        this.people = new person_1.PersonManager(this);
-        this.characters = new character_1.CharacterManager(this);
-        this.genres = new genre_1.GenreManager(this);
-        this.magazines = new magazine_1.MagazineManager(this);
-        this.producers = new producer_1.ProducerManager(this);
-        this.users = new user_1.UserManager(this);
-        this.seasons = new season_1.SeasonManager(this);
-        this.top = new top_1.TopManager(this);
-        this.schedules = new schedule_1.ScheduleManager(this);
-        this.heartbeat = new heartbeat_1.HeartBeatMonitor(this);
-        this.events = new events_1.EventEmitter();
-    }
     /** @hidden */
     static setOptions(options) {
         const defaultOptions = {
-            dataPath: (0, path_1.join)(__dirname, '..', '..', '.Jikan'),
+            dataPath: ('__dirname' in global)
+                ? (0, path_1.join)(__dirname, '..', '..', '.Jikan')
+                : undefined,
             host: 'api.jikan.moe',
             baseUri: 'v4',
             secure: true,
@@ -99,6 +71,36 @@ class Client {
     /** @hidden */
     debug(scope, message) {
         return this.emit('debug', scope, message);
+    }
+    /**
+     * Instantiate new Jikan client
+     *
+     * @param options - Client options
+     * @example
+     * ```ts
+     *  const Jikan = require('jikan4.js')
+     *  const client = new Client()
+     *
+     *  console.log(await client.anime.get(5))
+     * ```
+    */
+    constructor(options) {
+        this.options = Client.setOptions(options);
+        this.APIClient = new api_1.APIClient(this);
+        this.anime = new anime_1.AnimeManager(this);
+        this.manga = new manga_1.MangaManager(this);
+        this.clubs = new club_1.ClubManager(this);
+        this.people = new person_1.PersonManager(this);
+        this.characters = new character_1.CharacterManager(this);
+        this.genres = new genre_1.GenreManager(this);
+        this.magazines = new magazine_1.MagazineManager(this);
+        this.producers = new producer_1.ProducerManager(this);
+        this.users = new user_1.UserManager(this);
+        this.seasons = new season_1.SeasonManager(this);
+        this.top = new top_1.TopManager(this);
+        this.schedules = new schedule_1.ScheduleManager(this);
+        this.heartbeat = new heartbeat_1.HeartBeatMonitor(this);
+        this.events = new events_1.EventEmitter();
     }
 }
 exports.Client = Client;

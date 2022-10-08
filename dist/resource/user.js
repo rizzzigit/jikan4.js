@@ -6,6 +6,9 @@ const base_1 = require("../resource/content/base");
 const base_2 = require("./base");
 const meta_1 = require("./meta");
 class UserMeta extends base_2.BaseClass {
+    getUser() {
+        return this.client.users.get(this.username);
+    }
     constructor(client, data) {
         var _a, _b;
         super(client);
@@ -14,24 +17,9 @@ class UserMeta extends base_2.BaseClass {
         this.imageUrl = UserMeta.parseURL((_b = (_a = data === null || data === void 0 ? void 0 : data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
         this.lastOnline = UserMeta.parseDate(data.last_online);
     }
-    getUser() {
-        return this.client.users.get(this.username);
-    }
 }
 exports.UserMeta = UserMeta;
 class User extends base_2.BaseClass {
-    constructor(client, data) {
-        var _a, _b;
-        super(client);
-        this.username = data.username;
-        this.url = User.parseURL(data.url);
-        this.imageUrl = User.parseURL((_b = (_a = data === null || data === void 0 ? void 0 : data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
-        this.lastOnline = User.parseDate(data.last_online, true);
-        this.gender = User.parseGender(data.gender);
-        this.birthday = User.parseDate(data.birthday, true);
-        this.location = data.location || null;
-        this.joined = User.parseDate(data.joined, true);
-    }
     static parseGender(input) {
         var _a;
         switch (((_a = input === null || input === void 0 ? void 0 : input.trim) === null || _a === void 0 ? void 0 : _a.call(input).toLowerCase()) || '') {
@@ -71,6 +59,18 @@ class User extends base_2.BaseClass {
     }
     getFull() {
         return this.client.users.getFull(this.username);
+    }
+    constructor(client, data) {
+        var _a, _b;
+        super(client);
+        this.username = data.username;
+        this.url = User.parseURL(data.url);
+        this.imageUrl = User.parseURL((_b = (_a = data === null || data === void 0 ? void 0 : data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
+        this.lastOnline = User.parseDate(data.last_online, true);
+        this.gender = User.parseGender(data.gender);
+        this.birthday = User.parseDate(data.birthday, true);
+        this.location = data.location || null;
+        this.joined = User.parseDate(data.joined, true);
     }
 }
 exports.User = User;
@@ -173,6 +173,9 @@ class UserMangaHistory extends base_2.BaseClass {
 }
 exports.UserMangaHistory = UserMangaHistory;
 class UserFriend extends base_2.BaseClass {
+    getUser() {
+        return this.client.users.get(this.username);
+    }
     constructor(client, data) {
         var _a, _b;
         super(client);
@@ -181,9 +184,6 @@ class UserFriend extends base_2.BaseClass {
         this.imageUrl = UserFriend.parseURL((_b = (_a = data.user.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
         this.lastOnline = UserFriend.parseDate(data.last_online, true);
         this.friendsSince = UserFriend.parseDate(data.friends_since, true);
-    }
-    getUser() {
-        return this.client.users.get(this.username);
     }
 }
 exports.UserFriend = UserFriend;

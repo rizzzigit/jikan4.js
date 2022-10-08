@@ -98,7 +98,7 @@ export interface ClientOptions {
     /**
      * Where to store cache from Jikan API
     */
-    dataPath: string;
+    dataPath?: string;
 }
 export interface ClientEvents {
     debug: [scope: string, message: string];

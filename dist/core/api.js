@@ -9,6 +9,12 @@ const url_1 = require("url");
 const utils_1 = require("../utils");
 const cache_1 = require("./cache");
 class APIResponseData {
+    static parsePagination(url, paginationData) {
+        const current = Number(url.searchParams.get('page')) || 1;
+        const last = (paginationData === null || paginationData === void 0 ? void 0 : paginationData.last_visible_page) || 1;
+        const hasNext = (paginationData === null || paginationData === void 0 ? void 0 : paginationData.has_next_page) || false;
+        return { current, last, hasNext };
+    }
     constructor(status, url, headers, body) {
         this.time = Date.now();
         this.url = `${url.href}`;
@@ -18,12 +24,6 @@ class APIResponseData {
         this.pagination = (body === null || body === void 0 ? void 0 : body.pagination)
             ? APIResponseData.parsePagination(url, body.pagination)
             : undefined;
-    }
-    static parsePagination(url, paginationData) {
-        const current = Number(url.searchParams.get('page')) || 1;
-        const last = (paginationData === null || paginationData === void 0 ? void 0 : paginationData.last_visible_page) || 1;
-        const hasNext = (paginationData === null || paginationData === void 0 ? void 0 : paginationData.has_next_page) || false;
-        return { current, last, hasNext };
     }
 }
 exports.APIResponseData = APIResponseData;
@@ -48,7 +48,8 @@ class APIClient {
     constructor(client) {
         this.client = client;
         this.queue = [];
-        this.cache = !client.options.disableCaching
+        const { options: { disableCaching, dataPath } } = client;
+        this.cache = (!disableCaching) && (dataPath != null)
             ? new cache_1.CacheManager(client)
             : undefined;
         this.lastRequest = 0;

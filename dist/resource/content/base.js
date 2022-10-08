@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContentExternal = exports.ContentRelationGroup = exports.ContentUserUpdate = exports.ContentReview = exports.ContentReviewScores = exports.ContentUser = exports.ContentNews = exports.ContentStatistics = exports.ContentStatisticsScore = exports.Content = exports.ContentTitle = exports.ContentImage = void 0;
 const base_1 = require("../base");
 const misc_1 = require("../misc");
-const url_1 = require("url");
 class ContentImage extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
@@ -182,7 +181,7 @@ class ContentExternal extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
         this.name = data.name;
-        this.url = data.url && new url_1.URL(data.url);
+        this.url = data.url && new URL(data.url);
     }
 }
 exports.ContentExternal = ContentExternal;

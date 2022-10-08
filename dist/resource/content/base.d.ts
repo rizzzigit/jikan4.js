@@ -1,8 +1,6 @@
-/// <reference types="node" />
 import { Client } from '../../core/client';
 import { BaseClass, BaseResource } from '../base';
 import { Image } from '../misc';
-import { URL } from 'url';
 export declare class ContentImage extends BaseClass {
     readonly jpg: Image;
     readonly webp: Image;

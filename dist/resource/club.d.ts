@@ -1,7 +1,5 @@
-/// <reference types="node" />
 import { Client } from '../core/client';
 import { BaseClass, BaseResource } from './base';
-import { URL } from 'url';
 export type ClubCategory = 'ActorsAndArtists' | 'Anime' | 'Characters' | 'CitiesAndNeighborhoods' | 'Companies' | 'Conventions' | 'Games' | 'Japan' | 'Manga' | 'Music' | 'Others' | 'Schools' | 'None' | 'Unknown';
 export type ClubType = 'Public' | 'Private' | 'Secret' | 'Unknown';
 export declare class Club extends BaseResource {

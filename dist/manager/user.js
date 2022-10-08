@@ -8,7 +8,6 @@ const base_1 = require("./base");
 const anime_1 = require("../resource/content/anime");
 const manga_1 = require("../resource/content/manga");
 const meta_1 = require("../resource/meta");
-const url_1 = require("url");
 class UserManager extends base_1.BaseManager {
     search(searchString, filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -106,7 +105,7 @@ class UserManager extends base_1.BaseManager {
     getExternal(username) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`users/${username}/external`);
-            return rawData ? rawData.map((data) => Object.assign(data, { url: new url_1.URL(data.url) })) : undefined;
+            return rawData ? rawData.map((data) => Object.assign(data, { url: new URL(data.url) })) : undefined;
         });
     }
 }

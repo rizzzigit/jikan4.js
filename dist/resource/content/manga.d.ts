@@ -1,10 +1,8 @@
-/// <reference types="node" />
 import { Client } from '../../core/client';
 import { BaseClass, BaseResource } from '../base';
 import { Content, ContentRelationType, ContentRelationGroup, ContentNews, ContentStatistics, ContentUserUpdate, ContentReviewScores, ContentReview, ContentExternal } from './base';
 import { PersonMeta, MagazineMeta, MangaGenreMeta, CharacterMeta, MangaMeta, AnimeMeta } from '../meta';
 import { Image } from '../misc';
-import { URL } from 'url';
 export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown';
 export type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished' | 'Unknown';
 export declare class MangaPublishInformation extends BaseClass {

@@ -1,10 +1,8 @@
 /// <reference types="node" />
 /// <reference types="node" />
-/// <reference types="node" />
 import HTTP from 'http';
 import HTTPS from 'https';
 import { Client } from '../core/client';
-import { URL } from 'url';
 import { CacheManager } from './cache';
 export interface APIRequestQuery {
     disableCaching?: string;
@@ -49,8 +47,8 @@ export declare class APIClient {
     }>;
     readonly cache?: CacheManager;
     readonly agent: {
-        http: HTTP.Agent;
-        https: HTTPS.Agent;
+        http?: HTTP.Agent;
+        https?: HTTPS.Agent;
     };
     /** @hidden */
     private newRequestInstance;

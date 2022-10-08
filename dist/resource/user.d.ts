@@ -1,5 +1,3 @@
-/// <reference types="node" />
-import { URL } from 'url';
 import { Client } from '../core/client';
 import { ContentImage } from '../resource/content/base';
 import { BaseClass } from './base';

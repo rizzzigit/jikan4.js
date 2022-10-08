@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserFull = exports.UserRecommendation = exports.UserFriend = exports.UserMangaHistory = exports.UserAnimeHistory = exports.UserContentUpdates = exports.UserMangaUpdate = exports.UserAnimeUpdate = exports.UserContentUpdate = exports.UserFavorites = exports.UserStats = exports.User = exports.UserMeta = void 0;
-const url_1 = require("url");
 const base_1 = require("../resource/content/base");
 const base_2 = require("./base");
 const meta_1 = require("./meta");
@@ -211,7 +210,7 @@ class UserFull extends User {
         var _a, _b, _c, _d;
         super(client, data);
         this.statistics = new UserStats(client, data.statistics);
-        this.external = data.external.map((data) => Object.assign(data, { url: new url_1.URL(data.url) }));
+        this.external = data.external.map((data) => Object.assign(data, { url: new URL(data.url) }));
         this.updates = {
             manga: ((_b = (_a = data.updates) === null || _a === void 0 ? void 0 : _a.manga) === null || _b === void 0 ? void 0 : _b.map((update) => new UserMangaUpdate(client, update))) || [],
             anime: ((_d = (_c = data.updates) === null || _c === void 0 ? void 0 : _c.anime) === null || _d === void 0 ? void 0 : _d.map((update) => new UserAnimeUpdate(client, update))) || []

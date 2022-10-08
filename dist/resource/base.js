@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseResource = exports.BaseClass = void 0;
-const url_1 = require("url");
 class BaseClass {
     static parseDate(input, nullable = false) {
         const date = new Date(input || '');
@@ -19,7 +18,7 @@ class BaseClass {
         let url = null;
         try {
             if (input) {
-                url = new url_1.URL(input);
+                url = new URL(input);
             }
         }
         catch (error) {

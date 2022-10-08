@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProducerFull = exports.Producer = void 0;
 const tslib_1 = require("tslib");
-const url_1 = require("url");
 const base_1 = require("./base");
 const base_2 = require("./content/base");
 class Producer extends base_1.BaseResource {
@@ -32,7 +31,7 @@ class ProducerFull extends Producer {
     constructor(client, data) {
         var _a;
         super(client, data);
-        this.external = ((_a = data.external) === null || _a === void 0 ? void 0 : _a.map((entry) => Object.assign(entry, { url: new url_1.URL(entry.url) }))) || [];
+        this.external = ((_a = data.external) === null || _a === void 0 ? void 0 : _a.map((entry) => Object.assign(entry, { url: new URL(entry.url) }))) || [];
     }
 }
 exports.ProducerFull = ProducerFull;

@@ -125,9 +125,15 @@ export class Client {
   /** @hidden */
   private static setOptions (options?: Partial<ClientOptions>): ClientOptions {
     const defaultOptions: ClientOptions = {
-      dataPath: ('__dirname' in global)
-        ? join(__dirname, '..', '..', '.Jikan')
-        : undefined,
+      dataPath: (() => {
+        try {
+          return ('__dirname' in global)
+            ? join(__dirname, '..', '..', '.Jikan')
+            : undefined
+        } catch {
+          return undefined
+        }
+      })(),
 
       host: 'api.jikan.moe',
       baseUri: 'v4',

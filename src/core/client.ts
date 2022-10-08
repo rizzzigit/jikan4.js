@@ -112,7 +112,7 @@ export interface ClientOptions {
   /**
    * Where to store cache from Jikan API
   */
-  dataPath: string
+  dataPath?: string
 }
 
 export interface ClientEvents {
@@ -125,7 +125,10 @@ export class Client {
   /** @hidden */
   private static setOptions (options?: Partial<ClientOptions>): ClientOptions {
     const defaultOptions: ClientOptions = {
-      dataPath: join(__dirname, '..', '..', '.Jikan'),
+      dataPath: ('__dirname' in global)
+        ? join(__dirname, '..', '..', '.Jikan')
+        : undefined,
+
       host: 'api.jikan.moe',
       baseUri: 'v4',
 

@@ -11,6 +11,10 @@ export class CacheManager {
   private get cacheDir () {
     const { client: { options: { dataPath } } } = this
 
+    if (dataPath == null) {
+      throw new Error('client.options.dataPath is not set')
+    }
+
     return join(dataPath, 'cache')
   }
 

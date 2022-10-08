@@ -82,7 +82,9 @@ export class APIClient {
   public constructor (client: Client) {
     this.client = client
     this.queue = []
-    this.cache = !client.options.disableCaching
+
+    const { options: { disableCaching, dataPath } } = client
+    this.cache = (!disableCaching) && (dataPath != null)
       ? new CacheManager(client)
       : undefined
 

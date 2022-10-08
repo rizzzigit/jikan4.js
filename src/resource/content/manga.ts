@@ -20,7 +20,6 @@ import {
   AnimeMeta
 } from '../meta'
 import { Image } from '../misc'
-import { URL } from 'url'
 import { mangaExplicitGenres } from '../../manager/genre'
 
 export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown'

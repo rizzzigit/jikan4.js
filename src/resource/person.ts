@@ -1,6 +1,5 @@
 import { Client } from '../core/client'
 import { BaseClass, BaseResource } from './base'
-import { URL } from 'url'
 import { AnimeMeta, CharacterMeta, MangaMeta } from './meta'
 import { Image } from './misc'
 

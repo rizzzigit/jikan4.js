@@ -1,6 +1,5 @@
 import { Client } from '../core/client'
 import { BaseClass, BaseResource } from './base'
-import { URL } from 'url'
 
 export type ClubCategory =
   | 'ActorsAndArtists'

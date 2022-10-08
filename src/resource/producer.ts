@@ -1,4 +1,3 @@
-import { URL } from 'url'
 import { Client } from '../core/client'
 import { BaseResource } from './base'
 import { ContentTitle, ContentImage, TitleArray } from './content/base'

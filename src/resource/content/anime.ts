@@ -20,7 +20,6 @@ import {
   AnimeMeta,
   MangaMeta
 } from '../meta'
-import { URL } from 'url'
 import ParseDuration from 'parse-duration'
 import { animeExplicitGenres } from '../../manager/genre'
 

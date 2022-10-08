@@ -1,7 +1,6 @@
 import { Client } from '../../core/client'
 import { BaseClass, BaseResource } from '../base'
 import { Image } from '../misc'
-import { URL } from 'url'
 
 export class ContentImage extends BaseClass {
   public readonly jpg: Image

@@ -1,7 +1,6 @@
 import { Client } from './client'
 import { dirname, join } from 'path'
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
-import { URL } from 'url'
 import { APIRequestData, APIRequestQuery, APIResponseData } from './api'
 
 export class CacheManager {

@@ -50,12 +50,6 @@ const run = async () => {
       const user = await client.users.getFull('fullbellydragon')
 
       return user?.updates
-    },
-
-    dataPath: async () => {
-      const client = new Client({})
-
-      console.log(await client.anime.get(5))
     }
   }
 

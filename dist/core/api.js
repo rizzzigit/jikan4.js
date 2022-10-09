@@ -7,14 +7,7 @@ const https_1 = tslib_1.__importDefault(require("https"));
 const path_1 = tslib_1.__importDefault(require("path"));
 const utils_1 = require("../utils");
 const cache_1 = require("./cache");
-const isBrowser = (() => {
-    try {
-        return process == null;
-    }
-    catch (_a) {
-        return true;
-    }
-})();
+const isBrowser = typeof window !== 'undefined';
 class APIResponseData {
     static parsePagination(url, paginationData) {
         const current = Number(url.searchParams.get('page')) || 1;
@@ -174,6 +167,24 @@ class APIClient {
             const { client: { options: { secure, requestTimeout, maxApiErrorRetry, retryOnApiError } }, cache } = this;
             const url = this.constructURL(requestData);
             const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true;
+            const processResponse = (responseData, resolve, reject) => {
+                if ([418, 200, 404].includes(responseData.status)) {
+                    if (cachingEnabled) {
+                        cache === null || cache === void 0 ? void 0 : cache.set(requestData, responseData);
+                    }
+                    resolve(responseData);
+                }
+                else if (responseData.status === 429) {
+                    reject(new APIError(Object.assign(responseData, {
+                        body: Object.assign(responseData.body, {
+                            error: 'Rate limited'
+                        })
+                    })));
+                }
+                else {
+                    reject(new APIError(responseData));
+                }
+            };
             const run = () => new Promise((resolve, reject) => {
                 if (cachingEnabled && (cache === null || cache === void 0 ? void 0 : cache.has(requestData))) {
                     return cache.get(requestData);
@@ -202,22 +213,7 @@ class APIClient {
                     }
                     const body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'));
                     const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body);
-                    if ([418, 200, 404].includes(responseData.status)) {
-                        if (cachingEnabled) {
-                            cache === null || cache === void 0 ? void 0 : cache.set(requestData, responseData);
-                        }
-                        resolve(responseData);
-                    }
-                    else if (responseData.status === 429) {
-                        reject(new APIError(Object.assign(responseData, {
-                            body: Object.assign(responseData.body, {
-                                error: 'Rate limited'
-                            })
-                        })));
-                    }
-                    else {
-                        reject(new APIError(responseData));
-                    }
+                    processResponse(responseData, resolve, reject);
                 }); });
                 request.end();
             });
@@ -227,10 +223,7 @@ class APIClient {
                 const request = new XMLHttpRequest();
                 request.open('GET', url);
                 request.timeout = requestTimeout;
-                // let errored = false
-                request.onerror = () => {
-                    // errored = true
-                };
+                request.onerror = () => { };
                 request.ontimeout = () => reject(new Error(`${requestTimeout} ms timeout`));
                 request.onloadend = () => {
                     const body = JSON.parse(request.responseText);
@@ -242,22 +235,7 @@ class APIClient {
                         }
                         return data;
                     })(), body);
-                    if ([418, 200, 404].includes(responseData.status)) {
-                        if (cachingEnabled) {
-                            cache === null || cache === void 0 ? void 0 : cache.set(requestData, responseData);
-                        }
-                        resolve(responseData);
-                    }
-                    else if (responseData.status === 429) {
-                        reject(new APIError(Object.assign(responseData, {
-                            body: Object.assign(responseData.body, {
-                                error: 'Rate limited'
-                            })
-                        })));
-                    }
-                    else {
-                        reject(new APIError(responseData));
-                    }
+                    processResponse(responseData, resolve, reject);
                 };
                 request.send(null);
             });

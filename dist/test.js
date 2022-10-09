@@ -40,10 +40,6 @@ const run = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
         fullUserUpdate: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const user = yield client.users.getFull('fullbellydragon');
             return user === null || user === void 0 ? void 0 : user.updates;
-        }),
-        dataPath: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-            const client = new Jikan_1.Client({});
-            console.log(yield client.anime.get(5));
         })
     };
     const funcKey = process.argv[2];

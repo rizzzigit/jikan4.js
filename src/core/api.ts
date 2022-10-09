@@ -6,13 +6,7 @@ import { Client } from '../core/client'
 import { waitUntil } from '../utils'
 import { CacheManager } from './cache'
 
-const isBrowser = (() => {
-  try {
-    return process == null
-  } catch {
-    return true
-  }
-})()
+const isBrowser = typeof window !== 'undefined'
 
 export interface APIRequestQuery {
   disableCaching?: string
@@ -248,6 +242,24 @@ export class APIClient {
     const url = this.constructURL(requestData)
     const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true
 
+    const processResponse = (responseData: APIResponseData, resolve: (responseData: APIResponseData) => void, reject: (reason: any) => void) => {
+      if ([418, 200, 404].includes(responseData.status)) {
+        if (cachingEnabled) {
+          cache?.set(requestData, responseData)
+        }
+
+        resolve(responseData)
+      } else if (responseData.status === 429) {
+        reject(new APIError(Object.assign(responseData, {
+          body: Object.assign(responseData.body, {
+            error: 'Rate limited'
+          })
+        })))
+      } else {
+        reject(new APIError(responseData))
+      }
+    }
+
     const run = () => new Promise<APIResponseData>((resolve, reject) => {
       if (cachingEnabled && cache?.has(requestData)) {
         return cache.get(requestData)
@@ -269,21 +281,7 @@ export class APIClient {
         const body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'))
         const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body)
 
-        if ([418, 200, 404].includes(responseData.status)) {
-          if (cachingEnabled) {
-            cache?.set(requestData, responseData)
-          }
-
-          resolve(responseData)
-        } else if (responseData.status === 429) {
-          reject(new APIError(Object.assign(responseData, {
-            body: Object.assign(responseData.body, {
-              error: 'Rate limited'
-            })
-          })))
-        } else {
-          reject(new APIError(responseData))
-        }
+        processResponse(responseData, resolve, reject)
       })
 
       request.end()
@@ -298,10 +296,7 @@ export class APIClient {
       request.open('GET', url)
       request.timeout = requestTimeout
 
-      // let errored = false
-      request.onerror = () => {
-        // errored = true
-      }
+      request.onerror = () => {}
       request.ontimeout = () => reject(new Error(`${requestTimeout} ms timeout`))
       request.onloadend = () => {
         const body = JSON.parse(request.responseText)
@@ -316,21 +311,7 @@ export class APIClient {
           return data
         })(), body)
 
-        if ([418, 200, 404].includes(responseData.status)) {
-          if (cachingEnabled) {
-            cache?.set(requestData, responseData)
-          }
-
-          resolve(responseData)
-        } else if (responseData.status === 429) {
-          reject(new APIError(Object.assign(responseData, {
-            body: Object.assign(responseData.body, {
-              error: 'Rate limited'
-            })
-          })))
-        } else {
-          reject(new APIError(responseData))
-        }
+        processResponse(responseData, resolve, reject)
       }
 
       request.send(null)

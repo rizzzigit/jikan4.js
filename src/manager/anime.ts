@@ -51,7 +51,7 @@ export interface AnimeSearchFilter {
 
 export interface TopAnimeFilter {
   type: 'tv' | 'movie' | 'ova' | 'special' | 'ona' | 'music'
-  filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite'
+  filter: 'airing' | 'upcoming' | 'bypopularity' | 'favorite'
 }
 
 export class AnimeManager extends BaseManager {

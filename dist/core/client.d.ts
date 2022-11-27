@@ -102,7 +102,7 @@ export interface ClientOptions {
 export interface ClientEvents extends EventInterface {
     debug: [scope: string, message: string];
 }
-export type ClientEventNames = keyof ClientEvents;
+export declare type ClientEventNames = keyof ClientEvents;
 export declare class Client {
     /** @hidden */
     private static setOptions;

@@ -6,6 +6,13 @@ const base_2 = require("./base");
 const meta_1 = require("../meta");
 const genre_1 = require("../../manager/genre");
 class MangaPublishInformation extends base_1.BaseClass {
+    constructor(client, data) {
+        super(client);
+        this.status = MangaPublishInformation.parseMangaPublishStatus(data.status);
+        this.publishing = !!data.publishing;
+        this.publishedFrom = MangaPublishInformation.parseDate(data.published.from, true);
+        this.publishedTo = MangaPublishInformation.parseDate(data.published.to, true);
+    }
     /** @hidden */
     static parseMangaPublishStatus(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
@@ -17,16 +24,23 @@ class MangaPublishInformation extends base_1.BaseClass {
             default: return 'Unknown';
         }
     }
-    constructor(client, data) {
-        super(client);
-        this.status = MangaPublishInformation.parseMangaPublishStatus(data.status);
-        this.publishing = !!data.publishing;
-        this.publishedFrom = MangaPublishInformation.parseDate(data.published.from, true);
-        this.publishedTo = MangaPublishInformation.parseDate(data.published.to, true);
-    }
 }
 exports.MangaPublishInformation = MangaPublishInformation;
 class Manga extends base_2.Content {
+    constructor(client, data) {
+        var _a, _b, _c, _d, _e, _f;
+        super(client, data);
+        this.type = Manga.parseType(data.type);
+        this.chapters = data.chapters;
+        this.volumes = data.volumes;
+        this.publishInfo = new MangaPublishInformation(client, data);
+        this.authors = ((_a = data.authors) === null || _a === void 0 ? void 0 : _a.map((author) => new meta_1.PersonMeta(this.client, author))) || [];
+        this.serializations = ((_b = data.serializations) === null || _b === void 0 ? void 0 : _b.map((serialization) => new meta_1.MagazineMeta(this.client, serialization))) || [];
+        this.genres = ((_c = data.genres) === null || _c === void 0 ? void 0 : _c.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Genre'))) || [];
+        this.explicitGenres = ((_d = data.explicit_genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Explicit'))) || [];
+        this.demographics = ((_e = data.demographics) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Demographic'))) || [];
+        this.themes = ((_f = data.themes) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Theme'))) || [];
+    }
     /** @hidden */
     static parseType(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
@@ -77,20 +91,6 @@ class Manga extends base_2.Content {
     }
     getFull() {
         return this.client.manga.getFull(this.id);
-    }
-    constructor(client, data) {
-        var _a, _b, _c, _d, _e, _f;
-        super(client, data);
-        this.type = Manga.parseType(data.type);
-        this.chapters = data.chapters;
-        this.volumes = data.volumes;
-        this.publishInfo = new MangaPublishInformation(client, data);
-        this.authors = ((_a = data.authors) === null || _a === void 0 ? void 0 : _a.map((author) => new meta_1.PersonMeta(this.client, author))) || [];
-        this.serializations = ((_b = data.serializations) === null || _b === void 0 ? void 0 : _b.map((serialization) => new meta_1.MagazineMeta(this.client, serialization))) || [];
-        this.genres = ((_c = data.genres) === null || _c === void 0 ? void 0 : _c.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Genre'))) || [];
-        this.explicitGenres = ((_d = data.explicit_genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Explicit'))) || [];
-        this.demographics = ((_e = data.demographics) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Demographic'))) || [];
-        this.themes = ((_f = data.themes) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.MangaGenreMeta(this.client, genre, 'Theme'))) || [];
     }
 }
 exports.Manga = Manga;

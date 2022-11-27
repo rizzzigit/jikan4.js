@@ -2,6 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseResource = exports.BaseClass = void 0;
 class BaseClass {
+    constructor(client) {
+        this.client = client;
+        Object.defineProperty(this, 'client', { enumerable: false, value: client });
+    }
     static parseDate(input, nullable = false) {
         const date = new Date(input || '');
         if (Number.isNaN(date.getTime())) {
@@ -34,10 +38,6 @@ class BaseClass {
         else {
             return url;
         }
-    }
-    constructor(client) {
-        this.client = client;
-        Object.defineProperty(this, 'client', { enumerable: false, value: client });
     }
 }
 exports.BaseClass = BaseClass;

@@ -12,9 +12,6 @@ class ContentImage extends base_1.BaseClass {
 }
 exports.ContentImage = ContentImage;
 class ContentTitle extends base_1.BaseClass {
-    toString() {
-        return this.default;
-    }
     constructor(client, data) {
         super(client);
         this.synonyms = [];
@@ -53,6 +50,9 @@ class ContentTitle extends base_1.BaseClass {
                     break;
             }
         }
+    }
+    toString() {
+        return this.default;
     }
 }
 exports.ContentTitle = ContentTitle;
@@ -153,6 +153,10 @@ class ContentUserUpdate extends base_1.BaseClass {
 }
 exports.ContentUserUpdate = ContentUserUpdate;
 class ContentRelationGroup extends base_1.BaseClass {
+    constructor(client, relation, data) {
+        super(client);
+        this.relation = relation;
+    }
     /** @hidden */
     static parseRelation(data) {
         switch ((data === null || data === void 0 ? void 0 : data.toLowerCase().trim()) || 'any') {
@@ -170,10 +174,6 @@ class ContentRelationGroup extends base_1.BaseClass {
             case 'parent story': return 'ParentStory';
             default: return 'Unknown';
         }
-    }
-    constructor(client, relation, data) {
-        super(client);
-        this.relation = relation;
     }
 }
 exports.ContentRelationGroup = ContentRelationGroup;

@@ -4,6 +4,13 @@ exports.HeartBeatMonitor = exports.HeartBeat = void 0;
 const tslib_1 = require("tslib");
 const base_1 = require("../resource/base");
 class HeartBeat extends base_1.BaseClass {
+    constructor(client, data) {
+        super(client);
+        this.status = HeartBeat.parseStatus(data.status);
+        this.score = data.score;
+        this.down = !!data.down;
+        this.lastDowntime = data.last_downtime ? new Date(data.last_downtime) : null;
+    }
     static parseStatus(data) {
         switch ((data === null || data === void 0 ? void 0 : data.toLowerCase().trim()) || '') {
             case 'healthy': return 'Healthy';
@@ -12,16 +19,13 @@ class HeartBeat extends base_1.BaseClass {
             default: throw new Error(`Unknown status: ${data}`);
         }
     }
-    constructor(client, data) {
-        super(client);
-        this.status = HeartBeat.parseStatus(data.status);
-        this.score = data.score;
-        this.down = !!data.down;
-        this.lastDowntime = data.last_downtime ? new Date(data.last_downtime) : null;
-    }
 }
 exports.HeartBeat = HeartBeat;
 class HeartBeatMonitor extends base_1.BaseClass {
+    constructor(client) {
+        super(client);
+        this.APIClient = client.APIClient;
+    }
     check() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const { APIClient, client } = this;
@@ -34,10 +38,6 @@ class HeartBeatMonitor extends base_1.BaseClass {
                 return new HeartBeat(client, heartBeat);
             }
         });
-    }
-    constructor(client) {
-        super(client);
-        this.APIClient = client.APIClient;
     }
 }
 exports.HeartBeatMonitor = HeartBeatMonitor;

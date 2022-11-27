@@ -5,9 +5,6 @@ const base_1 = require("./base");
 const meta_1 = require("./meta");
 const misc_1 = require("./misc");
 class PersonName extends base_1.BaseClass {
-    toString() {
-        return this.name;
-    }
     constructor(client, data) {
         var _a;
         super(client);
@@ -16,9 +13,22 @@ class PersonName extends base_1.BaseClass {
         this.family = data.faimly_name || null;
         this.alternate = ((_a = data.alternate_names) === null || _a === void 0 ? void 0 : _a.map((alternate) => alternate || null).filter((alternate) => !!alternate)) || [];
     }
+    toString() {
+        return this.name;
+    }
 }
 exports.PersonName = PersonName;
 class Person extends base_1.BaseResource {
+    constructor(client, data) {
+        var _a;
+        super(client, data);
+        this.websiteUrl = Person.parseURL(data.website_url, true);
+        this.image = new misc_1.Image(client, (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
+        this.name = new PersonName(client, data);
+        this.birth = Person.parseDate(data.birthday, true);
+        this.favorites = data.favorites;
+        this.about = data.about || null;
+    }
     getAnime() {
         return this.client.people.getAnime(this.id);
     }
@@ -33,16 +43,6 @@ class Person extends base_1.BaseResource {
     }
     getFull() {
         return this.client.people.getFull(this.id);
-    }
-    constructor(client, data) {
-        var _a;
-        super(client, data);
-        this.websiteUrl = Person.parseURL(data.website_url, true);
-        this.image = new misc_1.Image(client, (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
-        this.name = new PersonName(client, data);
-        this.birth = Person.parseDate(data.birthday, true);
-        this.favorites = data.favorites;
-        this.about = data.about || null;
     }
 }
 exports.Person = Person;

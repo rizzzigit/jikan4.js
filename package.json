@@ -16,9 +16,9 @@
     ]
   },
   "scripts": {
-    "build-docs": "typedoc ./src/index.ts",
+    "build-docs": "npx typedoc ./src/index.ts",
     "build": "npx rimraf ./dist; tsc",
-    "lint": "eslint ./src/**/*.ts --fix",
+    "lint": "npx eslint ./src/**/*.ts --fix",
     "test": "node dist/test"
   },
   "repository": {

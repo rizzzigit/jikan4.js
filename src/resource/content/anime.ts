@@ -6,7 +6,7 @@ import {
   ContentStatistics,
   ContentNews,
   ContentUserUpdate,
-  ContentReviewScores,
+  ContentReactions,
   ContentReview,
   ContentExternal
 } from './base'
@@ -436,27 +436,15 @@ export class AnimeUserUpdate extends ContentUserUpdate {
   }
 }
 
-export class AnimeReviewScores extends ContentReviewScores {
-  public readonly animation: number
-  public readonly sound: number
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.animation = data.animation
-    this.sound = data.sound
-  }
-}
-
 export class AnimeReview extends ContentReview {
   public readonly episodesWatched: number
-  public readonly scores: AnimeReviewScores
+  public readonly reactions: ContentReactions
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
     this.episodesWatched = data.episodes_watched
-    this.scores = new AnimeReviewScores(client, data.scores)
+    this.reactions = new ContentReactions(client, data.reactions)
   }
 }
 

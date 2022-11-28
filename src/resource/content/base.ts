@@ -183,7 +183,7 @@ export class ContentUser extends BaseClass {
   }
 }
 
-export class ContentReviewScores extends BaseClass {
+export class ContentReactions extends BaseClass {
   public readonly overall: number
   public readonly story: number
   public readonly character: number
@@ -204,7 +204,7 @@ export class ContentReview extends BaseResource {
   public readonly votes: number
   public readonly date: Date
   public readonly review: string
-  public readonly scores: ContentReviewScores
+  public readonly reactions: ContentReactions
   public readonly user: ContentUser
 
   public constructor (client: Client, data: any) {
@@ -214,7 +214,7 @@ export class ContentReview extends BaseResource {
     this.votes = data.votes
     this.date = new Date(data.date)
     this.review = data.review
-    this.scores = new ContentReviewScores(client, data.scores)
+    this.reactions = new ContentReactions(client, data.reactions)
     this.user = new ContentUser(client, data.user)
   }
 }

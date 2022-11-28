@@ -206,6 +206,9 @@ export class ContentReview extends BaseResource {
   public readonly review: string
   public readonly reactions: ContentReactions
   public readonly user: ContentUser
+  public readonly isSpoiler: boolean
+  public readonly isPreliminary: boolean
+  public readonly tags: Array<string>
 
   public constructor (client: Client, data: any) {
     super(client, data)
@@ -216,6 +219,9 @@ export class ContentReview extends BaseResource {
     this.review = data.review
     this.reactions = new ContentReactions(client, data.reactions)
     this.user = new ContentUser(client, data.user)
+    this.isSpoiler = data.is_spoiler
+    this.isPreliminary = data.is_preliminary
+    this.tags = data.tags
   }
 }
 

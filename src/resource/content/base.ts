@@ -185,17 +185,25 @@ export class ContentUser extends BaseClass {
 
 export class ContentReactions extends BaseClass {
   public readonly overall: number
-  public readonly story: number
-  public readonly character: number
-  public readonly enjoyment: number
+  public readonly nice: number
+  public readonly loveIt: number
+  public readonly funny: number
+  public readonly confusing: number
+  public readonly informative: number
+  public readonly wellWritten: number
+  public readonly creative: number
 
   public constructor (client: Client, data: any) {
     super(client)
 
     this.overall = data.overall
-    this.story = data.story
-    this.character = data.character
-    this.enjoyment = data.enjoyment
+    this.nice = data.nice
+    this.loveIt = data.love_it
+    this.funny = data.funny
+    this.confusing = data.confusing
+    this.informative = data.informative
+    this.wellWritten = data.well_written
+    this.creative = data.creative
   }
 }
 

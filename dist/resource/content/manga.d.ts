@@ -1,6 +1,6 @@
 import { Client } from '../../core/client';
 import { BaseClass, BaseResource } from '../base';
-import { Content, ContentRelationType, ContentRelationGroup, ContentNews, ContentStatistics, ContentUserUpdate, ContentReviewScores, ContentReview, ContentExternal } from './base';
+import { Content, ContentRelationType, ContentRelationGroup, ContentNews, ContentStatistics, ContentUserUpdate, ContentReactions, ContentReview, ContentExternal } from './base';
 import { PersonMeta, MagazineMeta, MangaGenreMeta, CharacterMeta, MangaMeta, AnimeMeta } from '../meta';
 import { Image } from '../misc';
 export declare type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown';
@@ -72,13 +72,9 @@ export declare class MangaUserUpdate extends ContentUserUpdate {
     readonly chaptersTotal: number;
     constructor(client: Client, data: any);
 }
-export declare class MangaReviewScores extends ContentReviewScores {
-    readonly art: number;
-    constructor(client: Client, data: any);
-}
 export declare class MangaReview extends ContentReview {
     readonly chaptersRead: number;
-    readonly scores: MangaReviewScores;
+    readonly reactions: ContentReactions;
     constructor(client: Client, data: any);
 }
 export declare class MangaRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {

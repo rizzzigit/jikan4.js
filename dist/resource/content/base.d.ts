@@ -67,11 +67,15 @@ export declare class ContentUser extends BaseClass {
     readonly imageUrl: URL | null;
     constructor(client: Client, data: any);
 }
-export declare class ContentReviewScores extends BaseClass {
+export declare class ContentReactions extends BaseClass {
     readonly overall: number;
-    readonly story: number;
-    readonly character: number;
-    readonly enjoyment: number;
+    readonly nice: number;
+    readonly loveIt: number;
+    readonly funny: number;
+    readonly confusing: number;
+    readonly informative: number;
+    readonly wellWritten: number;
+    readonly creative: number;
     constructor(client: Client, data: any);
 }
 export declare class ContentReview extends BaseResource {
@@ -79,8 +83,11 @@ export declare class ContentReview extends BaseResource {
     readonly votes: number;
     readonly date: Date;
     readonly review: string;
-    readonly scores: ContentReviewScores;
+    readonly reactions: ContentReactions;
     readonly user: ContentUser;
+    readonly isSpoiler: boolean;
+    readonly isPreliminary: boolean;
+    readonly tags: Array<string>;
     constructor(client: Client, data: any);
 }
 export declare class ContentUserUpdate extends BaseClass {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeReviewScores = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeMusicVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
+exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeMusicVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
 const tslib_1 = require("tslib");
 const base_1 = require("./base");
 const base_2 = require("../base");
@@ -288,19 +288,11 @@ class AnimeUserUpdate extends base_1.ContentUserUpdate {
     }
 }
 exports.AnimeUserUpdate = AnimeUserUpdate;
-class AnimeReviewScores extends base_1.ContentReviewScores {
-    constructor(client, data) {
-        super(client, data);
-        this.animation = data.animation;
-        this.sound = data.sound;
-    }
-}
-exports.AnimeReviewScores = AnimeReviewScores;
 class AnimeReview extends base_1.ContentReview {
     constructor(client, data) {
         super(client, data);
         this.episodesWatched = data.episodes_watched;
-        this.scores = new AnimeReviewScores(client, data.scores);
+        this.reactions = new base_1.ContentReactions(client, data.reactions);
     }
 }
 exports.AnimeReview = AnimeReview;

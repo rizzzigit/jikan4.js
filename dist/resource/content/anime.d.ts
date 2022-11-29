@@ -1,5 +1,5 @@
 import { Client } from '../../core/client';
-import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReviewScores, ContentReview, ContentExternal } from './base';
+import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReactions, ContentReview, ContentExternal } from './base';
 import { BaseClass, BaseResource } from '../base';
 import { YoutubeVideo, Image, Link } from '../misc';
 import { ProducerMeta, AnimeGenreMeta, PersonMeta, CharacterMeta, AnimeMeta, MangaMeta } from '../meta';
@@ -155,14 +155,9 @@ export declare class AnimeUserUpdate extends ContentUserUpdate {
     readonly episodesTotal: number;
     constructor(client: Client, data: any);
 }
-export declare class AnimeReviewScores extends ContentReviewScores {
-    readonly animation: number;
-    readonly sound: number;
-    constructor(client: Client, data: any);
-}
 export declare class AnimeReview extends ContentReview {
     readonly episodesWatched: number;
-    readonly scores: AnimeReviewScores;
+    readonly reactions: ContentReactions;
     constructor(client: Client, data: any);
 }
 export declare class AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {

@@ -9,8 +9,8 @@ export class ContentImage extends BaseClass {
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.jpg = new Image(client, data?.jpg)
-    this.webp = new Image(client, data?.webp)
+    this.jpg = ContentImage.parseImage(data?.jpg)
+    this.webp = ContentImage.parseImage(data?.webp)
   }
 }
 
@@ -82,6 +82,124 @@ export type TitleArray = Array<{
 }>
 
 export class Content extends BaseResource {
+  public static parseStatisticsScore (data: any): ContentStatisticsScore {
+    return {
+      score: data.score,
+      votes: data.votes,
+      percentage: data.percentage
+    }
+  }
+
+  /** @hidden */
+  public static parseStatistics (data: any): ContentStatistics {
+    return {
+      completed: data.completed,
+      onHold: data.on_hold,
+      dropped: data.dropped,
+      total: data.total,
+      scores: data.scores?.map((score: any) => this.parseStatisticsScore(score))
+    }
+  }
+
+  /** @hidden */
+  public static parseUserUpdate (data: any): ContentUserUpdate {
+    return {
+      user: this.parseUser(data.user),
+      score: data.score,
+      status: data.status,
+      date: new Date(data.date)
+    }
+  }
+
+  /** @hidden */
+  public static parseUser (data: any): ContentUser {
+    return {
+      username: data.username,
+      url: data.url,
+      imageUrl: Content.parseURL(data.images?.jpg?.image_url, true)
+    }
+  }
+
+  /** @hidden */
+  public static parseReview (data: any): ContentReview {
+    return {
+      id: data.mal_id,
+      url: Content.parseURL(data.url),
+      type: data.type,
+      votes: data.votes,
+      date: new Date(data.date),
+      review: data.review,
+      reactions: this.parseReactions(data.reactions),
+      user: this.parseUser(data.user),
+      isSpoiler: data.is_spoiler,
+      isPreliminary: data.is_preliminary,
+      tags: data.tags
+    }
+  }
+
+  /** @hidden */
+  public static parseNews (data: any): ContentNews {
+    return {
+      id: data.mal_id,
+      url: data.url,
+      title: data.title,
+      date: new Date(data.date),
+      authorUsername: data.author_username,
+      authorURL: this.parseURL(data.author_url),
+      forumURL: this.parseURL(data.forum_url),
+      imageURL: this.parseURL(data.data.images?.jpg?.image_url, true),
+      comments: data.comments,
+      excerpt: data.excerpt
+    }
+  }
+
+  /** @hidden */
+  public static parseReactions (data: any): ContentReactions {
+    return {
+      overall: data.overall,
+      nice: data.nice,
+      loveIt: data.love_it,
+      funny: data.funny,
+      confusing: data.confusing,
+      informative: data.informative,
+      wellWritten: data.well_written,
+      creative: data.creative
+    }
+  }
+
+  /** @hidden */
+  public static parseRelationType (data: any): ContentRelationType {
+    switch (data?.toLowerCase().trim() || 'any') {
+      case 'adaptation': return 'Adaptation'
+      case 'side story': return 'SideStory'
+      case 'summary': return 'Summary'
+      case 'sequel': return 'Sequel'
+      case 'prequel': return 'Prequel'
+      case 'character': return 'Character'
+      case 'other': return 'Other'
+      case 'alternative setting': return 'AlternativeSetting'
+      case 'alternative version': return 'AlternativeVersion'
+      case 'spin-off': return 'SpinOff'
+      case 'full story': return 'FullStory'
+      case 'parent story': return 'ParentStory'
+
+      default: return 'Unknown'
+    }
+  }
+
+  /** @hidden */
+  public static parseRelationGroup <T extends ContentRelationType> (client: Client, relation: T, data: any): ContentRelationGroup<T> {
+    return { relation }
+  }
+
+  /** @hidden */
+  public static parseExternal (data: any): ContentExternal {
+    return {
+      name: data.name,
+      url: this.parseURL(data.url, true)
+    }
+  }
+
   public readonly image: ContentImage
   public readonly title: ContentTitle
   public readonly titles: TitleArray
@@ -113,184 +231,80 @@ export class Content extends BaseResource {
   }
 }
 
-export class ContentStatisticsScore extends BaseClass {
-  public readonly score: number
-  public readonly votes: number
-  public readonly percentage: number
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.score = data.score
-    this.votes = data.votes
-    this.percentage = data.percentage
-  }
+export interface ContentStatisticsScore {
+  readonly score: number
+  readonly votes: number
+  readonly percentage: number
 }
 
-export class ContentStatistics extends BaseClass {
-  public readonly completed: number
-  public readonly onHold: number
-  public readonly dropped: number
-  public readonly total: number
-  public readonly scores: ContentStatisticsScore
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.completed = data.completed
-    this.onHold = data.on_hold
-    this.dropped = data.dropped
-    this.total = data.total
-    this.scores = data.scores?.map((score: any) => new ContentStatisticsScore(client, score)) || []
-  }
+export interface ContentStatistics {
+  readonly completed: number
+  readonly onHold: number
+  readonly dropped: number
+  readonly total: number
+  readonly scores: ContentStatisticsScore
 }
 
-export class ContentNews extends BaseResource {
-  public readonly title: string
-  public readonly date: Date
-  public readonly authorUsername: string
-  public readonly authorURL: URL
-  public readonly forumURL: URL
-  public readonly imageURL: URL | null
-  public readonly comments: number
-  public readonly excerpt: string
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.title = data.title
-    this.date = new Date(data.date)
-    this.authorUsername = data.author_username
-    this.authorURL = ContentNews.parseURL(data.author_url)
-    this.forumURL = ContentNews.parseURL(data.forum_url)
-    this.imageURL = ContentNews.parseURL(data.images?.jpg?.image_url, true)
-    this.comments = data.comments
-    this.excerpt = data.excerpt
-  }
+export interface ContentNews {
+  readonly id: number
+  readonly url: string
+  readonly title: string
+  readonly date: Date
+  readonly authorUsername: string
+  readonly authorURL: string
+  readonly forumURL: string
+  readonly imageURL: string | null
+  readonly comments: number
+  readonly excerpt: string
 }
 
-export class ContentUser extends BaseClass {
-  public readonly username: string
-  public readonly url: URL
-  public readonly imageUrl: URL | null
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.username = data.username
-    this.url = ContentUser.parseURL(data.url)
-    this.imageUrl = ContentUser.parseURL(data.images?.jpg?.image_url, true)
-  }
+export interface ContentUser {
+  readonly username: string
+  readonly url: string
+  readonly imageUrl: string | null
 }
 
-export class ContentReactions extends BaseClass {
-  public readonly overall: number
-  public readonly nice: number
-  public readonly loveIt: number
-  public readonly funny: number
-  public readonly confusing: number
-  public readonly informative: number
-  public readonly wellWritten: number
-  public readonly creative: number
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.overall = data.overall
-    this.nice = data.nice
-    this.loveIt = data.love_it
-    this.funny = data.funny
-    this.confusing = data.confusing
-    this.informative = data.informative
-    this.wellWritten = data.well_written
-    this.creative = data.creative
-  }
+export interface ContentReactions {
+  readonly overall: number
+  readonly nice: number
+  readonly loveIt: number
+  readonly funny: number
+  readonly confusing: number
+  readonly informative: number
+  readonly wellWritten: number
+  readonly creative: number
 }
 
-export class ContentReview extends BaseResource {
-  public readonly type: string
-  public readonly votes: number
-  public readonly date: Date
-  public readonly review: string
-  public readonly reactions: ContentReactions
-  public readonly user: ContentUser
-  public readonly isSpoiler: boolean
-  public readonly isPreliminary: boolean
-  public readonly tags: Array<string>
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.type = data.type
-    this.votes = data.votes
-    this.date = new Date(data.date)
-    this.review = data.review
-    this.reactions = new ContentReactions(client, data.reactions)
-    this.user = new ContentUser(client, data.user)
-    this.isSpoiler = data.is_spoiler
-    this.isPreliminary = data.is_preliminary
-    this.tags = data.tags
-  }
+export interface ContentReview {
+  readonly id: number
+  readonly url: string
+  readonly type: string
+  readonly votes: number
+  readonly date: Date
+  readonly review: string
+  readonly reactions: ContentReactions
+  readonly user: ContentUser
+  readonly isSpoiler: boolean
+  readonly isPreliminary: boolean
+  readonly tags: Array<string>
 }
 
-export class ContentUserUpdate extends BaseClass {
-  public readonly user: ContentUser
-  public readonly score: number
-  public readonly status: string
-  public readonly date: Date
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.user = new ContentUser(client, data.user)
-    this.score = data.score
-    this.status = data.status
-    this.date = new Date(data.date)
-  }
+export interface ContentUserUpdate {
+  readonly user: ContentUser
+  readonly score: number
+  readonly status: string
+  readonly date: Date
 }
 
 export type ContentRelationType =
   'Adaptation' | 'SideStory' | 'Summary' | 'Sequel' | 'Prequel' | 'Character' | 'Other' |
   'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory' | 'Unknown'
 
-export class ContentRelationGroup <T extends ContentRelationType> extends BaseClass {
-  /** @hidden */
-  public static parseRelation (data: any): ContentRelationType {
-    switch (data?.toLowerCase().trim() || 'any') {
-      case 'adaptation': return 'Adaptation'
-      case 'side story': return 'SideStory'
-      case 'summary': return 'Summary'
-      case 'sequel': return 'Sequel'
-      case 'prequel': return 'Prequel'
-      case 'character': return 'Character'
-      case 'other': return 'Other'
-      case 'alternative setting': return 'AlternativeSetting'
-      case 'alternative version': return 'AlternativeVersion'
-      case 'spin-off': return 'SpinOff'
-      case 'full story': return 'FullStory'
-      case 'parent story': return 'ParentStory'
-
-      default: return 'Unknown'
-    }
-  }
-
-  public readonly relation: T
-
-  public constructor (client: Client, relation: T, data: any) {
-    super(client)
-
-    this.relation = relation
-  }
+export interface ContentRelationGroup <T extends ContentRelationType> {
+  readonly relation: T
 }
 
-export class ContentExternal extends BaseClass {
-  public readonly name: string
-  public readonly url: URL
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.name = data.name
-    this.url = data.url && new URL(data.url)
-  }
+export interface ContentExternal {
+  readonly name: string
+  readonly url: string | null
 }

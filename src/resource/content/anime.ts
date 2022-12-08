@@ -10,7 +10,6 @@ import {
   ContentReview,
   ContentExternal
 } from './base'
-import { BaseClass, BaseResource } from '../base'
 import { YoutubeVideo, Image, Link } from '../misc'
 import {
   ProducerMeta,
@@ -28,9 +27,26 @@ export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unkn
 export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown'
 export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown'
 
-export class AnimeAirInformation extends BaseClass {
+export interface AnimeAirInformation {
+  readonly status: AnimeAirStatus
+  readonly airing: boolean
+  readonly airedFrom: Date | null
+  readonly airedTo: Date | null
+}
+
+export class Anime extends Content {
   /** @hidden */
-  public static parseStatus (input: any): AnimeAirStatus {
+  public static parseAirInfo (data: any): AnimeAirInformation {
+    return {
+      status: this.parseAirInfoStatus(data.status),
+      airing: data.airing,
+      airedFrom: this.parseDate(data.aired.from, true),
+      airedTo: this.parseDate(data.aired.to, true)
+    }
+  }
+
+  /** @hidden */
+  public static parseAirInfoStatus (input: any): AnimeAirStatus {
     const status = input?.toLowerCase().trim()
 
     switch (status) {
@@ -42,22 +58,6 @@ export class AnimeAirInformation extends BaseClass {
     }
   }
 
-  public readonly status: AnimeAirStatus
-  public readonly airing: boolean
-  public readonly airedFrom: Date | null
-  public readonly airedTo: Date | null
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.status = AnimeAirInformation.parseStatus(data.status)
-    this.airing = !!data.airing
-    this.airedFrom = AnimeAirInformation.parseDate(data.aired.from, true)
-    this.airedTo = AnimeAirInformation.parseDate(data.aired.to, true)
-  }
-}
-
-export class Anime extends Content {
   /** @hidden */
   public static parseType (input: any): AnimeType {
     switch (input?.toLowerCase().trim()) {
@@ -103,11 +103,177 @@ export class Anime extends Content {
     }
   }
 
+  /** @hidden */
+  public static parseVoiceActorReference (client: Client, data: any): AnimeVoiceActorReference {
+    return {
+      language: data.language,
+      person: new PersonMeta(client, data.person)
+    }
+  }
+
+  /** @hidden */
+  public static parseCharacterReference (client: Client, data: any): AnimeCharacterReference {
+    return {
+      role: data.role,
+      character: new CharacterMeta(client, data.character),
+      voiceActors: data.voice_actors?.map((entry: any) => this.parseVoiceActorReference(client, entry))
+    }
+  }
+
+  /** @hidden */
+  public static parseStaffReference (client: Client, data: any): AnimeStaffReference {
+    return {
+      positions: data.positions.filter((position: any) => !!position),
+      person: new PersonMeta(client, data.person)
+    }
+  }
+
+  /** @hidden */
+  public static parseEpisodeTitle (data: any): AnimeEpisodeTitle {
+    return {
+      default: data.title,
+      japanese: data.japanese || null,
+      romanji: data.romanji || null,
+
+      toString: () => data.title
+    }
+  }
+
+  /** @hidden */
+  public static parseEpisode (data: any): AnimeEpisode {
+    return {
+      animeId: data.animeId,
+      episodeId: data.mal_id,
+      URL: Anime.parseURL(data.url, true),
+      title: Anime.parseEpisodeTitle(data),
+      duration: data.duration || null,
+      aired: data.aired ? new Date(data.aired) : null,
+      filler: data.filler,
+      recap: data.recap,
+      synopsis: data.synopsis || null
+    }
+  }
+
+  /** @hidden */
+  public static parsePartialEpisode (data: any): AnimePartialEpisode {
+    return Object.assign(this.parseEpisode(data), {
+      synopsis: null,
+      forumUrl: Anime.parseURL(data.forum_url, true)
+    })
+  }
+
+  /** @hidden */
+  public static parseTopc (data: any): AnimeTopic {
+    return {
+      id: data.mal_id,
+      url: Anime.parseURL(data.url),
+      title: data.title,
+      date: new Date(data.date),
+      authorUsername: data.author_username,
+      authorURL: data.author_url,
+      comments: data.comments
+    }
+  }
+
+  /** @hidden */
+  public static parsePromo (data: any): AnimePromo {
+    return {
+      title: data.title,
+      trailer: Anime.parseYoutubeVideo(data.trailer)
+    }
+  }
+
+  /** @hidden */
+  public static parseEpisodeVideo (data: any): AnimeEpisodeVideo {
+    return {
+      id: data.mal_id,
+      url: data.url,
+      title: data.title,
+      episode: typeof (data.episode) === 'string' ? Number(data.episode.toLowerCase().split('episode')[1]?.trim()) || 0 : 0,
+      imageURL: Anime.parseURL(data.images?.jpg?.image_url, true)
+    }
+  }
+
+  /** @hidden */
+  public static parseMusicVideo (data: any): AnimeMusicVideo {
+    return {
+      title: data.title,
+      video: this.parseYoutubeVideo(data.video),
+      meta: data.meta
+    }
+  }
+
+  /** @hidden */
+  public static parseVideo (data: any): AnimeVideo {
+    return {
+      promos: data.promo?.map((promo: any) => this.parsePromo(promo)) ?? [],
+      episodes: data.episodes?.map((episode: any) => this.parseEpisodeVideo(episode)) ?? [],
+      musicVideos: data.music_videos?.map((musicVideo: any) => this.parseMusicVideo(musicVideo)) ?? []
+    }
+  }
+
+  /** @hidden */
+  public static parseStatistics (data: any): AnimeStatistics {
+    return {
+      ...super.parseStatistics(data),
+
+      watching: data.watching,
+      planToWatch: data.plan_to_watch
+    }
+  }
+
+  /** @hidden */
+  public static parseRecommendation (client: Client, data: any): AnimeRecommendation {
+    return {
+      entry: new AnimeMeta(client, data.entry),
+      URL: this.parseURL(data.url),
+      votes: data.votes
+    }
+  }
+
+  /** @hidden */
+  public static parseUserUpdate (data: any): AnimeUserUpdate {
+    return {
+      ...super.parseUserUpdate(data),
+      episodesSeen: data.episodes_seen,
+      episodesTotal: data.episodes_total
+    }
+  }
+
+  /** @hidden */
+  public static parseReview (data: any): AnimeReview {
+    return {
+      ...Anime.parseReview(data),
+
+      episodesWatched: data.episodes_watched
+    }
+  }
+
+  /** @hidden */
+  public static parseTopReview (client: Client, data: any): TopAnimeReview {
+    return {
+      ...this.parseReview(data),
+
+      anime: new AnimeMeta(client, data.entry)
+    }
+  }
+
+  /** @hidden */
+  public static parseRelationGroup<T extends ContentRelationType> (client: Client, relation: T, data: any): AnimeRelationGroup<T> {
+    const a = super.parseRelationGroup(client, relation, data)
+
+    return {
+      ...a,
+      items: data.entry?.map((item: any) => new (a.relation === 'Adaptation' ? MangaMeta : AnimeMeta)(client, item)) ?? []
+    }
+  }
+
   public readonly trailer: YoutubeVideo | null
   public readonly type: AnimeType
   public readonly source: string | null
   public readonly episodes: this['type'] extends 'TV' ? number : null
   public readonly airInfo: AnimeAirInformation
+
   public readonly duration: number | null
   public readonly rating: AnimeRating
   public readonly season: AnimeSeason | null
@@ -206,11 +372,11 @@ export class Anime extends Content {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.trailer = data.trailer ? new YoutubeVideo(client, data.trailer) : null
+    this.trailer = data.trailer ? Anime.parseYoutubeVideo(data.trailer) : null
     this.type = Anime.parseType(data.type)
     this.source = data.source || null
     this.episodes = data.episodes || null
-    this.airInfo = new AnimeAirInformation(client, data)
+    this.airInfo = Anime.parseAirInfo(data)
     this.duration = ParseDuration(data.duration, 'millisecond') || null
     this.rating = Anime.parseRating(data.rating)
     this.season = Anime.parseSeason(data.season)
@@ -225,237 +391,112 @@ export class Anime extends Content {
   }
 }
 
-export class AnimeVoiceActorReference extends BaseClass {
-  public readonly language: string
-  public readonly person: PersonMeta
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.language = data.language
-    this.person = new PersonMeta(client, data.person)
-  }
+export interface AnimeVoiceActorReference {
+  readonly language: string
+  readonly person: PersonMeta
 }
 
-export class AnimeCharacterReference extends BaseClass {
-  public readonly role: string
-  public readonly character: CharacterMeta
-  public readonly voiceActors: Array<AnimeVoiceActorReference>
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.role = data.role
-    this.character = new CharacterMeta(client, data.character)
-    this.voiceActors = data.voice_actors?.map((voiceActor: any) => new AnimeVoiceActorReference(this.client, voiceActor)) || []
-  }
+export interface AnimeCharacterReference {
+  readonly role: string
+  readonly character: CharacterMeta
+  readonly voiceActors: Array<AnimeVoiceActorReference>
 }
 
-export class AnimeStaffReference extends BaseClass {
-  public readonly positions: Array<string>
-  public readonly person: PersonMeta
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.positions = data.positions.filter((position: any) => !!position)
-    this.person = new PersonMeta(client, data.person)
-  }
+export interface AnimeStaffReference {
+  readonly positions: Array<string>
+  readonly person: PersonMeta
 }
 
-export class AnimeEpisodeTitle extends BaseClass {
-  public readonly default: string
-  public readonly japanese: string | null
-  public readonly romanji: string | null
+export interface AnimeEpisodeTitle {
+  readonly default: string
+  readonly japanese: string | null
+  readonly romanji: string | null
 
-  public toString () {
-    return this.default
-  }
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.default = data.title
-    this.japanese = data.japanese || null
-    this.romanji = data.romanji || null
-  }
+  toString (): string
 }
 
-export class AnimeEpisode extends BaseClass {
-  public readonly animeId: number
-  public readonly episodeId: number
-  public readonly URL: URL | null
-  public readonly title: AnimeEpisodeTitle
-  public readonly duration: number
-  public readonly aired: Date | null
-  public readonly filler: boolean
-  public readonly recap: boolean
-  public readonly synopsis: string | null
-
-  public constructor (client: Client, animeId: number, data: any) {
-    super(client)
-
-    this.animeId = animeId
-    this.episodeId = data.mal_id
-    this.URL = AnimeEpisode.parseURL(data.url, true)
-    this.title = new AnimeEpisodeTitle(client, data)
-    this.duration = data.duration || null
-    this.aired = data.aired ? new Date(data.aired) : null
-    this.filler = !!data.filler
-    this.recap = !!data.recap
-    this.synopsis = data.synopsis || null
-  }
+export interface AnimeEpisode {
+  readonly animeId: number
+  readonly episodeId: number
+  readonly URL: string | null
+  readonly title: AnimeEpisodeTitle
+  readonly duration: number
+  readonly aired: Date | null
+  readonly filler: boolean
+  readonly recap: boolean
+  readonly synopsis: string | null
 }
 
-export class AnimePartialEpisode extends AnimeEpisode {
-  public readonly synopsis: null
-  public readonly forumUrl: URL | null
-
-  public getFullEpisode () {
-    return <Promise<AnimeEpisode>> this.client.anime.getEpisode(this.animeId, this.episodeId)
-  }
-
-  public constructor (client: Client, animeId: number, data: any) {
-    super(client, animeId, data)
-
-    this.synopsis = null
-    this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url, true)
-  }
+export interface AnimePartialEpisode extends AnimeEpisode {
+  readonly synopsis: null
+  readonly forumUrl: string | null
 }
 
-export class AnimeTopic extends BaseResource {
-  public readonly title: string
-  public readonly date: Date
-  public readonly authorUsername: string
-  public readonly authorURL: URL
-  public readonly comments: number
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.title = data.title
-    this.date = new Date(data.date)
-    this.authorUsername = data.author_username
-    this.authorURL = AnimeTopic.parseURL(data.author_url)
-    this.comments = data.comments
-  }
+export interface AnimeTopic {
+  readonly id: number
+  readonly url: string
+  readonly title: string
+  readonly date: Date
+  readonly authorUsername: string
+  readonly authorURL: string
+  readonly comments: number
 }
 
-export class AnimePromo extends BaseClass {
-  public readonly title: string
-  public readonly trailer: YoutubeVideo
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.title = data.title
-    this.trailer = new YoutubeVideo(client, data.trailer)
-  }
+export interface AnimePromo {
+  readonly title: string
+  readonly trailer: YoutubeVideo
 }
 
-export class AnimeEpisodeVideo extends BaseResource {
-  public readonly title: string
-  public readonly episode: number
-  public readonly imageURL: URL | null
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.title = data.title
-    this.episode = typeof (data.episode) === 'string' ? Number(data.episode.toLowerCase().split('episode')[1]?.trim()) || 0 : 0
-    this.imageURL = AnimeEpisodeVideo.parseURL(data.images?.jpg?.image_url, true)
-  }
+export interface AnimeEpisodeVideo {
+  readonly id: number,
+  readonly url: string | null,
+  readonly title: string
+  readonly episode: number
+  readonly imageURL: string | null
 }
 
-export class AnimeMusicVideo extends BaseClass {
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.title = data.title
-    this.video = new YoutubeVideo(client, data.video)
-    this.meta = data.meta
-  }
-
-  public readonly title: string
-  public readonly video: YoutubeVideo
-  public readonly meta: {
+export interface AnimeMusicVideo {
+  readonly title: string
+  readonly video: YoutubeVideo
+  readonly meta: {
     title: string
     author: string
   }
 }
 
-export class AnimeVideo extends BaseClass {
-  public readonly promos: Array<AnimePromo>
-  public readonly episodes: Array<AnimeEpisodeVideo>
-  public readonly musicVideos: Array<AnimeMusicVideo>
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.promos = data.promo?.map((promo: any) => new AnimePromo(this.client, promo)) || []
-    this.episodes = data.episodes?.map((episodeVideo: any) => new AnimeEpisodeVideo(this.client, episodeVideo)) || []
-    this.musicVideos = data.music_videos?.map((musicVideo: any) => new AnimeMusicVideo(client, musicVideo)) || []
-  }
+export interface AnimeVideo {
+  readonly promos: Array<AnimePromo>
+  readonly episodes: Array<AnimeEpisodeVideo>
+  readonly musicVideos: Array<AnimeMusicVideo>
 }
 
-export class AnimeStatistics extends ContentStatistics {
-  public readonly watching: number
-  public readonly planToWatch: number
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.watching = data.watching
-    this.planToWatch = data.plan_to_watch
-  }
+export interface AnimeStatistics extends ContentStatistics {
+  readonly watching: number
+  readonly planToWatch: number
 }
 
-export class AnimeRecommendation extends BaseClass {
-  public readonly entry: AnimeMeta
-  public readonly URL: URL | null
-  public readonly votes: number
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.entry = new AnimeMeta(client, data.entry)
-    this.URL = AnimeRecommendation.parseURL(data.url)
-    this.votes = data.votes
-  }
+export interface AnimeRecommendation {
+  entry: AnimeMeta
+  URL: string | null
+  votes: number
 }
 
-export class AnimeUserUpdate extends ContentUserUpdate {
-  public readonly episodesSeen: number
-  public readonly episodesTotal: number
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.episodesSeen = data.episodes_seen
-    this.episodesTotal = data.episodes_total
-  }
+export interface AnimeUserUpdate extends ContentUserUpdate {
+  readonly episodesSeen: number
+  readonly episodesTotal: number
 }
 
-export class AnimeReview extends ContentReview {
-  public readonly episodesWatched: number
-  public readonly reactions: ContentReactions
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.episodesWatched = data.episodes_watched
-    this.reactions = new ContentReactions(client, data.reactions)
-  }
+export interface AnimeReview extends ContentReview {
+  readonly episodesWatched: number
+  readonly reactions: ContentReactions
 }
 
-export class AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
-  public readonly items: T extends 'Adaptation' ? Array<MangaMeta> : Array<AnimeMeta>
+export interface TopAnimeReview extends AnimeReview {
+  readonly anime: AnimeMeta
+}
 
-  public constructor (client: Client, relation: T, data: any) {
-    super(client, relation, data)
-
-    this.items = data.entry?.map((item: any) => new (this.relation === 'Adaptation' ? MangaMeta : AnimeMeta)(this.client, item)) || []
-  }
+export interface AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
+  readonly items: T extends 'Adaptation' ? Array<MangaMeta> : Array<AnimeMeta>
 }
 
 export class AnimeFull extends Anime {
@@ -471,9 +512,9 @@ export class AnimeFull extends Anime {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.relations = data.relations?.map((relation: any) => new AnimeRelationGroup(this.client, AnimeRelationGroup.parseRelation(relation.relation), relation)) || []
+    this.relations = data.relations?.map((relation: any) => Anime.parseRelationGroup(this.client, Anime.parseRelationType(relation.relation), relation)) || []
     this.themeSongs = data.theme || data.theme_songs || []
-    this.external = data.external?.map((external: any) => new ContentExternal(client, external))
+    this.external = data.external?.map((external: any) => Anime.parseExternal(external))
     this.streamingLinks = data.streaming
   }
 }

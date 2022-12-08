@@ -3,11 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnimeManager = void 0;
 const tslib_1 = require("tslib");
 const base_1 = require("../manager/base");
-const base_2 = require("../resource/content/base");
 const anime_1 = require("../resource/content/anime");
-const misc_1 = require("../resource/misc");
 const utils_1 = require("../utils");
 const meta_1 = require("../resource/meta");
+const Jikan_1 = require("../Jikan");
 class AnimeManager extends base_1.BaseManager {
     search(searchString, filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -72,61 +71,61 @@ class AnimeManager extends base_1.BaseManager {
     getCharacters(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/characters`);
-            return rawData ? rawData.map((characterReference) => new anime_1.AnimeCharacterReference(this.client, characterReference)) : undefined;
+            return rawData ? rawData.map((characterReference) => anime_1.Anime.parseCharacterReference(this.client, characterReference)) : undefined;
         });
     }
     getStaff(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/staff`);
-            return rawData ? rawData.map((staffReference) => new anime_1.AnimeStaffReference(this.client, staffReference)) : undefined;
+            return rawData ? rawData.map((staffReference) => anime_1.Anime.parseStaffReference(this.client, staffReference)) : undefined;
         });
     }
     getEpisodes(animeId, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`anime/${animeId}/episodes`, offset, maxCount);
-            return rawData ? rawData.map((partialEpisode) => new anime_1.AnimePartialEpisode(this.client, animeId, partialEpisode)) : undefined;
+            return rawData ? rawData.map((partialEpisode) => anime_1.Anime.parsePartialEpisode(Object.assign(partialEpisode, { animeId }))) : undefined;
         });
     }
     getEpisode(animeId, episodeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/episodes/${episodeId}`);
-            return rawData ? new anime_1.AnimeEpisode(this.client, animeId, rawData) : undefined;
+            return rawData ? anime_1.Anime.parseEpisode(Object.assign(rawData, { animeId })) : undefined;
         });
     }
     getNews(animeId, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`anime/${animeId}/news`, offset, maxCount);
-            return rawData ? rawData.map((news) => new base_2.ContentNews(this.client, news)) : undefined;
+            return rawData ? rawData.map((news) => anime_1.Anime.parseNews(news)) : undefined;
         });
     }
     getTopics(animeId, topic = 'all') {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/forum`, { topic });
-            return rawData ? rawData.map((topic) => new anime_1.AnimeTopic(this.client, topic)) : undefined;
+            return rawData ? rawData.map((topic) => anime_1.Anime.parseTopc(topic)) : undefined;
         });
     }
     getVideos(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/videos`);
-            return rawData ? new anime_1.AnimeVideo(this.client, rawData) : undefined;
+            return rawData ? anime_1.Anime.parseVideo(rawData) : undefined;
         });
     }
     getVideosEpisodes(animeId, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`anime/${animeId}/videos/episodes`, offset, maxCount);
-            return rawData ? rawData.map((episode) => new anime_1.AnimeEpisodeVideo(this.client, episode)) : undefined;
+            return rawData ? rawData.map((episode) => anime_1.Anime.parseEpisodeVideo(episode)) : undefined;
         });
     }
     getPictures(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/pictures`);
-            return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
+            return rawData ? rawData.map((picture) => Jikan_1.BaseClass.parseImage(picture)) : undefined;
         });
     }
     getStatistics(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/statistics`);
-            return rawData ? new anime_1.AnimeStatistics(this.client, rawData) : undefined;
+            return rawData ? anime_1.Anime.parseStatistics(rawData) : undefined;
         });
     }
     getMoreInfo(animeId) {
@@ -138,25 +137,25 @@ class AnimeManager extends base_1.BaseManager {
     getRecommendations(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/recommendations`);
-            return rawData ? rawData.map((recommendation) => new anime_1.AnimeRecommendation(this.client, recommendation)) : undefined;
+            return rawData ? rawData.map((recommendation) => anime_1.Anime.parseRecommendation(this.client, recommendation)) : undefined;
         });
     }
     getUserUpdates(animeId, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`anime/${animeId}/userupdates`, offset, maxCount);
-            return rawData ? rawData.map((userUpdate) => new anime_1.AnimeUserUpdate(this.client, userUpdate)) : undefined;
+            return rawData ? rawData.map((userUpdate) => anime_1.Anime.parseUserUpdate(userUpdate)) : undefined;
         });
     }
     getReviews(animeId, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`anime/${animeId}/reviews`, offset, maxCount);
-            return rawData ? rawData.map((review) => new anime_1.AnimeReview(this.client, review)) : undefined;
+            return rawData ? rawData.map((review) => anime_1.Anime.parseReview(review)) : undefined;
         });
     }
     getRelations(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/relations`);
-            return rawData ? rawData.map((relation) => new anime_1.AnimeRelationGroup(this.client, anime_1.AnimeRelationGroup.parseRelation(relation.relation), relation)) : undefined;
+            return rawData ? rawData.map((relation) => anime_1.Anime.parseRelationGroup(this.client, anime_1.Anime.parseRelationType(relation.relation), relation)) : undefined;
         });
     }
     getThemes(animeId) {
@@ -167,7 +166,7 @@ class AnimeManager extends base_1.BaseManager {
     getExternal(animeId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`anime/${animeId}/external`);
-            return rawData ? rawData.map((external) => new base_2.ContentExternal(this.client, external)) : undefined;
+            return rawData ? rawData.map((external) => anime_1.Anime.parseExternal(external)) : undefined;
         });
     }
     getStreamingLinks(animeId) {

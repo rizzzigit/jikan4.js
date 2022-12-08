@@ -1,5 +1,5 @@
 import { Client } from '../core/client'
-import { BaseClass, BaseResource } from './base'
+import { BaseResource } from './base'
 
 export type ClubCategory =
   | 'ActorsAndArtists'
@@ -57,7 +57,24 @@ export class Club extends BaseResource {
     }
   }
 
-  public readonly imageUrl: URL | null
+  /** @hidden */
+  public static parseStaff (data: any): ClubStaff {
+    return {
+      url: this.parseURL(data.url),
+      username: data.username
+    }
+  }
+
+  /** @hidden */
+  public static parseMember (data: any): ClubMember {
+    return {
+      URL: this.parseURL(data.url),
+      username: data.username,
+      imageURL: this.parseURL(data.image_url, true)
+    }
+  }
+
+  public readonly imageUrl: string | null
   public readonly memberCount: number
   public readonly pictureCount: number
   public readonly category: ClubCategory
@@ -78,32 +95,17 @@ export class Club extends BaseResource {
     this.category = Club.parseCategory(data.category)
     this.created = Club.parseDate(data.created)
     this.type = Club.parseType(data.type)
-    this.staff = data.staff?.map((staff: any) => new ClubStaff(client, staff)) || []
+    this.staff = data.staff?.map((staff: any) => Club.parseStaff(staff)) || []
   }
 }
 
-export class ClubStaff extends BaseClass {
-  public readonly url: URL
-  public readonly username: string
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.url = ClubStaff.parseURL(data.url)
-    this.username = data.username
-  }
+export interface ClubStaff {
+  readonly url: string
+  readonly username: string
 }
 
-export class ClubMember extends BaseClass {
-  public readonly URL: URL
-  public readonly username: string
-  public readonly imageURL: URL | null
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.URL = ClubMember.parseURL(data.url)
-    this.username = data.username
-    this.imageURL = ClubMember.parseURL(data.image_url, true)
-  }
+export interface ClubMember {
+  readonly URL: string
+  readonly username: string
+  readonly imageURL: string | null
 }

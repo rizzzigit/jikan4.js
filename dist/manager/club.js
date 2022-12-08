@@ -31,7 +31,7 @@ class ClubManager extends base_1.BaseManager {
     getMembers(clubId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`clubs/${clubId}/members`);
-            return rawData ? rawData.map((member) => new club_1.ClubMember(this.client, member)) : undefined;
+            return rawData ? rawData.map((member) => club_1.Club.parseMember(member)) : undefined;
         });
     }
 }

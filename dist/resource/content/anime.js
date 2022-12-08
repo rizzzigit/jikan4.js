@@ -1,23 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeMusicVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
+exports.AnimeFull = exports.Anime = void 0;
 const tslib_1 = require("tslib");
 const base_1 = require("./base");
-const base_2 = require("../base");
-const misc_1 = require("../misc");
 const meta_1 = require("../meta");
 const parse_duration_1 = tslib_1.__importDefault(require("parse-duration"));
 const genre_1 = require("../../manager/genre");
-class AnimeAirInformation extends base_2.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.status = AnimeAirInformation.parseStatus(data.status);
-        this.airing = !!data.airing;
-        this.airedFrom = AnimeAirInformation.parseDate(data.aired.from, true);
-        this.airedTo = AnimeAirInformation.parseDate(data.aired.to, true);
+class Anime extends base_1.Content {
+    /** @hidden */
+    static parseAirInfo(data) {
+        return {
+            status: this.parseAirInfoStatus(data.status),
+            airing: data.airing,
+            airedFrom: this.parseDate(data.aired.from, true),
+            airedTo: this.parseDate(data.aired.to, true)
+        };
     }
     /** @hidden */
-    static parseStatus(input) {
+    static parseAirInfoStatus(input) {
         const status = input === null || input === void 0 ? void 0 : input.toLowerCase().trim();
         switch (status) {
             case 'finished airing': return 'FinishedAiring';
@@ -25,29 +25,6 @@ class AnimeAirInformation extends base_2.BaseClass {
             case 'not yet aired': return 'NotYetAired';
             default: return 'Unknown';
         }
-    }
-}
-exports.AnimeAirInformation = AnimeAirInformation;
-class Anime extends base_1.Content {
-    constructor(client, data) {
-        var _a, _b, _c, _d, _e, _f, _g;
-        super(client, data);
-        this.trailer = data.trailer ? new misc_1.YoutubeVideo(client, data.trailer) : null;
-        this.type = Anime.parseType(data.type);
-        this.source = data.source || null;
-        this.episodes = data.episodes || null;
-        this.airInfo = new AnimeAirInformation(client, data);
-        this.duration = (0, parse_duration_1.default)(data.duration, 'millisecond') || null;
-        this.rating = Anime.parseRating(data.rating);
-        this.season = Anime.parseSeason(data.season);
-        this.year = data.year || null;
-        this.producers = ((_a = data.producers) === null || _a === void 0 ? void 0 : _a.map((producer) => new meta_1.ProducerMeta(this.client, producer))) || [];
-        this.licensors = ((_b = data.licensors) === null || _b === void 0 ? void 0 : _b.map((licensor) => new meta_1.ProducerMeta(this.client, licensor))) || [];
-        this.studios = ((_c = data.studios) === null || _c === void 0 ? void 0 : _c.map((studio) => new meta_1.ProducerMeta(this.client, studio))) || [];
-        this.genres = ((_d = data.genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'))) || [];
-        this.explicitGenres = ((_e = data.explicit_genres) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
-        this.demographics = ((_f = data.demographics) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
-        this.themes = ((_g = data.themes) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
     }
     /** @hidden */
     static parseType(input) {
@@ -87,6 +64,136 @@ class Anime extends base_1.Content {
             case 'fall': return 'Fall';
             default: return 'Unknown';
         }
+    }
+    /** @hidden */
+    static parseVoiceActorReference(client, data) {
+        return {
+            language: data.language,
+            person: new meta_1.PersonMeta(client, data.person)
+        };
+    }
+    /** @hidden */
+    static parseCharacterReference(client, data) {
+        var _a;
+        return {
+            role: data.role,
+            character: new meta_1.CharacterMeta(client, data.character),
+            voiceActors: (_a = data.voice_actors) === null || _a === void 0 ? void 0 : _a.map((entry) => this.parseVoiceActorReference(client, entry))
+        };
+    }
+    /** @hidden */
+    static parseStaffReference(client, data) {
+        return {
+            positions: data.positions.filter((position) => !!position),
+            person: new meta_1.PersonMeta(client, data.person)
+        };
+    }
+    /** @hidden */
+    static parseEpisodeTitle(data) {
+        return {
+            default: data.title,
+            japanese: data.japanese || null,
+            romanji: data.romanji || null,
+            toString: () => data.title
+        };
+    }
+    /** @hidden */
+    static parseEpisode(data) {
+        return {
+            animeId: data.animeId,
+            episodeId: data.mal_id,
+            URL: Anime.parseURL(data.url, true),
+            title: Anime.parseEpisodeTitle(data),
+            duration: data.duration || null,
+            aired: data.aired ? new Date(data.aired) : null,
+            filler: data.filler,
+            recap: data.recap,
+            synopsis: data.synopsis || null
+        };
+    }
+    /** @hidden */
+    static parsePartialEpisode(data) {
+        return Object.assign(this.parseEpisode(data), {
+            synopsis: null,
+            forumUrl: Anime.parseURL(data.forum_url, true)
+        });
+    }
+    /** @hidden */
+    static parseTopc(data) {
+        return {
+            id: data.mal_id,
+            url: Anime.parseURL(data.url),
+            title: data.title,
+            date: new Date(data.date),
+            authorUsername: data.author_username,
+            authorURL: data.author_url,
+            comments: data.comments
+        };
+    }
+    /** @hidden */
+    static parsePromo(data) {
+        return {
+            title: data.title,
+            trailer: Anime.parseYoutubeVideo(data.trailer)
+        };
+    }
+    /** @hidden */
+    static parseEpisodeVideo(data) {
+        var _a, _b, _c;
+        return {
+            id: data.mal_id,
+            url: data.url,
+            title: data.title,
+            episode: typeof (data.episode) === 'string' ? Number((_a = data.episode.toLowerCase().split('episode')[1]) === null || _a === void 0 ? void 0 : _a.trim()) || 0 : 0,
+            imageURL: Anime.parseURL((_c = (_b = data.images) === null || _b === void 0 ? void 0 : _b.jpg) === null || _c === void 0 ? void 0 : _c.image_url, true)
+        };
+    }
+    /** @hidden */
+    static parseMusicVideo(data) {
+        return {
+            title: data.title,
+            video: this.parseYoutubeVideo(data.video),
+            meta: data.meta
+        };
+    }
+    /** @hidden */
+    static parseVideo(data) {
+        var _a, _b, _c, _d, _e, _f;
+        return {
+            promos: (_b = (_a = data.promo) === null || _a === void 0 ? void 0 : _a.map((promo) => this.parsePromo(promo))) !== null && _b !== void 0 ? _b : [],
+            episodes: (_d = (_c = data.episodes) === null || _c === void 0 ? void 0 : _c.map((episode) => this.parseEpisodeVideo(episode))) !== null && _d !== void 0 ? _d : [],
+            musicVideos: (_f = (_e = data.music_videos) === null || _e === void 0 ? void 0 : _e.map((musicVideo) => this.parseMusicVideo(musicVideo))) !== null && _f !== void 0 ? _f : []
+        };
+    }
+    /** @hidden */
+    static parseStatistics(data) {
+        return Object.assign(Object.assign({}, super.parseStatistics(data)), { watching: data.watching, planToWatch: data.plan_to_watch });
+    }
+    /** @hidden */
+    static parseRecommendation(client, data) {
+        return {
+            entry: new meta_1.AnimeMeta(client, data.entry),
+            URL: this.parseURL(data.url),
+            votes: data.votes
+        };
+    }
+    /** @hidden */
+    static parseUserUpdate(data) {
+        return Object.assign(Object.assign({}, super.parseUserUpdate(data)), { episodesSeen: data.episodes_seen, episodesTotal: data.episodes_total });
+    }
+    /** @hidden */
+    static parseReview(data) {
+        return Object.assign(Object.assign({}, Anime.parseReview(data)), { episodesWatched: data.episodes_watched });
+    }
+    /** @hidden */
+    static parseTopReview(client, data) {
+        return Object.assign(Object.assign({}, this.parseReview(data)), { anime: new meta_1.AnimeMeta(client, data.entry) });
+    }
+    /** @hidden */
+    static parseRelationGroup(client, relation, data) {
+        var _a, _b;
+        const a = super.parseRelationGroup(client, relation, data);
+        return Object.assign(Object.assign({}, a), { items: (_b = (_a = data.entry) === null || _a === void 0 ? void 0 : _a.map((item) => new (a.relation === 'Adaptation' ? meta_1.MangaMeta : meta_1.AnimeMeta)(client, item))) !== null && _b !== void 0 ? _b : [] });
     }
     get isExplicit() {
         return !!(['Rx', 'R-17+'].includes(this.rating) ||
@@ -149,168 +256,35 @@ class Anime extends base_1.Content {
     getFull() {
         return this.client.anime.getFull(this.id);
     }
+    constructor(client, data) {
+        var _a, _b, _c, _d, _e, _f, _g;
+        super(client, data);
+        this.trailer = data.trailer ? Anime.parseYoutubeVideo(data.trailer) : null;
+        this.type = Anime.parseType(data.type);
+        this.source = data.source || null;
+        this.episodes = data.episodes || null;
+        this.airInfo = Anime.parseAirInfo(data);
+        this.duration = (0, parse_duration_1.default)(data.duration, 'millisecond') || null;
+        this.rating = Anime.parseRating(data.rating);
+        this.season = Anime.parseSeason(data.season);
+        this.year = data.year || null;
+        this.producers = ((_a = data.producers) === null || _a === void 0 ? void 0 : _a.map((producer) => new meta_1.ProducerMeta(this.client, producer))) || [];
+        this.licensors = ((_b = data.licensors) === null || _b === void 0 ? void 0 : _b.map((licensor) => new meta_1.ProducerMeta(this.client, licensor))) || [];
+        this.studios = ((_c = data.studios) === null || _c === void 0 ? void 0 : _c.map((studio) => new meta_1.ProducerMeta(this.client, studio))) || [];
+        this.genres = ((_d = data.genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'))) || [];
+        this.explicitGenres = ((_e = data.explicit_genres) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
+        this.demographics = ((_f = data.demographics) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
+        this.themes = ((_g = data.themes) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
+    }
 }
 exports.Anime = Anime;
-class AnimeVoiceActorReference extends base_2.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.language = data.language;
-        this.person = new meta_1.PersonMeta(client, data.person);
-    }
-}
-exports.AnimeVoiceActorReference = AnimeVoiceActorReference;
-class AnimeCharacterReference extends base_2.BaseClass {
-    constructor(client, data) {
-        var _a;
-        super(client);
-        this.role = data.role;
-        this.character = new meta_1.CharacterMeta(client, data.character);
-        this.voiceActors = ((_a = data.voice_actors) === null || _a === void 0 ? void 0 : _a.map((voiceActor) => new AnimeVoiceActorReference(this.client, voiceActor))) || [];
-    }
-}
-exports.AnimeCharacterReference = AnimeCharacterReference;
-class AnimeStaffReference extends base_2.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.positions = data.positions.filter((position) => !!position);
-        this.person = new meta_1.PersonMeta(client, data.person);
-    }
-}
-exports.AnimeStaffReference = AnimeStaffReference;
-class AnimeEpisodeTitle extends base_2.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.default = data.title;
-        this.japanese = data.japanese || null;
-        this.romanji = data.romanji || null;
-    }
-    toString() {
-        return this.default;
-    }
-}
-exports.AnimeEpisodeTitle = AnimeEpisodeTitle;
-class AnimeEpisode extends base_2.BaseClass {
-    constructor(client, animeId, data) {
-        super(client);
-        this.animeId = animeId;
-        this.episodeId = data.mal_id;
-        this.URL = AnimeEpisode.parseURL(data.url, true);
-        this.title = new AnimeEpisodeTitle(client, data);
-        this.duration = data.duration || null;
-        this.aired = data.aired ? new Date(data.aired) : null;
-        this.filler = !!data.filler;
-        this.recap = !!data.recap;
-        this.synopsis = data.synopsis || null;
-    }
-}
-exports.AnimeEpisode = AnimeEpisode;
-class AnimePartialEpisode extends AnimeEpisode {
-    constructor(client, animeId, data) {
-        super(client, animeId, data);
-        this.synopsis = null;
-        this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url, true);
-    }
-    getFullEpisode() {
-        return this.client.anime.getEpisode(this.animeId, this.episodeId);
-    }
-}
-exports.AnimePartialEpisode = AnimePartialEpisode;
-class AnimeTopic extends base_2.BaseResource {
-    constructor(client, data) {
-        super(client, data);
-        this.title = data.title;
-        this.date = new Date(data.date);
-        this.authorUsername = data.author_username;
-        this.authorURL = AnimeTopic.parseURL(data.author_url);
-        this.comments = data.comments;
-    }
-}
-exports.AnimeTopic = AnimeTopic;
-class AnimePromo extends base_2.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.title = data.title;
-        this.trailer = new misc_1.YoutubeVideo(client, data.trailer);
-    }
-}
-exports.AnimePromo = AnimePromo;
-class AnimeEpisodeVideo extends base_2.BaseResource {
-    constructor(client, data) {
-        var _a, _b, _c;
-        super(client, data);
-        this.title = data.title;
-        this.episode = typeof (data.episode) === 'string' ? Number((_a = data.episode.toLowerCase().split('episode')[1]) === null || _a === void 0 ? void 0 : _a.trim()) || 0 : 0;
-        this.imageURL = AnimeEpisodeVideo.parseURL((_c = (_b = data.images) === null || _b === void 0 ? void 0 : _b.jpg) === null || _c === void 0 ? void 0 : _c.image_url, true);
-    }
-}
-exports.AnimeEpisodeVideo = AnimeEpisodeVideo;
-class AnimeMusicVideo extends base_2.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.title = data.title;
-        this.video = new misc_1.YoutubeVideo(client, data.video);
-        this.meta = data.meta;
-    }
-}
-exports.AnimeMusicVideo = AnimeMusicVideo;
-class AnimeVideo extends base_2.BaseClass {
-    constructor(client, data) {
-        var _a, _b, _c;
-        super(client);
-        this.promos = ((_a = data.promo) === null || _a === void 0 ? void 0 : _a.map((promo) => new AnimePromo(this.client, promo))) || [];
-        this.episodes = ((_b = data.episodes) === null || _b === void 0 ? void 0 : _b.map((episodeVideo) => new AnimeEpisodeVideo(this.client, episodeVideo))) || [];
-        this.musicVideos = ((_c = data.music_videos) === null || _c === void 0 ? void 0 : _c.map((musicVideo) => new AnimeMusicVideo(client, musicVideo))) || [];
-    }
-}
-exports.AnimeVideo = AnimeVideo;
-class AnimeStatistics extends base_1.ContentStatistics {
-    constructor(client, data) {
-        super(client, data);
-        this.watching = data.watching;
-        this.planToWatch = data.plan_to_watch;
-    }
-}
-exports.AnimeStatistics = AnimeStatistics;
-class AnimeRecommendation extends base_2.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.entry = new meta_1.AnimeMeta(client, data.entry);
-        this.URL = AnimeRecommendation.parseURL(data.url);
-        this.votes = data.votes;
-    }
-}
-exports.AnimeRecommendation = AnimeRecommendation;
-class AnimeUserUpdate extends base_1.ContentUserUpdate {
-    constructor(client, data) {
-        super(client, data);
-        this.episodesSeen = data.episodes_seen;
-        this.episodesTotal = data.episodes_total;
-    }
-}
-exports.AnimeUserUpdate = AnimeUserUpdate;
-class AnimeReview extends base_1.ContentReview {
-    constructor(client, data) {
-        super(client, data);
-        this.episodesWatched = data.episodes_watched;
-        this.reactions = new base_1.ContentReactions(client, data.reactions);
-    }
-}
-exports.AnimeReview = AnimeReview;
-class AnimeRelationGroup extends base_1.ContentRelationGroup {
-    constructor(client, relation, data) {
-        var _a;
-        super(client, relation, data);
-        this.items = ((_a = data.entry) === null || _a === void 0 ? void 0 : _a.map((item) => new (this.relation === 'Adaptation' ? meta_1.MangaMeta : meta_1.AnimeMeta)(this.client, item))) || [];
-    }
-}
-exports.AnimeRelationGroup = AnimeRelationGroup;
 class AnimeFull extends Anime {
     constructor(client, data) {
         var _a, _b;
         super(client, data);
-        this.relations = ((_a = data.relations) === null || _a === void 0 ? void 0 : _a.map((relation) => new AnimeRelationGroup(this.client, AnimeRelationGroup.parseRelation(relation.relation), relation))) || [];
+        this.relations = ((_a = data.relations) === null || _a === void 0 ? void 0 : _a.map((relation) => Anime.parseRelationGroup(this.client, Anime.parseRelationType(relation.relation), relation))) || [];
         this.themeSongs = data.theme || data.theme_songs || [];
-        this.external = (_b = data.external) === null || _b === void 0 ? void 0 : _b.map((external) => new base_1.ContentExternal(client, external));
+        this.external = (_b = data.external) === null || _b === void 0 ? void 0 : _b.map((external) => Anime.parseExternal(external));
         this.streamingLinks = data.streaming;
     }
 }

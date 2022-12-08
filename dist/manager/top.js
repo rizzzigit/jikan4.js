@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TopManager = void 0;
 const tslib_1 = require("tslib");
-const top_1 = require("../resource/top");
+const Jikan_1 = require("../Jikan");
 const base_1 = require("./base");
 class TopManager extends base_1.BaseManager {
     listAnime(filter, offset, maxCount) {
@@ -22,8 +22,8 @@ class TopManager extends base_1.BaseManager {
             const rawData = yield this.requestPaginated('top/reviews', offset, maxCount);
             return rawData.map((data) => {
                 switch (data.type) {
-                    case 'anime': return new top_1.TopAnimeReview(this.client, data);
-                    case 'manga': return new top_1.TopMangaReview(this.client, data);
+                    case 'anime': return Jikan_1.Anime.parseTopReview(this.client, data);
+                    case 'manga': return Jikan_1.Manga.parseTopReview(this.client, data);
                     default:
                         throw new Error(`Unknown review type: ${data.type}`);
                 }

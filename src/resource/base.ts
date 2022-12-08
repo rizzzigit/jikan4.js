@@ -1,6 +1,29 @@
 import { Client } from '../core/client'
+import { Image, YoutubeVideo } from './misc'
 
 export class BaseClass {
+  /** @hidden */
+  public static parseImage (data: any): Image {
+    return {
+      small: this.parseURL(data?.small_image_url, true),
+      default: this.parseURL(data?.image_url, true),
+      medium: this.parseURL(data?.medium_image_url, true),
+      large: this.parseURL(data?.large_image_url, true),
+      maximum: this.parseURL(data?.maximum_image_url, true)
+    }
+  }
+
+  /** @hidden */
+  public static parseYoutubeVideo (data: any): YoutubeVideo {
+    return {
+      id: data.youtube_id,
+      url: `https://youtu.be/${data.youtube_id}`,
+      embedUrl: `https://www.youtube.com/embed/${data.youtube_id}`,
+      image: this.parseImage(data.images)
+    }
+  }
+
+  /** @hidden */
   public static parseDate<IsNullable extends boolean = false> (input: any, nullable: IsNullable = <any> false): IsNullable extends false ? Date : (Date | null) {
     const date = new Date(input || '')
 
@@ -15,7 +38,8 @@ export class BaseClass {
     return date
   }
 
-  public static parseURL<IsNullable extends boolean = false> (input: any, nullable: IsNullable = <any> false): IsNullable extends false ? URL : (URL | null) {
+  /** @hidden */
+  public static parseURL<IsNullable extends boolean = false> (input: any, nullable: IsNullable = <any> false): IsNullable extends false ? string : (string | null) {
     let url: URL | null = null
 
     try {
@@ -32,7 +56,7 @@ export class BaseClass {
         throw new Error(`Invalid URL: ${input}`)
       }
     } else {
-      return url
+      return url.toString()
     }
   }
 
@@ -47,7 +71,7 @@ export class BaseClass {
 
 export class BaseResource extends BaseClass {
   public readonly id: number
-  public readonly url: URL
+  public readonly url: string
 
   public constructor (client: Client, data: any) {
     super(client)

@@ -13,6 +13,7 @@ import {
 import { Image } from '../resource/misc'
 import { translateObject } from '../utils'
 import { MangaGenreMeta, MagazineMeta, GenreType } from '../resource/meta'
+import { BaseClass } from '../Jikan'
 
 export interface MangaSearchFilter {
   type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'manhua'
@@ -106,31 +107,31 @@ export class MangaManager extends BaseManager {
   public async getCharacters (mangaId: number): Promise<Array<MangaCharacterReference> | undefined> {
     const rawData = await this.request(`manga/${mangaId}/characters`)
 
-    return rawData ? rawData.map((characterReference: any) => new MangaCharacterReference(this.client, characterReference)) : undefined
+    return rawData ? rawData.map((characterReference: any) => Manga.parseCharacerReference(this.client, characterReference)) : undefined
   }
 
   public async getNews (mangaId: number, offset?: number, maxCount?: number): Promise<Array<ContentNews> | undefined> {
     const rawData = await this.requestPaginated(`manga/${mangaId}/news`, offset, maxCount)
 
-    return rawData ? rawData.map((news: any) => new ContentNews(this.client, news)) : undefined
+    return rawData ? rawData.map((news: any) => Manga.parseNews(news)) : undefined
   }
 
   public async getTopics (mangaId: number): Promise<Array<MangaTopic> | undefined> {
     const rawData = await this.request(`manga/${mangaId}/forum`)
 
-    return rawData ? rawData.map((topic: any) => new MangaTopic(this.client, topic)) : undefined
+    return rawData ? rawData.map((topic: any) => Manga.parseTopic(topic)) : undefined
   }
 
   public async getPictures (mangaId: number): Promise<Array<Image> | undefined> {
     const rawData = await this.request(`manga/${mangaId}/pictures`)
 
-    return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
+    return rawData ? rawData.map((picture: any) => BaseClass.parseImage(picture)) : undefined
   }
 
   public async getStatistics (mangaId: number): Promise<MangaStatistics | undefined> {
     const rawData = await this.request(`manga/${mangaId}/statistics`)
 
-    return rawData ? new MangaStatistics(this.client, rawData) : undefined
+    return rawData ? Manga.parseStatistics(rawData) : undefined
   }
 
   public async getMoreInfo (mangaId: number): Promise<string | null | undefined> {
@@ -142,24 +143,24 @@ export class MangaManager extends BaseManager {
   public async getUserUpdates (mangaId: number): Promise<Array<MangaUserUpdate> | undefined> {
     const rawData = await this.request(`manga/${mangaId}/userupdates`)
 
-    return rawData ? rawData.map((userUpdate: any) => new MangaUserUpdate(this.client, userUpdate)) : undefined
+    return rawData ? rawData.map((userUpdate: any) => Manga.parseUserUpdate(userUpdate)) : undefined
   }
 
   public async getReviews (mangaId: number): Promise<Array<MangaReview> | undefined> {
     const rawData = await this.request(`manga/${mangaId}/reviews`)
 
-    return rawData ? rawData.map((review: any) => new MangaReview(this.client, review)) : undefined
+    return rawData ? rawData.map((review: any) => Manga.parseReview(review)) : undefined
   }
 
   public async getRelations (mangaId: number): Promise<Array<MangaRelationGroup<ContentRelationType>> | undefined> {
     const rawData = await this.requestPaginated(`manga/${mangaId}/relations`)
 
-    return rawData ? rawData.map((relation) => new MangaRelationGroup(this.client, MangaRelationGroup.parseRelation(relation.relation), relation)) : undefined
+    return rawData ? rawData.map((relation) => Manga.parseRelationGroup(this.client, Manga.parseRelationType(relation.relation), relation)) : undefined
   }
 
   public async getExternal (mangaId: number): Promise<Array<ContentExternal> | undefined> {
     const rawData = await this.request(`manga/${mangaId}/external`)
 
-    return rawData ? rawData.map((external: any) => new ContentExternal(this.client, external)) : undefined
+    return rawData ? rawData.map((external: any) => Manga.parseExternal(external)) : undefined
   }
 }

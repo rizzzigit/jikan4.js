@@ -3,20 +3,39 @@ import { ContentImage } from '../resource/content/base';
 import { BaseClass } from './base';
 import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta';
 import { Link } from './misc';
-export declare type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
+export type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
 export declare class UserMeta extends BaseClass {
     readonly username: string;
-    readonly url: URL;
-    readonly imageUrl: URL | null;
+    readonly url: string;
+    readonly imageUrl: string | null;
     readonly lastOnline: Date | null;
     getUser(): Promise<User>;
     constructor(client: Client, data: any);
 }
 export declare class User extends BaseClass {
+    /** @hidden */
     static parseGender(input: any): UserGender;
+    /** @hidden */
+    static parseStats(data: any): UserStats;
+    /** @hidden */
+    static parseFavorites(client: Client, data: any): UserFavorites;
+    /** @hidden */
+    static parseContentUpdate(data: any): UserContentUpdate;
+    /** @hidden */
+    static parseAnimeUpdate(client: Client, data: any): UserAnimeUpdate;
+    /** @hidden */
+    static parseMangaUpdate(client: Client, data: any): UserMangaUpdate;
+    /** @hidden */
+    static parseContentUpdates(client: Client, data: any): UserContentUpdates;
+    /** @hidden */
+    static parseAnimeHistory(client: Client, data: any): UserAnimeHistory;
+    /** @hidden */
+    static parseMangaHistory(client: Client, data: any): UserMangaHistory;
+    /** @hidden */
+    static parseRecommendation(client: Client, data: any): UserRecommendation;
     readonly username: string;
-    readonly url: URL;
-    readonly imageUrl: URL | null;
+    readonly url: string;
+    readonly imageUrl: string | null;
     readonly lastOnline: Date | null;
     readonly gender: UserGender;
     readonly birthday: Date | null;
@@ -26,7 +45,7 @@ export declare class User extends BaseClass {
     getFavorites(): Promise<UserFavorites>;
     getUpdates(): Promise<UserContentUpdates>;
     getAbout(): Promise<string | null>;
-    getHistory(type?: 'anime' | 'manga' | 'all'): Promise<(UserMangaHistory | UserAnimeHistory)[]>;
+    getHistory(type?: 'anime' | 'manga' | 'all'): Promise<(UserAnimeHistory | UserMangaHistory)[]>;
     getFriends(offset?: number, maxCount?: number): Promise<UserFriend[]>;
     getRecommendations(offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
     getClubs(offset?: number, maxCount?: number): Promise<ClubMeta[]>;
@@ -34,7 +53,7 @@ export declare class User extends BaseClass {
     getFull(): Promise<UserFull>;
     constructor(client: Client, data: any);
 }
-export declare class UserStats extends BaseClass {
+export interface UserStats {
     readonly anime: {
         daysWatched: number;
         meanScore: number;
@@ -60,9 +79,8 @@ export declare class UserStats extends BaseClass {
         chaptersRead: number;
         volumesRead: number;
     };
-    constructor(client: Client, data: any);
 }
-export declare class UserFavorites extends BaseClass {
+export interface UserFavorites {
     readonly anime: Array<AnimeMeta & {
         images: ContentImage;
     }>;
@@ -75,64 +93,56 @@ export declare class UserFavorites extends BaseClass {
     readonly people: Array<PersonMeta & {
         images: ContentImage;
     }>;
-    constructor(client: Client, data: any);
 }
-export declare class UserContentUpdate extends BaseClass {
+export interface UserContentUpdate {
     readonly score: number;
     readonly status: string;
     readonly date: Date;
-    constructor(client: Client, data: any);
 }
-export declare class UserAnimeUpdate extends UserContentUpdate {
+export interface UserAnimeUpdate {
     readonly anime: AnimeMeta;
     readonly episodesSeen: number;
     readonly episodesTotal: number;
-    constructor(client: Client, data: any);
 }
-export declare class UserMangaUpdate extends UserContentUpdate {
+export interface UserMangaUpdate extends UserContentUpdate {
     readonly manga: MangaMeta;
     readonly chaptersRead: number;
     readonly chaptersTotal: number;
     readonly volumesRead: number;
     readonly volumesTotal: number;
-    constructor(client: Client, data: any);
 }
-export declare class UserContentUpdates extends BaseClass {
+export interface UserContentUpdates {
     readonly anime: Array<UserAnimeUpdate>;
     readonly manga: Array<UserMangaUpdate>;
-    constructor(client: Client, data: any);
 }
-export declare class UserAnimeHistory extends BaseClass {
+export interface UserAnimeHistory {
     readonly anime: AnimeMeta;
     readonly increment: number;
     readonly date: Date;
-    constructor(client: Client, data: any);
 }
-export declare class UserMangaHistory extends BaseClass {
+export interface UserMangaHistory {
     readonly manga: MangaMeta;
     readonly increment: number;
     readonly date: Date;
-    constructor(client: Client, data: any);
 }
 export declare class UserFriend extends BaseClass {
     readonly username: string;
-    readonly url: URL;
-    readonly imageUrl: URL | null;
+    readonly url: string;
+    readonly imageUrl: string | null;
     readonly lastOnline: Date | null;
     readonly friendsSince: Date | null;
     getUser(): Promise<User>;
     constructor(client: Client, data: any);
 }
-export declare class UserRecommendation extends BaseClass {
+export interface UserRecommendation {
     readonly user: {
-        url: URL;
+        url: string;
         username: string;
     };
     readonly entries: Array<(AnimeMeta | MangaMeta) & {
         images: ContentImage;
     }>;
     readonly content: string;
-    constructor(client: Client, data: any);
 }
 export declare class UserFull extends User {
     readonly statistics: UserStats;

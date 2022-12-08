@@ -1,33 +1,41 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PersonFull = exports.PersonMangaReference = exports.PersonVoiceActorReference = exports.PersonAnimeReference = exports.Person = exports.PersonName = void 0;
+exports.PersonFull = exports.Person = void 0;
 const base_1 = require("./base");
 const meta_1 = require("./meta");
-const misc_1 = require("./misc");
-class PersonName extends base_1.BaseClass {
-    constructor(client, data) {
-        var _a;
-        super(client);
-        this.name = data.name;
-        this.given = data.given_name || null;
-        this.family = data.faimly_name || null;
-        this.alternate = ((_a = data.alternate_names) === null || _a === void 0 ? void 0 : _a.map((alternate) => alternate || null).filter((alternate) => !!alternate)) || [];
-    }
-    toString() {
-        return this.name;
-    }
-}
-exports.PersonName = PersonName;
 class Person extends base_1.BaseResource {
-    constructor(client, data) {
-        var _a;
-        super(client, data);
-        this.websiteUrl = Person.parseURL(data.website_url, true);
-        this.image = new misc_1.Image(client, (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
-        this.name = new PersonName(client, data);
-        this.birth = Person.parseDate(data.birthday, true);
-        this.favorites = data.favorites;
-        this.about = data.about || null;
+    /** @hidden */
+    static parseName(data) {
+        var _a, _b, _c, _d;
+        return {
+            name: data.name,
+            given: (_a = data.given_name) !== null && _a !== void 0 ? _a : null,
+            family: (_b = data.faimly_name) !== null && _b !== void 0 ? _b : null,
+            alternate: (_d = (_c = data.alternate_names) === null || _c === void 0 ? void 0 : _c.map((alternate) => alternate !== null && alternate !== void 0 ? alternate : null).filter((alternate) => !!alternate)) !== null && _d !== void 0 ? _d : [],
+            toString: () => data.name
+        };
+    }
+    /** @hidden */
+    static parseAnimeReference(client, data) {
+        return {
+            position: data.position,
+            anime: new meta_1.AnimeMeta(client, data.anime)
+        };
+    }
+    /** @hidden */
+    static parseVoiceActorReference(client, data) {
+        return {
+            role: data.role,
+            anime: new meta_1.AnimeMeta(client, data.anime),
+            character: new meta_1.CharacterMeta(client, data.character)
+        };
+    }
+    /** @hidden */
+    static parseMangaReference(client, data) {
+        return {
+            position: data.position,
+            manga: new meta_1.MangaMeta(client, data.manga)
+        };
     }
     getAnime() {
         return this.client.people.getAnime(this.id);
@@ -44,40 +52,25 @@ class Person extends base_1.BaseResource {
     getFull() {
         return this.client.people.getFull(this.id);
     }
+    constructor(client, data) {
+        var _a;
+        super(client, data);
+        this.websiteUrl = Person.parseURL(data.website_url, true);
+        this.image = Person.parseImage((_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
+        this.name = Person.parseName(data);
+        this.birth = Person.parseDate(data.birthday, true);
+        this.favorites = data.favorites;
+        this.about = data.about || null;
+    }
 }
 exports.Person = Person;
-class PersonAnimeReference extends base_1.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.position = data.position;
-        this.anime = new meta_1.AnimeMeta(client, data.anime);
-    }
-}
-exports.PersonAnimeReference = PersonAnimeReference;
-class PersonVoiceActorReference extends base_1.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.role = data.role;
-        this.anime = new meta_1.AnimeMeta(client, data.anime);
-        this.character = new meta_1.CharacterMeta(client, data.character);
-    }
-}
-exports.PersonVoiceActorReference = PersonVoiceActorReference;
-class PersonMangaReference extends base_1.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.position = data.position;
-        this.manga = new meta_1.MangaMeta(client, data.manga);
-    }
-}
-exports.PersonMangaReference = PersonMangaReference;
 class PersonFull extends Person {
     constructor(client, data) {
         var _a, _b, _c;
         super(client, data);
-        this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => new PersonAnimeReference(client, anime))) || [];
-        this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => new PersonMangaReference(client, manga))) || [];
-        this.voices = ((_c = data.voices) === null || _c === void 0 ? void 0 : _c.map((voice) => new PersonVoiceActorReference(client, voice))) || [];
+        this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => Person.parseAnimeReference(client, anime))) || [];
+        this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => Person.parseMangaReference(client, manga))) || [];
+        this.voices = ((_c = data.voices) === null || _c === void 0 ? void 0 : _c.map((voice) => Person.parseVoiceActorReference(client, voice))) || [];
     }
 }
 exports.PersonFull = PersonFull;

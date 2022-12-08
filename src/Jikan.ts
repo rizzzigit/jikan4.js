@@ -28,7 +28,6 @@ export * from './resource/meta'
 export * from './resource/misc'
 export * from './resource/person'
 export * from './resource/season'
-export * from './resource/top'
 export * from './resource/user'
 export * from './resource/producer'
 

@@ -1,10 +1,34 @@
 import { Client } from '../core/client'
-import { BaseClass, BaseResource } from './base'
+import { BaseResource } from './base'
 import { ContentImage } from './content/base'
 import { MangaMeta, PersonMeta, AnimeMeta } from './meta'
 import { Image } from './misc'
 
 export class Character extends BaseResource {
+  /** @hidden */
+  public static parseAnimeReference (client: Client, data: any): CharacterAnimeReference {
+    return {
+      role: data.role,
+      anime: new AnimeMeta(client, data.anime)
+    }
+  }
+
+  /** @hidden */
+  public static parseMangaReference (client: Client, data: any): CharacterMangaReference {
+    return {
+      role: data.role,
+      manga: new MangaMeta(client, data.manga)
+    }
+  }
+
+  /** @hidden */
+  public static parseVoiceActorReference (client: Client, data: any): CharacterVoiceActorReference {
+    return {
+      language: data.language,
+      person: new PersonMeta(client, data.person)
+    }
+  }
+
   public readonly image: ContentImage
   public readonly name: string
   public readonly nameKanji: string | null
@@ -44,40 +68,19 @@ export class Character extends BaseResource {
   }
 }
 
-export class CharacterAnimeReference extends BaseClass {
-  public readonly role: string
-  public readonly anime: AnimeMeta
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.role = data.role
-    this.anime = new AnimeMeta(client, data.anime)
-  }
+export interface CharacterAnimeReference {
+  readonly role: string
+  readonly anime: AnimeMeta
 }
 
-export class CharacterMangaReference extends BaseClass {
-  public readonly role: string
-  public readonly manga: MangaMeta
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.role = data.role
-    this.manga = new MangaMeta(client, data.manga)
-  }
+export interface CharacterMangaReference {
+  readonly role: string
+  readonly manga: MangaMeta
 }
 
-export class CharacterVoiceActorReference extends BaseClass {
-  public readonly language: string
-  public readonly person: PersonMeta
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.language = data.language
-    this.person = new PersonMeta(client, data.person)
-  }
+export interface CharacterVoiceActorReference {
+  readonly language: string
+  readonly person: PersonMeta
 }
 
 export class CharacterFull extends Character {
@@ -88,8 +91,8 @@ export class CharacterFull extends Character {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.anime = data.anime?.map((anime: any) => new CharacterAnimeReference(client, anime))
-    this.manga = data.manga?.map((manga: any) => new CharacterMangaReference(client, manga))
-    this.voices = data.voices?.map((voice: any) => new CharacterVoiceActorReference(client, voice))
+    this.anime = data.anime?.map((anime: any) => Character.parseAnimeReference(client, anime))
+    this.manga = data.manga?.map((manga: any) => Character.parseMangaReference(client, manga))
+    this.voices = data.voices?.map((voice: any) => Character.parseVoiceActorReference(client, voice))
   }
 }

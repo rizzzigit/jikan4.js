@@ -1,17 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContentExternal = exports.ContentRelationGroup = exports.ContentUserUpdate = exports.ContentReview = exports.ContentReactions = exports.ContentUser = exports.ContentNews = exports.ContentStatistics = exports.ContentStatisticsScore = exports.Content = exports.ContentTitle = exports.ContentImage = void 0;
+exports.Content = exports.ContentTitle = exports.ContentImage = void 0;
 const base_1 = require("../base");
-const misc_1 = require("../misc");
 class ContentImage extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
-        this.jpg = new misc_1.Image(client, data === null || data === void 0 ? void 0 : data.jpg);
-        this.webp = new misc_1.Image(client, data === null || data === void 0 ? void 0 : data.webp);
+        this.jpg = ContentImage.parseImage(data === null || data === void 0 ? void 0 : data.jpg);
+        this.webp = ContentImage.parseImage(data === null || data === void 0 ? void 0 : data.webp);
     }
 }
 exports.ContentImage = ContentImage;
 class ContentTitle extends base_1.BaseClass {
+    toString() {
+        return this.default;
+    }
     constructor(client, data) {
         super(client);
         this.synonyms = [];
@@ -51,12 +53,119 @@ class ContentTitle extends base_1.BaseClass {
             }
         }
     }
-    toString() {
-        return this.default;
-    }
 }
 exports.ContentTitle = ContentTitle;
 class Content extends base_1.BaseResource {
+    static parseStatisticsScore(data) {
+        return {
+            score: data.score,
+            votes: data.votes,
+            percentage: data.percentage
+        };
+    }
+    /** @hidden */
+    static parseStatistics(data) {
+        var _a;
+        return {
+            completed: data.completed,
+            onHold: data.on_hold,
+            dropped: data.dropped,
+            total: data.total,
+            scores: (_a = data.scores) === null || _a === void 0 ? void 0 : _a.map((score) => this.parseStatisticsScore(score))
+        };
+    }
+    /** @hidden */
+    static parseUserUpdate(data) {
+        return {
+            user: this.parseUser(data.user),
+            score: data.score,
+            status: data.status,
+            date: new Date(data.date)
+        };
+    }
+    /** @hidden */
+    static parseUser(data) {
+        var _a, _b;
+        return {
+            username: data.username,
+            url: data.url,
+            imageUrl: Content.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true)
+        };
+    }
+    /** @hidden */
+    static parseReview(data) {
+        return {
+            id: data.mal_id,
+            url: Content.parseURL(data.url),
+            type: data.type,
+            votes: data.votes,
+            date: new Date(data.date),
+            review: data.review,
+            reactions: this.parseReactions(data.reactions),
+            user: this.parseUser(data.user),
+            isSpoiler: data.is_spoiler,
+            isPreliminary: data.is_preliminary,
+            tags: data.tags
+        };
+    }
+    /** @hidden */
+    static parseNews(data) {
+        var _a, _b;
+        return {
+            id: data.mal_id,
+            url: data.url,
+            title: data.title,
+            date: new Date(data.date),
+            authorUsername: data.author_username,
+            authorURL: this.parseURL(data.author_url),
+            forumURL: this.parseURL(data.forum_url),
+            imageURL: this.parseURL((_b = (_a = data.data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true),
+            comments: data.comments,
+            excerpt: data.excerpt
+        };
+    }
+    /** @hidden */
+    static parseReactions(data) {
+        return {
+            overall: data.overall,
+            nice: data.nice,
+            loveIt: data.love_it,
+            funny: data.funny,
+            confusing: data.confusing,
+            informative: data.informative,
+            wellWritten: data.well_written,
+            creative: data.creative
+        };
+    }
+    /** @hidden */
+    static parseRelationType(data) {
+        switch ((data === null || data === void 0 ? void 0 : data.toLowerCase().trim()) || 'any') {
+            case 'adaptation': return 'Adaptation';
+            case 'side story': return 'SideStory';
+            case 'summary': return 'Summary';
+            case 'sequel': return 'Sequel';
+            case 'prequel': return 'Prequel';
+            case 'character': return 'Character';
+            case 'other': return 'Other';
+            case 'alternative setting': return 'AlternativeSetting';
+            case 'alternative version': return 'AlternativeVersion';
+            case 'spin-off': return 'SpinOff';
+            case 'full story': return 'FullStory';
+            case 'parent story': return 'ParentStory';
+            default: return 'Unknown';
+        }
+    }
+    /** @hidden */
+    static parseRelationGroup(client, relation, data) {
+        return { relation };
+    }
+    /** @hidden */
+    static parseExternal(data) {
+        return {
+            name: data.name,
+            url: this.parseURL(data.url, true)
+        };
+    }
     constructor(client, data) {
         super(client, data);
         this.image = new ContentImage(client, data.images);
@@ -74,121 +183,3 @@ class Content extends base_1.BaseResource {
     }
 }
 exports.Content = Content;
-class ContentStatisticsScore extends base_1.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.score = data.score;
-        this.votes = data.votes;
-        this.percentage = data.percentage;
-    }
-}
-exports.ContentStatisticsScore = ContentStatisticsScore;
-class ContentStatistics extends base_1.BaseClass {
-    constructor(client, data) {
-        var _a;
-        super(client);
-        this.completed = data.completed;
-        this.onHold = data.on_hold;
-        this.dropped = data.dropped;
-        this.total = data.total;
-        this.scores = ((_a = data.scores) === null || _a === void 0 ? void 0 : _a.map((score) => new ContentStatisticsScore(client, score))) || [];
-    }
-}
-exports.ContentStatistics = ContentStatistics;
-class ContentNews extends base_1.BaseResource {
-    constructor(client, data) {
-        var _a, _b;
-        super(client, data);
-        this.title = data.title;
-        this.date = new Date(data.date);
-        this.authorUsername = data.author_username;
-        this.authorURL = ContentNews.parseURL(data.author_url);
-        this.forumURL = ContentNews.parseURL(data.forum_url);
-        this.imageURL = ContentNews.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
-        this.comments = data.comments;
-        this.excerpt = data.excerpt;
-    }
-}
-exports.ContentNews = ContentNews;
-class ContentUser extends base_1.BaseClass {
-    constructor(client, data) {
-        var _a, _b;
-        super(client);
-        this.username = data.username;
-        this.url = ContentUser.parseURL(data.url);
-        this.imageUrl = ContentUser.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
-    }
-}
-exports.ContentUser = ContentUser;
-class ContentReactions extends base_1.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.overall = data.overall;
-        this.nice = data.nice;
-        this.loveIt = data.love_it;
-        this.funny = data.funny;
-        this.confusing = data.confusing;
-        this.informative = data.informative;
-        this.wellWritten = data.well_written;
-        this.creative = data.creative;
-    }
-}
-exports.ContentReactions = ContentReactions;
-class ContentReview extends base_1.BaseResource {
-    constructor(client, data) {
-        super(client, data);
-        this.type = data.type;
-        this.votes = data.votes;
-        this.date = new Date(data.date);
-        this.review = data.review;
-        this.reactions = new ContentReactions(client, data.reactions);
-        this.user = new ContentUser(client, data.user);
-        this.isSpoiler = data.is_spoiler;
-        this.isPreliminary = data.is_preliminary;
-        this.tags = data.tags;
-    }
-}
-exports.ContentReview = ContentReview;
-class ContentUserUpdate extends base_1.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.user = new ContentUser(client, data.user);
-        this.score = data.score;
-        this.status = data.status;
-        this.date = new Date(data.date);
-    }
-}
-exports.ContentUserUpdate = ContentUserUpdate;
-class ContentRelationGroup extends base_1.BaseClass {
-    constructor(client, relation, data) {
-        super(client);
-        this.relation = relation;
-    }
-    /** @hidden */
-    static parseRelation(data) {
-        switch ((data === null || data === void 0 ? void 0 : data.toLowerCase().trim()) || 'any') {
-            case 'adaptation': return 'Adaptation';
-            case 'side story': return 'SideStory';
-            case 'summary': return 'Summary';
-            case 'sequel': return 'Sequel';
-            case 'prequel': return 'Prequel';
-            case 'character': return 'Character';
-            case 'other': return 'Other';
-            case 'alternative setting': return 'AlternativeSetting';
-            case 'alternative version': return 'AlternativeVersion';
-            case 'spin-off': return 'SpinOff';
-            case 'full story': return 'FullStory';
-            case 'parent story': return 'ParentStory';
-            default: return 'Unknown';
-        }
-    }
-}
-exports.ContentRelationGroup = ContentRelationGroup;
-class ContentExternal extends base_1.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.name = data.name;
-        this.url = data.url && new URL(data.url);
-    }
-}
-exports.ContentExternal = ContentExternal;

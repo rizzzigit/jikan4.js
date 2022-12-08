@@ -1,9 +1,15 @@
 import { Client } from '../core/client';
-import { BaseClass, BaseResource } from './base';
+import { BaseResource } from './base';
 import { ContentImage } from './content/base';
 import { MangaMeta, PersonMeta, AnimeMeta } from './meta';
 import { Image } from './misc';
 export declare class Character extends BaseResource {
+    /** @hidden */
+    static parseAnimeReference(client: Client, data: any): CharacterAnimeReference;
+    /** @hidden */
+    static parseMangaReference(client: Client, data: any): CharacterMangaReference;
+    /** @hidden */
+    static parseVoiceActorReference(client: Client, data: any): CharacterVoiceActorReference;
     readonly image: ContentImage;
     readonly name: string;
     readonly nameKanji: string | null;
@@ -17,20 +23,17 @@ export declare class Character extends BaseResource {
     getFull(): Promise<CharacterFull>;
     constructor(client: Client, data: any);
 }
-export declare class CharacterAnimeReference extends BaseClass {
+export interface CharacterAnimeReference {
     readonly role: string;
     readonly anime: AnimeMeta;
-    constructor(client: Client, data: any);
 }
-export declare class CharacterMangaReference extends BaseClass {
+export interface CharacterMangaReference {
     readonly role: string;
     readonly manga: MangaMeta;
-    constructor(client: Client, data: any);
 }
-export declare class CharacterVoiceActorReference extends BaseClass {
+export interface CharacterVoiceActorReference {
     readonly language: string;
     readonly person: PersonMeta;
-    constructor(client: Client, data: any);
 }
 export declare class CharacterFull extends Character {
     readonly anime: Array<CharacterAnimeReference>;

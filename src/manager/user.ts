@@ -1,18 +1,13 @@
 import {
   User,
-  UserContentUpdates,
-  UserFavorites,
-  UserFriend, UserMeta,
-  UserRecommendation,
-  UserStats,
-  UserAnimeHistory,
-  UserMangaHistory,
+  UserFriend,
+  UserMeta,
   UserFull
 } from '../resource/user'
 import { translateObject } from '../utils'
 import { BaseManager } from './base'
-import { AnimeReview } from '../resource/content/anime'
-import { MangaReview } from '../resource/content/manga'
+import { Anime, AnimeReview } from '../resource/content/anime'
+import { Manga, MangaReview } from '../resource/content/manga'
 import { ClubMeta } from '../resource/meta'
 import { Link } from '../Jikan'
 
@@ -54,19 +49,19 @@ export class UserManager extends BaseManager {
   public async getStatistics (username: string) {
     const rawData = await this.request(`users/${username}/statistics`)
 
-    return rawData ? new UserStats(this.client, rawData) : undefined
+    return rawData ? User.parseStats(rawData) : undefined
   }
 
   public async getFavorites (username: string) {
     const rawData = await this.request(`users/${username}/favorites`)
 
-    return rawData ? new UserFavorites(this.client, rawData) : undefined
+    return rawData ? User.parseFavorites(this.client, rawData) : undefined
   }
 
   public async getUpdates (username: string) {
     const rawData = await this.request(`users/${username}/userupdates`)
 
-    return rawData ? new UserContentUpdates(this.client, rawData) : undefined
+    return rawData ? User.parseContentUpdates(this.client, rawData) : undefined
   }
 
   public async getAbout (username: string) {
@@ -80,8 +75,8 @@ export class UserManager extends BaseManager {
 
     return rawData.map((data) => {
       switch (data.entry.type) {
-        case 'manga': return new UserMangaHistory(this.client, data)
-        case 'anime': return new UserAnimeHistory(this.client, data)
+        case 'manga': return User.parseMangaHistory(this.client, data)
+        case 'anime': return User.parseAnimeHistory(this.client, data)
 
         default: throw new Error(`Unknown entry type: ${data.entry.type}`)
       }
@@ -100,9 +95,9 @@ export class UserManager extends BaseManager {
     return rawData
       ? rawData.map((review) => {
         if ('episodes_watched' in review) {
-          return new AnimeReview(this.client, review)
+          return Anime.parseReview(review)
         } else {
-          return new MangaReview(this.client, review)
+          return Manga.parseReview(review)
         }
       })
       : undefined
@@ -111,7 +106,7 @@ export class UserManager extends BaseManager {
   public async getRecommendations (username: string, offset?: number, maxCount?: number) {
     const rawData = <Array<any>> await this.requestPaginated(`users/${username}/recommendations`, offset, maxCount)
 
-    return rawData ? rawData.map((recommendation) => new UserRecommendation(this.client, recommendation)) : undefined
+    return rawData ? rawData.map((recommendation) => User.parseRecommendation(this.client, recommendation)) : undefined
   }
 
   public async getClubs (username: string, offset?: number, maxCount?: number) {

@@ -5,8 +5,8 @@ import { Anime } from './content/anime';
 import { Manga } from './content/manga';
 import { Person } from './person';
 import { Image } from './misc';
-export declare type MetaType = 'Magazine' | 'Producer' | 'AnimeGenre' | 'MangaGenre' | 'Person' | 'Character' | 'Club';
-export declare type ContentMetaType = 'Anime' | 'Manga';
+export type MetaType = 'Magazine' | 'Producer' | 'AnimeGenre' | 'MangaGenre' | 'Person' | 'Character' | 'Club';
+export type ContentMetaType = 'Anime' | 'Manga';
 export declare class Meta<T extends MetaType> extends BaseResource {
     readonly type: T;
     readonly name: string;
@@ -27,7 +27,7 @@ export declare class ProducerMeta extends Meta<'Producer'> {
 export declare class ClubMeta extends Meta<'Club'> {
     constructor(client: Client, data: any);
 }
-export declare type GenreType = 'Genre' | 'Explicit' | 'Theme' | 'Demographic';
+export type GenreType = 'Genre' | 'Explicit' | 'Theme' | 'Demographic';
 export declare class AnimeGenreMeta<T extends GenreType> extends Meta<'AnimeGenre'> {
     constructor(client: Client, data: any, type: T);
     readonly genreType: T;

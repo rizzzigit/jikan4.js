@@ -2,10 +2,26 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseResource = exports.BaseClass = void 0;
 class BaseClass {
-    constructor(client) {
-        this.client = client;
-        Object.defineProperty(this, 'client', { enumerable: false, value: client });
+    /** @hidden */
+    static parseImage(data) {
+        return {
+            small: this.parseURL(data === null || data === void 0 ? void 0 : data.small_image_url, true),
+            default: this.parseURL(data === null || data === void 0 ? void 0 : data.image_url, true),
+            medium: this.parseURL(data === null || data === void 0 ? void 0 : data.medium_image_url, true),
+            large: this.parseURL(data === null || data === void 0 ? void 0 : data.large_image_url, true),
+            maximum: this.parseURL(data === null || data === void 0 ? void 0 : data.maximum_image_url, true)
+        };
     }
+    /** @hidden */
+    static parseYoutubeVideo(data) {
+        return {
+            id: data.youtube_id,
+            url: `https://youtu.be/${data.youtube_id}`,
+            embedUrl: `https://www.youtube.com/embed/${data.youtube_id}`,
+            image: this.parseImage(data.images)
+        };
+    }
+    /** @hidden */
     static parseDate(input, nullable = false) {
         const date = new Date(input || '');
         if (Number.isNaN(date.getTime())) {
@@ -18,6 +34,7 @@ class BaseClass {
         }
         return date;
     }
+    /** @hidden */
     static parseURL(input, nullable = false) {
         let url = null;
         try {
@@ -36,8 +53,12 @@ class BaseClass {
             }
         }
         else {
-            return url;
+            return url.toString();
         }
+    }
+    constructor(client) {
+        this.client = client;
+        Object.defineProperty(this, 'client', { enumerable: false, value: client });
     }
 }
 exports.BaseClass = BaseClass;

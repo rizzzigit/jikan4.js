@@ -1,28 +1,62 @@
 import { Client } from '../../core/client';
 import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReactions, ContentReview, ContentExternal } from './base';
-import { BaseClass, BaseResource } from '../base';
 import { YoutubeVideo, Image, Link } from '../misc';
 import { ProducerMeta, AnimeGenreMeta, PersonMeta, CharacterMeta, AnimeMeta, MangaMeta } from '../meta';
-export declare type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown';
-export declare type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown';
-export declare type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown';
-export declare type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown';
-export declare class AnimeAirInformation extends BaseClass {
-    /** @hidden */
-    static parseStatus(input: any): AnimeAirStatus;
+export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown';
+export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown';
+export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown';
+export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown';
+export interface AnimeAirInformation {
     readonly status: AnimeAirStatus;
     readonly airing: boolean;
     readonly airedFrom: Date | null;
     readonly airedTo: Date | null;
-    constructor(client: Client, data: any);
 }
 export declare class Anime extends Content {
+    /** @hidden */
+    static parseAirInfo(data: any): AnimeAirInformation;
+    /** @hidden */
+    static parseAirInfoStatus(input: any): AnimeAirStatus;
     /** @hidden */
     static parseType(input: any): AnimeType;
     /** @hidden */
     static parseRating(input: any): AnimeRating;
     /** @hidden */
     static parseSeason(input: any): AnimeSeason | null;
+    /** @hidden */
+    static parseVoiceActorReference(client: Client, data: any): AnimeVoiceActorReference;
+    /** @hidden */
+    static parseCharacterReference(client: Client, data: any): AnimeCharacterReference;
+    /** @hidden */
+    static parseStaffReference(client: Client, data: any): AnimeStaffReference;
+    /** @hidden */
+    static parseEpisodeTitle(data: any): AnimeEpisodeTitle;
+    /** @hidden */
+    static parseEpisode(data: any): AnimeEpisode;
+    /** @hidden */
+    static parsePartialEpisode(data: any): AnimePartialEpisode;
+    /** @hidden */
+    static parseTopc(data: any): AnimeTopic;
+    /** @hidden */
+    static parsePromo(data: any): AnimePromo;
+    /** @hidden */
+    static parseEpisodeVideo(data: any): AnimeEpisodeVideo;
+    /** @hidden */
+    static parseMusicVideo(data: any): AnimeMusicVideo;
+    /** @hidden */
+    static parseVideo(data: any): AnimeVideo;
+    /** @hidden */
+    static parseStatistics(data: any): AnimeStatistics;
+    /** @hidden */
+    static parseRecommendation(client: Client, data: any): AnimeRecommendation;
+    /** @hidden */
+    static parseUserUpdate(data: any): AnimeUserUpdate;
+    /** @hidden */
+    static parseReview(data: any): AnimeReview;
+    /** @hidden */
+    static parseTopReview(client: Client, data: any): TopAnimeReview;
+    /** @hidden */
+    static parseRelationGroup<T extends ContentRelationType>(client: Client, relation: T, data: any): AnimeRelationGroup<T>;
     readonly trailer: YoutubeVideo | null;
     readonly type: AnimeType;
     readonly source: string | null;
@@ -64,68 +98,61 @@ export declare class Anime extends Content {
     getFull(): Promise<AnimeFull>;
     constructor(client: Client, data: any);
 }
-export declare class AnimeVoiceActorReference extends BaseClass {
+export interface AnimeVoiceActorReference {
     readonly language: string;
     readonly person: PersonMeta;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeCharacterReference extends BaseClass {
+export interface AnimeCharacterReference {
     readonly role: string;
     readonly character: CharacterMeta;
     readonly voiceActors: Array<AnimeVoiceActorReference>;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeStaffReference extends BaseClass {
+export interface AnimeStaffReference {
     readonly positions: Array<string>;
     readonly person: PersonMeta;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeEpisodeTitle extends BaseClass {
+export interface AnimeEpisodeTitle {
     readonly default: string;
     readonly japanese: string | null;
     readonly romanji: string | null;
     toString(): string;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeEpisode extends BaseClass {
+export interface AnimeEpisode {
     readonly animeId: number;
     readonly episodeId: number;
-    readonly URL: URL | null;
+    readonly URL: string | null;
     readonly title: AnimeEpisodeTitle;
     readonly duration: number;
     readonly aired: Date | null;
     readonly filler: boolean;
     readonly recap: boolean;
     readonly synopsis: string | null;
-    constructor(client: Client, animeId: number, data: any);
 }
-export declare class AnimePartialEpisode extends AnimeEpisode {
+export interface AnimePartialEpisode extends AnimeEpisode {
     readonly synopsis: null;
-    readonly forumUrl: URL | null;
-    getFullEpisode(): Promise<AnimeEpisode>;
-    constructor(client: Client, animeId: number, data: any);
+    readonly forumUrl: string | null;
 }
-export declare class AnimeTopic extends BaseResource {
+export interface AnimeTopic {
+    readonly id: number;
+    readonly url: string;
     readonly title: string;
     readonly date: Date;
     readonly authorUsername: string;
-    readonly authorURL: URL;
+    readonly authorURL: string;
     readonly comments: number;
-    constructor(client: Client, data: any);
 }
-export declare class AnimePromo extends BaseClass {
+export interface AnimePromo {
     readonly title: string;
     readonly trailer: YoutubeVideo;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeEpisodeVideo extends BaseResource {
+export interface AnimeEpisodeVideo {
+    readonly id: number;
+    readonly url: string | null;
     readonly title: string;
     readonly episode: number;
-    readonly imageURL: URL | null;
-    constructor(client: Client, data: any);
+    readonly imageURL: string | null;
 }
-export declare class AnimeMusicVideo extends BaseClass {
-    constructor(client: Client, data: any);
+export interface AnimeMusicVideo {
     readonly title: string;
     readonly video: YoutubeVideo;
     readonly meta: {
@@ -133,36 +160,33 @@ export declare class AnimeMusicVideo extends BaseClass {
         author: string;
     };
 }
-export declare class AnimeVideo extends BaseClass {
+export interface AnimeVideo {
     readonly promos: Array<AnimePromo>;
     readonly episodes: Array<AnimeEpisodeVideo>;
     readonly musicVideos: Array<AnimeMusicVideo>;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeStatistics extends ContentStatistics {
+export interface AnimeStatistics extends ContentStatistics {
     readonly watching: number;
     readonly planToWatch: number;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeRecommendation extends BaseClass {
-    readonly entry: AnimeMeta;
-    readonly URL: URL | null;
-    readonly votes: number;
-    constructor(client: Client, data: any);
+export interface AnimeRecommendation {
+    entry: AnimeMeta;
+    URL: string | null;
+    votes: number;
 }
-export declare class AnimeUserUpdate extends ContentUserUpdate {
+export interface AnimeUserUpdate extends ContentUserUpdate {
     readonly episodesSeen: number;
     readonly episodesTotal: number;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeReview extends ContentReview {
+export interface AnimeReview extends ContentReview {
     readonly episodesWatched: number;
     readonly reactions: ContentReactions;
-    constructor(client: Client, data: any);
 }
-export declare class AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
+export interface TopAnimeReview extends AnimeReview {
+    readonly anime: AnimeMeta;
+}
+export interface AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
     readonly items: T extends 'Adaptation' ? Array<MangaMeta> : Array<AnimeMeta>;
-    constructor(client: Client, relation: T, data: any);
 }
 export declare class AnimeFull extends Anime {
     readonly relations: Array<AnimeRelationGroup<ContentRelationType>>;

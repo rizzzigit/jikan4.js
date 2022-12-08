@@ -8,8 +8,8 @@ export type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary'
 
 export class UserMeta extends BaseClass {
   public readonly username: string
-  public readonly url: URL
-  public readonly imageUrl: URL | null
+  public readonly url: string
+  public readonly imageUrl: string | null
   public readonly lastOnline: Date | null
 
   public getUser () {
@@ -27,6 +27,7 @@ export class UserMeta extends BaseClass {
 }
 
 export class User extends BaseClass {
+  /** @hidden */
   public static parseGender (input: any): UserGender {
     switch (input?.trim?.().toLowerCase() || '') {
       case 'any': return 'Any'
@@ -37,9 +38,127 @@ export class User extends BaseClass {
     }
   }
 
+  /** @hidden */
+  public static parseStats (data: any): UserStats {
+    return {
+      anime: {
+        daysWatched: data.anime.days_watched,
+        meanScore: data.anime.mean_score,
+        watching: data.anime.watching,
+        completed: data.anime.completed,
+        onHold: data.anime.on_hold,
+        dropped: data.anime.dropped,
+        planToWatch: data.anime.plan_to_watch,
+        totalEntries: data.anime.total_entries,
+        rewatched: data.anime.rewatched,
+        episodesWatched: data.anime.episodes_watched
+      },
+      manga: {
+        daysRead: data.manga.days_read,
+        meanScore: data.manga.mean_score,
+        reading: data.manga.reading,
+        completed: data.manga.completed,
+        onHold: data.manga.on_hold,
+        dropped: data.manga.dropped,
+        planToRead: data.manga.plan_to_read,
+        totalEntries: data.manga.total_entries,
+        reread: data.manga.reread,
+        chaptersRead: data.manga.chapters_read,
+        volumesRead: data.manga.volumes_read
+      }
+    }
+  }
+
+  /** @hidden */
+  public static parseFavorites (client: Client, data: any): UserFavorites {
+    return {
+      anime: data.anime?.map((anime: any) => Object.assign(new AnimeMeta(client, anime), { images: new ContentImage(client, anime.images) })) ?? [],
+      manga: data.manga?.map((manga: any) => Object.assign(new MangaMeta(client, manga), { images: new ContentImage(client, manga.images) })) ?? [],
+      characters: data.characters?.map((character: any) => Object.assign(new CharacterMeta(client, character), { images: new ContentImage(client, character.images) })) ?? [],
+      people: data.people?.map((person: any) => Object.assign(new PersonMeta(client, person), { images: new ContentImage(client, person.images) })) ?? []
+    }
+  }
+
+  /** @hidden */
+  public static parseContentUpdate (data: any): UserContentUpdate {
+    return {
+      score: data.score,
+      status: data.status,
+      date: this.parseDate(data.date)
+    }
+  }
+
+  /** @hidden */
+  public static parseAnimeUpdate (client: Client, data: any): UserAnimeUpdate {
+    return {
+      anime: new AnimeMeta(client, data.entry),
+      episodesSeen: data.episodes_seen,
+      episodesTotal: data.episodes_total
+    }
+  }
+
+  /** @hidden */
+  public static parseMangaUpdate (client: Client, data: any): UserMangaUpdate {
+    return {
+      ...this.parseContentUpdate(data),
+
+      manga: new MangaMeta(client, data.entry),
+      chaptersRead: data.chapters_read,
+      chaptersTotal: data.chapters_total,
+      volumesRead: data.volumes_read,
+      volumesTotal: data.volumes_total
+    }
+  }
+
+  /** @hidden */
+  public static parseContentUpdates (client: Client, data: any): UserContentUpdates {
+    return {
+      anime: data.anime?.map((anime: any) => this.parseAnimeUpdate(client, anime)) || [],
+      manga: data.manga?.map((manga: any) => this.parseMangaUpdate(client, manga)) || []
+    }
+  }
+
+  /** @hidden */
+  public static parseAnimeHistory (client: Client, data: any): UserAnimeHistory {
+    return {
+      anime: new AnimeMeta(client, data.entry),
+      increment: data.increment,
+      date: this.parseDate(data.date)
+    }
+  }
+
+  /** @hidden */
+  public static parseMangaHistory (client: Client, data: any): UserMangaHistory {
+    return {
+      manga: new MangaMeta(client, data.entry),
+      increment: data.increment,
+      date: this.parseDate(data.date)
+    }
+  }
+
+  /** @hidden */
+  public static parseRecommendation (client: Client, data: any): UserRecommendation {
+    return {
+      user: {
+        url: this.parseURL(data.user.url),
+        username: data.user.username
+      },
+
+      entries: Object.assign(((entry) => entry?.map((entry: any) => {
+        if (entry.url.split('/')[3] === 'anime') {
+          return new AnimeMeta(client, entry)
+        } else {
+          return new MangaMeta(client, entry)
+        }
+      }) || [])(data.entry), { images: new ContentImage(client, data.entry.images) }),
+
+      content: data.content
+    }
+  }
+
   public readonly username: string
-  public readonly url: URL
-  public readonly imageUrl: URL | null
+  public readonly url: string
+  public readonly imageUrl: string | null
   public readonly lastOnline: Date | null
   public readonly gender: UserGender
   public readonly birthday: Date | null
@@ -100,8 +219,8 @@ export class User extends BaseClass {
   }
 }
 
-export class UserStats extends BaseClass {
-  public readonly anime: {
+export interface UserStats {
+  readonly anime: {
     daysWatched: number
     meanScore: number
     watching: number
@@ -114,7 +233,7 @@ export class UserStats extends BaseClass {
     episodesWatched: number
   }
 
-  public readonly manga: {
+  readonly manga: {
     daysRead: number
     meanScore: number
     reading: number
@@ -127,144 +246,56 @@ export class UserStats extends BaseClass {
     chaptersRead: number
     volumesRead: number
   }
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.anime = {
-      daysWatched: data.anime.days_watched,
-      meanScore: data.anime.mean_score,
-      watching: data.anime.watching,
-      completed: data.anime.completed,
-      onHold: data.anime.on_hold,
-      dropped: data.anime.dropped,
-      planToWatch: data.anime.plan_to_watch,
-      totalEntries: data.anime.total_entries,
-      rewatched: data.anime.rewatched,
-      episodesWatched: data.anime.episodes_watched
-    }
-    this.manga = {
-      daysRead: data.manga.days_read,
-      meanScore: data.manga.mean_score,
-      reading: data.manga.reading,
-      completed: data.manga.completed,
-      onHold: data.manga.on_hold,
-      dropped: data.manga.dropped,
-      planToRead: data.manga.plan_to_read,
-      totalEntries: data.manga.total_entries,
-      reread: data.manga.reread,
-      chaptersRead: data.manga.chapters_read,
-      volumesRead: data.manga.volumes_read
-    }
-  }
 }
 
-export class UserFavorites extends BaseClass {
-  public readonly anime: Array<AnimeMeta & { images: ContentImage }>
-  public readonly manga: Array<MangaMeta & { images: ContentImage }>
-  public readonly characters: Array<CharacterMeta & { images: ContentImage }>
-  public readonly people: Array<PersonMeta & { images: ContentImage }>
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.anime = data.anime?.map((anime: any) => Object.assign(new AnimeMeta(client, anime), { images: new ContentImage(client, anime.images) })) || []
-    this.manga = data.manga?.map((manga: any) => Object.assign(new MangaMeta(client, manga), { images: new ContentImage(client, manga.images) })) || []
-    this.characters = data.characters?.map((character: any) => Object.assign(new CharacterMeta(client, character), { images: new ContentImage(client, character.images) })) || []
-    this.people = data.people?.map((person: any) => Object.assign(new PersonMeta(client, person), { images: new ContentImage(client, person.images) })) || []
-  }
+export interface UserFavorites {
+  readonly anime: Array<AnimeMeta & { images: ContentImage }>
+  readonly manga: Array<MangaMeta & { images: ContentImage }>
+  readonly characters: Array<CharacterMeta & { images: ContentImage }>
+  readonly people: Array<PersonMeta & { images: ContentImage }>
 }
 
-export class UserContentUpdate extends BaseClass {
-  public readonly score: number
-  public readonly status: string
-  public readonly date: Date
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.score = data.score
-    this.status = data.status
-    this.date = UserContentUpdate.parseDate(data.date)
-  }
+export interface UserContentUpdate {
+  readonly score: number
+  readonly status: string
+  readonly date: Date
 }
 
-export class UserAnimeUpdate extends UserContentUpdate {
-  public readonly anime: AnimeMeta
-  public readonly episodesSeen: number
-  public readonly episodesTotal: number
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.anime = new AnimeMeta(client, data.entry)
-    this.episodesSeen = data.episodes_seen
-    this.episodesTotal = data.episodes_total
-  }
+export interface UserAnimeUpdate {
+  readonly anime: AnimeMeta
+  readonly episodesSeen: number
+  readonly episodesTotal: number
 }
 
-export class UserMangaUpdate extends UserContentUpdate {
-  public readonly manga: MangaMeta
-  public readonly chaptersRead: number
-  public readonly chaptersTotal: number
-  public readonly volumesRead: number
-  public readonly volumesTotal: number
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.manga = new MangaMeta(client, data.entry)
-    this.chaptersRead = data.chapters_read
-    this.chaptersTotal = data.chapters_total
-    this.volumesRead = data.volumes_read
-    this.volumesTotal = data.volumes_total
-  }
+export interface UserMangaUpdate extends UserContentUpdate {
+  readonly manga: MangaMeta
+  readonly chaptersRead: number
+  readonly chaptersTotal: number
+  readonly volumesRead: number
+  readonly volumesTotal: number
 }
 
-export class UserContentUpdates extends BaseClass {
-  public readonly anime: Array<UserAnimeUpdate>
-  public readonly manga: Array<UserMangaUpdate>
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.anime = data.anime?.map((anime: any) => new UserAnimeUpdate(client, anime)) || []
-    this.manga = data.manga?.map((manga: any) => new UserMangaUpdate(client, manga)) || []
-  }
+export interface UserContentUpdates {
+  readonly anime: Array<UserAnimeUpdate>
+  readonly manga: Array<UserMangaUpdate>
 }
 
-export class UserAnimeHistory extends BaseClass {
-  public readonly anime: AnimeMeta
-  public readonly increment: number
-  public readonly date: Date
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.anime = new AnimeMeta(client, data.entry)
-    this.increment = data.increment
-    this.date = UserAnimeHistory.parseDate(data.date)
-  }
+export interface UserAnimeHistory {
+  readonly anime: AnimeMeta
+  readonly increment: number
+  readonly date: Date
 }
 
-export class UserMangaHistory extends BaseClass {
-  public readonly manga: MangaMeta
-  public readonly increment: number
-  public readonly date: Date
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.manga = new MangaMeta(client, data.entry)
-    this.increment = data.increment
-    this.date = UserMangaHistory.parseDate(data.date)
-  }
+export interface UserMangaHistory {
+  readonly manga: MangaMeta
+  readonly increment: number
+  readonly date: Date
 }
 
 export class UserFriend extends BaseClass {
   public readonly username: string
-  public readonly url: URL
-  public readonly imageUrl: URL | null
+  public readonly url: string
+  public readonly imageUrl: string | null
   public readonly lastOnline: Date | null
   public readonly friendsSince: Date | null
 
@@ -283,33 +314,14 @@ export class UserFriend extends BaseClass {
   }
 }
 
-export class UserRecommendation extends BaseClass {
-  public readonly user: {
-    url: URL
+export interface UserRecommendation {
+  readonly user: {
+    url: string
     username: string
   }
 
-  public readonly entries: Array<(AnimeMeta | MangaMeta) & { images: ContentImage }>
-  public readonly content: string
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.user = {
-      url: UserRecommendation.parseURL(data.user.url),
-      username: data.user.username
-    }
-
-    this.entries = Object.assign(((entry) => entry?.map((entry: any) => {
-      if (entry.url.split('/')[3] === 'anime') {
-        return new AnimeMeta(client, entry)
-      } else {
-        return new MangaMeta(client, entry)
-      }
-    }) || [])(data.entry), { images: new ContentImage(client, data.entry.images) })
-
-    this.content = data.content
-  }
+  readonly entries: Array<(AnimeMeta | MangaMeta) & { images: ContentImage }>
+  readonly content: string
 }
 
 export class UserFull extends User {
@@ -323,11 +335,11 @@ export class UserFull extends User {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.statistics = new UserStats(client, data.statistics)
+    this.statistics = User.parseStats(data.statistics)
     this.external = data.external.map((data: any) => Object.assign(data, { url: new URL(data.url) }))
     this.updates = {
-      manga: data.updates?.manga?.map((update: any) => new UserMangaUpdate(client, update)) || [],
-      anime: data.updates?.anime?.map((update: any) => new UserAnimeUpdate(client, update)) || []
+      manga: data.updates?.manga?.map((update: any) => User.parseMangaUpdate(client, update)) || [],
+      anime: data.updates?.anime?.map((update: any) => User.parseAnimeUpdate(client, update)) || []
     }
   }
 }

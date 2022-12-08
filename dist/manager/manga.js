@@ -3,11 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MangaManager = void 0;
 const tslib_1 = require("tslib");
 const base_1 = require("./base");
-const base_2 = require("../resource/content/base");
 const manga_1 = require("../resource/content/manga");
-const misc_1 = require("../resource/misc");
 const utils_1 = require("../utils");
 const meta_1 = require("../resource/meta");
+const Jikan_1 = require("../Jikan");
 class MangaManager extends base_1.BaseManager {
     search(searchString, filter, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -66,31 +65,31 @@ class MangaManager extends base_1.BaseManager {
     getCharacters(mangaId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/characters`);
-            return rawData ? rawData.map((characterReference) => new manga_1.MangaCharacterReference(this.client, characterReference)) : undefined;
+            return rawData ? rawData.map((characterReference) => manga_1.Manga.parseCharacerReference(this.client, characterReference)) : undefined;
         });
     }
     getNews(mangaId, offset, maxCount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`manga/${mangaId}/news`, offset, maxCount);
-            return rawData ? rawData.map((news) => new base_2.ContentNews(this.client, news)) : undefined;
+            return rawData ? rawData.map((news) => manga_1.Manga.parseNews(news)) : undefined;
         });
     }
     getTopics(mangaId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/forum`);
-            return rawData ? rawData.map((topic) => new manga_1.MangaTopic(this.client, topic)) : undefined;
+            return rawData ? rawData.map((topic) => manga_1.Manga.parseTopic(topic)) : undefined;
         });
     }
     getPictures(mangaId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/pictures`);
-            return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
+            return rawData ? rawData.map((picture) => Jikan_1.BaseClass.parseImage(picture)) : undefined;
         });
     }
     getStatistics(mangaId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/statistics`);
-            return rawData ? new manga_1.MangaStatistics(this.client, rawData) : undefined;
+            return rawData ? manga_1.Manga.parseStatistics(rawData) : undefined;
         });
     }
     getMoreInfo(mangaId) {
@@ -102,25 +101,25 @@ class MangaManager extends base_1.BaseManager {
     getUserUpdates(mangaId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/userupdates`);
-            return rawData ? rawData.map((userUpdate) => new manga_1.MangaUserUpdate(this.client, userUpdate)) : undefined;
+            return rawData ? rawData.map((userUpdate) => manga_1.Manga.parseUserUpdate(userUpdate)) : undefined;
         });
     }
     getReviews(mangaId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/reviews`);
-            return rawData ? rawData.map((review) => new manga_1.MangaReview(this.client, review)) : undefined;
+            return rawData ? rawData.map((review) => manga_1.Manga.parseReview(review)) : undefined;
         });
     }
     getRelations(mangaId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`manga/${mangaId}/relations`);
-            return rawData ? rawData.map((relation) => new manga_1.MangaRelationGroup(this.client, manga_1.MangaRelationGroup.parseRelation(relation.relation), relation)) : undefined;
+            return rawData ? rawData.map((relation) => manga_1.Manga.parseRelationGroup(this.client, manga_1.Manga.parseRelationType(relation.relation), relation)) : undefined;
         });
     }
     getExternal(mangaId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/external`);
-            return rawData ? rawData.map((external) => new base_2.ContentExternal(this.client, external)) : undefined;
+            return rawData ? rawData.map((external) => manga_1.Manga.parseExternal(external)) : undefined;
         });
     }
 }

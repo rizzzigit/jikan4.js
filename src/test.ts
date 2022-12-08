@@ -1,4 +1,4 @@
-import { Client } from './Jikan'
+import { Anime, Character, Client, Manga } from './Jikan'
 
 const client = new Client()
 client.on('debug', (scope, message) => console.log(`[${scope}] ${message}`))
@@ -54,10 +54,49 @@ const run = async () => {
 
     reviewUpdate: async () => {
       const anime = await client.anime.get(5)
-      const manga = await client.manga.get(4)
+      // const manga = await client.manga.get(4)
 
-      console.log(await anime?.getReviews())
-      console.log(await manga?.getReviews())
+      // console.log(await anime?.getReviews())
+      // console.log(await manga?.getReviews())
+      console.log(await anime?.getFull())
+    },
+
+    getAll: async () => {
+      const animeIds: Map<number, null> = new Map()
+      const mangaIds: Map<number, null> = new Map()
+      const characterIds: Map<number, null> = new Map()
+
+      const getCharacter = (character: Character) => {
+        if (characterIds.has(character.id)) {
+          return
+        }
+
+        characterIds.set(character.id, null)
+        character.getAnime().then((anime) => anime.map((a) => a.anime.getFull().then(getAnime)))
+        character.getManga().then((manga) => manga.map((m) => m.manga.getFull().then(getManga)))
+      }
+
+      const getAnime = (anime: Anime) => {
+        if (animeIds.has(anime.id)) {
+          return
+        }
+
+        animeIds.set(anime.id, null)
+        anime.getCharacters().then((characters) => characters.map((a) => a.character.getFull().then(getCharacter)))
+      }
+
+      const getManga = (manga: Manga) => {
+        if (mangaIds.has(manga.id)) {
+          return
+        }
+
+        mangaIds.set(manga.id, null)
+        manga.getCharacters().then((characters) => characters.map((a) => a.character.getFull().then(getCharacter)))
+      }
+
+      client.anime.list(0, 100).then((list) => list.forEach(getAnime))
+      client.manga.list(0, 100).then((list) => list.forEach(getManga))
+      client.characters.list(0, 100).then((list) => list.forEach(getCharacter))
     }
   }
 

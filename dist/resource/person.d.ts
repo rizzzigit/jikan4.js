@@ -1,17 +1,24 @@
 import { Client } from '../core/client';
-import { BaseClass, BaseResource } from './base';
+import { BaseResource } from './base';
 import { AnimeMeta, CharacterMeta, MangaMeta } from './meta';
 import { Image } from './misc';
-export declare class PersonName extends BaseClass {
+export interface PersonName {
     readonly name: string;
     readonly given: string | null;
     readonly family: string | null;
     readonly alternate: Array<string>;
     toString(): string;
-    constructor(client: Client, data: any);
 }
 export declare class Person extends BaseResource {
-    readonly websiteUrl: URL | null;
+    /** @hidden */
+    static parseName(data: any): PersonName;
+    /** @hidden */
+    static parseAnimeReference(client: Client, data: any): PersonAnimeReference;
+    /** @hidden */
+    static parseVoiceActorReference(client: Client, data: any): PersonVoiceActorReference;
+    /** @hidden */
+    static parseMangaReference(client: Client, data: any): PersonMangaReference;
+    readonly websiteUrl: string | null;
     readonly image: Image;
     readonly name: PersonName;
     readonly birth: Date | null;
@@ -24,21 +31,18 @@ export declare class Person extends BaseResource {
     getFull(): Promise<PersonFull>;
     constructor(client: Client, data: any);
 }
-export declare class PersonAnimeReference extends BaseClass {
+export interface PersonAnimeReference {
     readonly position: string;
     readonly anime: AnimeMeta;
-    constructor(client: Client, data: any);
 }
-export declare class PersonVoiceActorReference extends BaseClass {
+export interface PersonVoiceActorReference {
     readonly role: string;
     readonly anime: AnimeMeta;
     readonly character: CharacterMeta;
-    constructor(client: Client, data: any);
 }
-export declare class PersonMangaReference extends BaseClass {
+export interface PersonMangaReference {
     readonly position: string;
     readonly manga: MangaMeta;
-    constructor(client: Client, data: any);
 }
 export declare class PersonFull extends Person {
     readonly anime: Array<PersonAnimeReference>;

@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CharacterManager = void 0;
 const tslib_1 = require("tslib");
+const Jikan_1 = require("../Jikan");
 const base_1 = require("../manager/base");
 const character_1 = require("../resource/character");
-const misc_1 = require("../resource/misc");
 const utils_1 = require("../utils");
 class CharacterManager extends base_1.BaseManager {
     search(searchString, filter, offset, maxCount) {
@@ -51,25 +51,25 @@ class CharacterManager extends base_1.BaseManager {
     getAnime(characterId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`characters/${characterId}/anime`);
-            return rawData ? rawData.map((animeReference) => new character_1.CharacterAnimeReference(this.client, animeReference)) : undefined;
+            return rawData ? rawData.map((animeReference) => character_1.Character.parseAnimeReference(this.client, animeReference)) : undefined;
         });
     }
     getManga(characterId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`characters/${characterId}/manga`);
-            return rawData ? rawData.map((mangaReference) => new character_1.CharacterMangaReference(this.client, mangaReference)) : undefined;
+            return rawData ? rawData.map((mangaReference) => character_1.Character.parseMangaReference(this.client, mangaReference)) : undefined;
         });
     }
     getVoiceActors(characterId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`characters/${characterId}/voices`);
-            return rawData ? rawData.map((voiceActorReference) => new character_1.CharacterVoiceActorReference(this.client, voiceActorReference)) : undefined;
+            return rawData ? rawData.map((voiceActorReference) => character_1.Character.parseVoiceActorReference(this.client, voiceActorReference)) : undefined;
         });
     }
     getPictures(characterId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`characters/${characterId}/pictures`);
-            return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
+            return rawData ? rawData.map((picture) => Jikan_1.BaseClass.parseImage(picture)) : undefined;
         });
     }
 }

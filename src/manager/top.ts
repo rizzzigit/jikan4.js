@@ -1,4 +1,4 @@
-import { TopAnimeReview, TopMangaReview } from '../resource/top'
+import { Anime, Manga } from '../Jikan'
 import { TopAnimeFilter } from './anime'
 import { BaseManager } from './base'
 import { TopMangaFilter } from './manga'
@@ -25,8 +25,8 @@ export class TopManager extends BaseManager {
 
     return rawData.map((data: any) => {
       switch (data.type) {
-        case 'anime': return new TopAnimeReview(this.client, data)
-        case 'manga': return new TopMangaReview(this.client, data)
+        case 'anime': return Anime.parseTopReview(this.client, data)
+        case 'manga': return Manga.parseTopReview(this.client, data)
 
         default:
           throw new Error(`Unknown review type: ${data.type}`)

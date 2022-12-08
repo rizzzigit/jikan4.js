@@ -121,61 +121,61 @@ export class AnimeManager extends BaseManager {
   public async getCharacters (animeId: number): Promise<Array<AnimeCharacterReference> | undefined> {
     const rawData = await this.request(`anime/${animeId}/characters`)
 
-    return rawData ? rawData.map((characterReference: any) => new AnimeCharacterReference(this.client, characterReference)) : undefined
+    return rawData ? rawData.map((characterReference: any) => Anime.parseCharacterReference(this.client, characterReference)) : undefined
   }
 
   public async getStaff (animeId: number): Promise<Array<AnimeStaffReference> | undefined> {
     const rawData = await this.request(`anime/${animeId}/staff`)
 
-    return rawData ? rawData.map((staffReference: any) => new AnimeStaffReference(this.client, staffReference)) : undefined
+    return rawData ? rawData.map((staffReference: any) => Anime.parseStaffReference(this.client, staffReference)) : undefined
   }
 
   public async getEpisodes (animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimePartialEpisode> | undefined> {
     const rawData = await this.requestPaginated(`anime/${animeId}/episodes`, offset, maxCount)
 
-    return rawData ? rawData.map((partialEpisode) => new AnimePartialEpisode(this.client, animeId, partialEpisode)) : undefined
+    return rawData ? rawData.map((partialEpisode) => Anime.parsePartialEpisode(Object.assign(partialEpisode, { animeId }))) : undefined
   }
 
   public async getEpisode (animeId: number, episodeId: number): Promise<AnimeEpisode | undefined> {
     const rawData = await this.request(`anime/${animeId}/episodes/${episodeId}`)
 
-    return rawData ? new AnimeEpisode(this.client, animeId, rawData) : undefined
+    return rawData ? Anime.parseEpisode(Object.assign(rawData, { animeId })) : undefined
   }
 
   public async getNews (animeId: number, offset?: number, maxCount?: number): Promise<Array<ContentNews> | undefined> {
     const rawData = await this.requestPaginated(`anime/${animeId}/news`, offset, maxCount)
 
-    return rawData ? rawData.map((news) => new ContentNews(this.client, news)) : undefined
+    return rawData ? rawData.map((news) => Anime.parseNews(news)) : undefined
   }
 
   public async getTopics (animeId: number, topic: 'all' | 'episode' | 'other' = 'all'): Promise<Array<AnimeTopic> | undefined> {
     const rawData = await this.request(`anime/${animeId}/forum`, { topic })
 
-    return rawData ? rawData.map((topic: any) => new AnimeTopic(this.client, topic)) : undefined
+    return rawData ? rawData.map((topic: any) => Anime.parseTopc(topic)) : undefined
   }
 
   public async getVideos (animeId: number): Promise<AnimeVideo | undefined> {
     const rawData = await this.request(`anime/${animeId}/videos`)
 
-    return rawData ? new AnimeVideo(this.client, rawData) : undefined
+    return rawData ? Anime.parseVideo(rawData) : undefined
   }
 
   public async getVideosEpisodes (animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeEpisodeVideo> | undefined> {
     const rawData = await this.requestPaginated(`anime/${animeId}/videos/episodes`, offset, maxCount)
 
-    return rawData ? rawData.map((episode) => new AnimeEpisodeVideo(this.client, episode)) : undefined
+    return rawData ? rawData.map((episode) => Anime.parseEpisodeVideo(episode)) : undefined
   }
 
   public async getPictures (animeId: number): Promise<Array<Image> | undefined> {
     const rawData = await this.request(`anime/${animeId}/pictures`)
 
-    return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
+    return rawData ? rawData.map((picture: any) => Anime.parseImage(picture)) : undefined
   }
 
   public async getStatistics (animeId: number): Promise<AnimeStatistics | undefined> {
     const rawData = await this.request(`anime/${animeId}/statistics`)
 
-    return rawData ? new AnimeStatistics(this.client, rawData) : undefined
+    return rawData ? Anime.parseStatistics(rawData) : undefined
   }
 
   public async getMoreInfo (animeId: number): Promise<string | null | undefined> {
@@ -187,25 +187,25 @@ export class AnimeManager extends BaseManager {
   public async getRecommendations (animeId: number): Promise<Array<AnimeRecommendation> | undefined> {
     const rawData = await this.request(`anime/${animeId}/recommendations`)
 
-    return rawData ? rawData.map((recommendation: any) => new AnimeRecommendation(this.client, recommendation)) : undefined
+    return rawData ? rawData.map((recommendation: any) => Anime.parseRecommendation(this.client, recommendation)) : undefined
   }
 
   public async getUserUpdates (animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeUserUpdate> | undefined> {
     const rawData = await this.requestPaginated(`anime/${animeId}/userupdates`, offset, maxCount)
 
-    return rawData ? rawData.map((userUpdate: any) => new AnimeUserUpdate(this.client, userUpdate)) : undefined
+    return rawData ? rawData.map((userUpdate: any) => Anime.parseUserUpdate(userUpdate)) : undefined
   }
 
   public async getReviews (animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeReview> | undefined> {
     const rawData = await this.requestPaginated(`anime/${animeId}/reviews`, offset, maxCount)
 
-    return rawData ? rawData.map((review: any) => new AnimeReview(this.client, review)) : undefined
+    return rawData ? rawData.map((review: any) => Anime.parseReview(review)) : undefined
   }
 
   public async getRelations (animeId: number): Promise<Array<AnimeRelationGroup<ContentRelationType>> | undefined> {
     const rawData = await this.request(`anime/${animeId}/relations`)
 
-    return rawData ? rawData.map((relation: any) => new AnimeRelationGroup(this.client, AnimeRelationGroup.parseRelation(relation.relation), relation)) : undefined
+    return rawData ? rawData.map((relation: any) => Anime.parseRelationGroup(this.client, Anime.parseRelationType(relation.relation), relation)) : undefined
   }
 
   public async getThemes (animeId: number): Promise<{
@@ -218,7 +218,7 @@ export class AnimeManager extends BaseManager {
   public async getExternal (animeId: number): Promise<Array<ContentExternal> | undefined> {
     const rawData = await this.request(`anime/${animeId}/external`)
 
-    return rawData ? rawData.map((external: any) => new ContentExternal(this.client, external)) : undefined
+    return rawData ? rawData.map((external: any) => Anime.parseExternal(external)) : undefined
   }
 
   public async getStreamingLinks (animeId: number): Promise<Array<Link> | undefined> {

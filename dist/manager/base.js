@@ -4,10 +4,6 @@ exports.BaseManager = void 0;
 const tslib_1 = require("tslib");
 const base_1 = require("../resource/base");
 class BaseManager extends base_1.BaseClass {
-    constructor(client) {
-        super(client);
-        this.APIClient = client.APIClient;
-    }
     /** @hidden */
     debug(message) {
         this.client.debug('Content Manager', message);
@@ -52,6 +48,10 @@ class BaseManager extends base_1.BaseClass {
             } while (is200 && hasNext);
             return data.length || is200 ? data.slice(offset, fetchEnd()) : undefined;
         });
+    }
+    constructor(client) {
+        super(client);
+        this.APIClient = client.APIClient;
     }
 }
 exports.BaseManager = BaseManager;

@@ -1,22 +1,38 @@
 import { Client } from '../../core/client';
-import { BaseClass, BaseResource } from '../base';
 import { Content, ContentRelationType, ContentRelationGroup, ContentNews, ContentStatistics, ContentUserUpdate, ContentReactions, ContentReview, ContentExternal } from './base';
 import { PersonMeta, MagazineMeta, MangaGenreMeta, CharacterMeta, MangaMeta, AnimeMeta } from '../meta';
 import { Image } from '../misc';
-export declare type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown';
-export declare type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished' | 'Unknown';
-export declare class MangaPublishInformation extends BaseClass {
-    /** @hidden */
-    static parseMangaPublishStatus(input: any): MangaPublishStatus;
+export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown';
+export type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished' | 'Unknown';
+export interface MangaPublishInformation {
     readonly status: MangaPublishStatus;
     readonly publishing: boolean;
     readonly publishedFrom: Date | null;
     readonly publishedTo: Date | null;
-    constructor(client: Client, data: any);
 }
 export declare class Manga extends Content {
     /** @hidden */
+    static parsePublishStatus(input: any): MangaPublishStatus;
+    /** @hidden */
+    static parsePublishInfo(data: any): MangaPublishInformation;
+    /** @hidden */
     static parseType(input: any): MangaType;
+    /** @hidden */
+    static parseStatistics(data: any): MangaStatistics;
+    /** @hidden */
+    static parseUserUpdate(data: any): MangaUserUpdate;
+    /** @hidden */
+    static parseReview(data: any): MangaReview;
+    /** @hidden */
+    static parseTopReview(client: Client, data: any): TopMangaReview;
+    /** @hidden */
+    static parseRelationGroup<T extends ContentRelationType>(client: Client, relation: T, data: any): MangaRelationGroup<T>;
+    /** @hidden */
+    static parseCharacerReference(client: Client, data: any): MangaCharacterReference;
+    /** @hidden */
+    static parseTopic(data: any): MangaTopic;
+    /** @hidden */
+    static parseRecommendation(client: Client, data: any): MangaRecommendation;
     readonly type: MangaType;
     readonly chapters: number;
     readonly volumes: number;
@@ -41,45 +57,43 @@ export declare class Manga extends Content {
     getFull(): Promise<MangaFull>;
     constructor(client: Client, data: any);
 }
-export declare class MangaCharacterReference extends BaseClass {
+export interface MangaCharacterReference {
     readonly character: CharacterMeta;
     readonly role: string;
-    constructor(client: Client, data: any);
 }
-export declare class MangaTopic extends BaseResource {
+export interface MangaTopic {
+    readonly id: number;
+    readonly url: string;
     readonly title: string;
     readonly date: Date;
     readonly authorUsername: string;
-    readonly authorURL: URL;
+    readonly authorURL: string;
     readonly comments: number;
-    constructor(client: Client, data: any);
 }
-export declare class MangaStatistics extends ContentStatistics {
+export interface MangaStatistics extends ContentStatistics {
     readonly reading: number;
     readonly planToRead: number;
-    constructor(client: Client, data: any);
 }
-export declare class MangaRecommendation extends BaseClass {
+export interface MangaRecommendation {
     readonly entry: MangaMeta;
-    readonly URL: URL;
+    readonly URL: string;
     readonly votes: number;
-    constructor(client: Client, data: any);
 }
-export declare class MangaUserUpdate extends ContentUserUpdate {
+export interface MangaUserUpdate extends ContentUserUpdate {
     readonly volumesRead: number;
     readonly volumesTotal: number;
     readonly chaptersRead: number;
     readonly chaptersTotal: number;
-    constructor(client: Client, data: any);
 }
-export declare class MangaReview extends ContentReview {
+export interface MangaReview extends ContentReview {
     readonly chaptersRead: number;
     readonly reactions: ContentReactions;
-    constructor(client: Client, data: any);
 }
-export declare class MangaRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
+export interface TopMangaReview extends MangaReview {
+    readonly manga: MangaMeta;
+}
+export interface MangaRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {
     readonly items: T extends 'Adaptation' ? Array<AnimeMeta> : Array<MangaMeta>;
-    constructor(client: Client, relation: T, data: any);
 }
 export declare class MangaFull extends Manga {
     readonly relations: Array<MangaRelationGroup<ContentRelationType>>;

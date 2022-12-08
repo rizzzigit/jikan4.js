@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MangaMeta = exports.AnimeMeta = exports.CharacterMeta = exports.PersonMeta = exports.MangaGenreMeta = exports.AnimeGenreMeta = exports.ClubMeta = exports.ProducerMeta = exports.MagazineMeta = exports.ContentMeta = exports.Meta = void 0;
 const base_1 = require("./base");
-const misc_1 = require("./misc");
 class Meta extends base_1.BaseResource {
     constructor(client, data, type) {
         super(client, data);
@@ -17,7 +16,7 @@ class ContentMeta extends base_1.BaseResource {
         super(client, data);
         this.type = type;
         this.title = data.name || data.title;
-        this.image = new misc_1.Image(client, (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
+        this.image = base_1.BaseClass.parseImage((_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
     }
 }
 exports.ContentMeta = ContentMeta;

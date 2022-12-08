@@ -1,5 +1,5 @@
 import { Client } from '../core/client'
-import { BaseResource } from './base'
+import { BaseClass, BaseResource } from './base'
 import { Character } from './character'
 import { Anime } from './content/anime'
 import { Manga } from './content/manga'
@@ -32,7 +32,7 @@ export class ContentMeta<T extends ContentMetaType> extends BaseResource {
 
     this.type = type
     this.title = data.name || data.title
-    this.image = new Image(client, data.images?.jpg)
+    this.image = BaseClass.parseImage(data.images?.jpg)
   }
 }
 

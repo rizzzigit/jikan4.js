@@ -29,7 +29,6 @@ tslib_1.__exportStar(require("./resource/meta"), exports);
 tslib_1.__exportStar(require("./resource/misc"), exports);
 tslib_1.__exportStar(require("./resource/person"), exports);
 tslib_1.__exportStar(require("./resource/season"), exports);
-tslib_1.__exportStar(require("./resource/top"), exports);
 tslib_1.__exportStar(require("./resource/user"), exports);
 tslib_1.__exportStar(require("./resource/producer"), exports);
 tslib_1.__exportStar(require("./utils"), exports);

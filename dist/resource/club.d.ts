@@ -1,13 +1,17 @@
 import { Client } from '../core/client';
-import { BaseClass, BaseResource } from './base';
-export declare type ClubCategory = 'ActorsAndArtists' | 'Anime' | 'Characters' | 'CitiesAndNeighborhoods' | 'Companies' | 'Conventions' | 'Games' | 'Japan' | 'Manga' | 'Music' | 'Others' | 'Schools' | 'None' | 'Unknown';
-export declare type ClubType = 'Public' | 'Private' | 'Secret' | 'Unknown';
+import { BaseResource } from './base';
+export type ClubCategory = 'ActorsAndArtists' | 'Anime' | 'Characters' | 'CitiesAndNeighborhoods' | 'Companies' | 'Conventions' | 'Games' | 'Japan' | 'Manga' | 'Music' | 'Others' | 'Schools' | 'None' | 'Unknown';
+export type ClubType = 'Public' | 'Private' | 'Secret' | 'Unknown';
 export declare class Club extends BaseResource {
     /** @hidden */
     static parseCategory(input: any): ClubCategory;
     /** @hidden */
     static parseType(input: any): ClubType;
-    readonly imageUrl: URL | null;
+    /** @hidden */
+    static parseStaff(data: any): ClubStaff;
+    /** @hidden */
+    static parseMember(data: any): ClubMember;
+    readonly imageUrl: string | null;
     readonly memberCount: number;
     readonly pictureCount: number;
     readonly category: ClubCategory;
@@ -17,14 +21,12 @@ export declare class Club extends BaseResource {
     getMembers(): Promise<ClubMember[]>;
     constructor(client: Client, data: any);
 }
-export declare class ClubStaff extends BaseClass {
-    readonly url: URL;
+export interface ClubStaff {
+    readonly url: string;
     readonly username: string;
-    constructor(client: Client, data: any);
 }
-export declare class ClubMember extends BaseClass {
-    readonly URL: URL;
+export interface ClubMember {
+    readonly URL: string;
     readonly username: string;
-    readonly imageURL: URL | null;
-    constructor(client: Client, data: any);
+    readonly imageURL: string | null;
 }

@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContentExternal = exports.ContentRelationGroup = exports.ContentUserUpdate = exports.ContentReview = exports.ContentReviewScores = exports.ContentUser = exports.ContentNews = exports.ContentStatistics = exports.ContentStatisticsScore = exports.Content = exports.ContentTitle = exports.ContentImage = void 0;
+exports.ContentExternal = exports.ContentRelationGroup = exports.ContentUserUpdate = exports.ContentReview = exports.ContentReactions = exports.ContentUser = exports.ContentNews = exports.ContentStatistics = exports.ContentStatisticsScore = exports.Content = exports.ContentTitle = exports.ContentImage = void 0;
 const base_1 = require("../base");
 const misc_1 = require("../misc");
-const url_1 = require("url");
 class ContentImage extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
@@ -121,16 +120,20 @@ class ContentUser extends base_1.BaseClass {
     }
 }
 exports.ContentUser = ContentUser;
-class ContentReviewScores extends base_1.BaseClass {
+class ContentReactions extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
         this.overall = data.overall;
-        this.story = data.story;
-        this.character = data.character;
-        this.enjoyment = data.enjoyment;
+        this.nice = data.nice;
+        this.loveIt = data.love_it;
+        this.funny = data.funny;
+        this.confusing = data.confusing;
+        this.informative = data.informative;
+        this.wellWritten = data.well_written;
+        this.creative = data.creative;
     }
 }
-exports.ContentReviewScores = ContentReviewScores;
+exports.ContentReactions = ContentReactions;
 class ContentReview extends base_1.BaseResource {
     constructor(client, data) {
         super(client, data);
@@ -138,8 +141,11 @@ class ContentReview extends base_1.BaseResource {
         this.votes = data.votes;
         this.date = new Date(data.date);
         this.review = data.review;
-        this.scores = new ContentReviewScores(client, data.scores);
+        this.reactions = new ContentReactions(client, data.reactions);
         this.user = new ContentUser(client, data.user);
+        this.isSpoiler = data.is_spoiler;
+        this.isPreliminary = data.is_preliminary;
+        this.tags = data.tags;
     }
 }
 exports.ContentReview = ContentReview;
@@ -182,7 +188,7 @@ class ContentExternal extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
         this.name = data.name;
-        this.url = data.url && new url_1.URL(data.url);
+        this.url = data.url && new URL(data.url);
     }
 }
 exports.ContentExternal = ContentExternal;

@@ -7,7 +7,7 @@ import {
   ContentNews,
   ContentStatistics,
   ContentUserUpdate,
-  ContentReviewScores,
+  ContentReactions,
   ContentReview,
   ContentExternal
 } from './base'
@@ -20,7 +20,6 @@ import {
   AnimeMeta
 } from '../meta'
 import { Image } from '../misc'
-import { URL } from 'url'
 import { mangaExplicitGenres } from '../../manager/genre'
 
 export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown'
@@ -220,25 +219,15 @@ export class MangaUserUpdate extends ContentUserUpdate {
   }
 }
 
-export class MangaReviewScores extends ContentReviewScores {
-  public readonly art: number
-
-  public constructor (client: Client, data: any) {
-    super(client, data)
-
-    this.art = data.art
-  }
-}
-
 export class MangaReview extends ContentReview {
   public readonly chaptersRead: number
-  public readonly scores: MangaReviewScores
+  public readonly reactions: ContentReactions
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
     this.chaptersRead = data.chapters_read
-    this.scores = new MangaReviewScores(client, data.scores)
+    this.reactions = new ContentReactions(client, data.reactions)
   }
 }
 

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MangaFull = exports.MangaRelationGroup = exports.MangaReview = exports.MangaReviewScores = exports.MangaUserUpdate = exports.MangaRecommendation = exports.MangaStatistics = exports.MangaTopic = exports.MangaCharacterReference = exports.Manga = exports.MangaPublishInformation = void 0;
+exports.MangaFull = exports.MangaRelationGroup = exports.MangaReview = exports.MangaUserUpdate = exports.MangaRecommendation = exports.MangaStatistics = exports.MangaTopic = exports.MangaCharacterReference = exports.Manga = exports.MangaPublishInformation = void 0;
 const base_1 = require("../base");
 const base_2 = require("./base");
 const meta_1 = require("../meta");
@@ -140,18 +140,11 @@ class MangaUserUpdate extends base_2.ContentUserUpdate {
     }
 }
 exports.MangaUserUpdate = MangaUserUpdate;
-class MangaReviewScores extends base_2.ContentReviewScores {
-    constructor(client, data) {
-        super(client, data);
-        this.art = data.art;
-    }
-}
-exports.MangaReviewScores = MangaReviewScores;
 class MangaReview extends base_2.ContentReview {
     constructor(client, data) {
         super(client, data);
         this.chaptersRead = data.chapters_read;
-        this.scores = new MangaReviewScores(client, data.scores);
+        this.reactions = new base_2.ContentReactions(client, data.reactions);
     }
 }
 exports.MangaReview = MangaReview;

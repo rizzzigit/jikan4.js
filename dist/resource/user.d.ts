@@ -1,11 +1,9 @@
-/// <reference types="node" />
-import { URL } from 'url';
 import { Client } from '../core/client';
 import { ContentImage } from '../resource/content/base';
 import { BaseClass } from './base';
 import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta';
 import { Link } from './misc';
-export type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
+export declare type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
 export declare class UserMeta extends BaseClass {
     readonly username: string;
     readonly url: URL;

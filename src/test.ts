@@ -50,6 +50,14 @@ const run = async () => {
       const user = await client.users.getFull('fullbellydragon')
 
       return user?.updates
+    },
+
+    reviewUpdate: async () => {
+      const anime = await client.anime.get(5)
+      const manga = await client.manga.get(4)
+
+      console.log(await anime?.getReviews())
+      console.log(await manga?.getReviews())
     }
   }
 

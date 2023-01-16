@@ -1,7 +1,6 @@
 import { Client } from '../../core/client'
 import { BaseClass, BaseResource } from '../base'
 import { Image } from '../misc'
-import { URL } from 'url'
 
 export class ContentImage extends BaseClass {
   public readonly jpg: Image
@@ -184,19 +183,27 @@ export class ContentUser extends BaseClass {
   }
 }
 
-export class ContentReviewScores extends BaseClass {
+export class ContentReactions extends BaseClass {
   public readonly overall: number
-  public readonly story: number
-  public readonly character: number
-  public readonly enjoyment: number
+  public readonly nice: number
+  public readonly loveIt: number
+  public readonly funny: number
+  public readonly confusing: number
+  public readonly informative: number
+  public readonly wellWritten: number
+  public readonly creative: number
 
   public constructor (client: Client, data: any) {
     super(client)
 
     this.overall = data.overall
-    this.story = data.story
-    this.character = data.character
-    this.enjoyment = data.enjoyment
+    this.nice = data.nice
+    this.loveIt = data.love_it
+    this.funny = data.funny
+    this.confusing = data.confusing
+    this.informative = data.informative
+    this.wellWritten = data.well_written
+    this.creative = data.creative
   }
 }
 
@@ -205,8 +212,11 @@ export class ContentReview extends BaseResource {
   public readonly votes: number
   public readonly date: Date
   public readonly review: string
-  public readonly scores: ContentReviewScores
+  public readonly reactions: ContentReactions
   public readonly user: ContentUser
+  public readonly isSpoiler: boolean
+  public readonly isPreliminary: boolean
+  public readonly tags: Array<string>
 
   public constructor (client: Client, data: any) {
     super(client, data)
@@ -215,8 +225,11 @@ export class ContentReview extends BaseResource {
     this.votes = data.votes
     this.date = new Date(data.date)
     this.review = data.review
-    this.scores = new ContentReviewScores(client, data.scores)
+    this.reactions = new ContentReactions(client, data.reactions)
     this.user = new ContentUser(client, data.user)
+    this.isSpoiler = data.is_spoiler
+    this.isPreliminary = data.is_preliminary
+    this.tags = data.tags
   }
 }
 

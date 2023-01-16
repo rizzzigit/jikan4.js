@@ -1,4 +1,6 @@
 import { join } from 'path'
+import EventEmitter, { EventInterface } from '@rizzzi/eventemitter'
+
 import { APIClient } from './api'
 import { HeartBeatMonitor } from './heartbeat'
 import { AnimeManager } from '../manager/anime'
@@ -11,7 +13,6 @@ import { MagazineManager } from '../manager/magazine'
 import { ProducerManager } from '../manager/producer'
 import { SeasonManager } from '../manager/season'
 import { TopManager } from '../manager/top'
-import { EventEmitter } from 'events'
 import { ScheduleManager } from '../manager/schedule'
 import { UserManager } from '../manager/user'
 
@@ -112,10 +113,10 @@ export interface ClientOptions {
   /**
    * Where to store cache from Jikan API
   */
-  dataPath: string
+  dataPath?: string
 }
 
-export interface ClientEvents {
+export interface ClientEvents extends EventInterface {
   debug: [scope: string, message: string]
 }
 
@@ -125,7 +126,8 @@ export class Client {
   /** @hidden */
   private static setOptions (options?: Partial<ClientOptions>): ClientOptions {
     const defaultOptions: ClientOptions = {
-      dataPath: join(__dirname, '..', '..', '.Jikan'),
+      dataPath: (() => { try { return join(__dirname, '..', '..', '.Jikan') } catch {} })(),
+
       host: 'api.jikan.moe',
       baseUri: 'v4',
 
@@ -292,7 +294,7 @@ export class Client {
   public readonly heartbeat: HeartBeatMonitor
 
   /** @hidden */
-  public readonly events: EventEmitter
+  public readonly events: EventEmitter<ClientEvents>
 
   /**
    * Listen to client events.
@@ -302,12 +304,7 @@ export class Client {
    * client.on('debug', console.log)
    * ```
   */
-
-  public on <T extends ClientEventNames> (event: T, listener: (...args: ClientEvents[T]) => void): Client {
-    this.events.on(event, <any> listener)
-
-    return this
-  }
+  public on: EventEmitter<ClientEvents>['on']
 
   /**
    * Listen to client events once.
@@ -317,17 +314,20 @@ export class Client {
    * client.once('debug', console.log)
    * ```
   */
+  public once: EventEmitter<ClientEvents>['on']
 
-  public once <T extends ClientEventNames> (event: T, listener: (...args: ClientEvents[T]) => void): Client {
-    this.events.once(event, <any> listener)
-
-    return this
-  }
+  /**
+   * Remove a listener.
+   *
+   * @example
+   * ```ts
+   * client.off('debug', console.log)
+   * ```
+  */
+  public off: EventEmitter<ClientEvents>['off']
 
   /** @hidden */
-  public emit <T extends ClientEventNames> (event: T, ...args: ClientEvents[T]): boolean {
-    return this.events.emit(event, ...args)
-  }
+  public readonly emit: EventEmitter<ClientEvents>['emit']
 
   /** @hidden */
   public debug (scope: string, message: string) {
@@ -366,5 +366,10 @@ export class Client {
     this.heartbeat = new HeartBeatMonitor(this)
 
     this.events = new EventEmitter()
+    const { on, once, emit, off } = this.events.bind()
+    this.on = on
+    this.once = once
+    this.emit = emit
+    this.off = off
   }
 }

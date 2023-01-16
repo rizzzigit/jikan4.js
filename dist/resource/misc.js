@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YoutubeVideo = exports.Image = void 0;
 const base_1 = require("./base");
-const url_1 = require("url");
 class Image extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
@@ -18,8 +17,8 @@ class YoutubeVideo extends base_1.BaseClass {
     constructor(client, data) {
         super(client);
         this.id = data.youtube_id;
-        this.url = new url_1.URL(`https://youtu.be/${data.youtube_id}`);
-        this.embedUrl = new url_1.URL(`https://www.youtube.com/embed/${this.id}`);
+        this.url = new URL(`https://youtu.be/${data.youtube_id}`);
+        this.embedUrl = new URL(`https://www.youtube.com/embed/${this.id}`);
         this.image = new Image(client, data.images);
     }
 }

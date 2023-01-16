@@ -5,9 +5,9 @@ const tslib_1 = require("tslib");
 const http_1 = tslib_1.__importDefault(require("http"));
 const https_1 = tslib_1.__importDefault(require("https"));
 const path_1 = tslib_1.__importDefault(require("path"));
-const url_1 = require("url");
 const utils_1 = require("../utils");
 const cache_1 = require("./cache");
+const isBrowser = typeof window !== 'undefined';
 class APIResponseData {
     constructor(status, url, headers, body) {
         this.time = Date.now();
@@ -48,27 +48,30 @@ class APIClient {
     constructor(client) {
         this.client = client;
         this.queue = [];
-        this.cache = !client.options.disableCaching
+        const { options: { disableCaching, dataPath } } = client;
+        this.cache = (!disableCaching) && (dataPath != null)
             ? new cache_1.CacheManager(client)
             : undefined;
         this.lastRequest = 0;
         this.isQueueRunning = false;
-        this.agent = (() => {
-            const { options: { keepAlive, keepAliveMsecs } } = client;
-            const options = { keepAlive, keepAliveMsecs };
-            return {
-                http: new http_1.default.Agent(options),
-                https: new https_1.default.Agent(options)
-            };
-        })();
+        this.agent = isBrowser
+            ? {}
+            : (() => {
+                const { options: { keepAlive, keepAliveMsecs } } = client;
+                const options = { keepAlive, keepAliveMsecs };
+                return {
+                    http: new http_1.default.Agent(options),
+                    https: new https_1.default.Agent(options)
+                };
+            })();
     }
     /** @hidden */
     newRequestInstance(secure, url, options) {
         const { agent } = this;
         if (secure) {
-            return https_1.default.request(url, Object.assign(Object.assign({}, options), { agent: agent.https }));
+            return https_1.default.request(url.toString(), Object.assign(Object.assign({}, options), { agent: agent.https }));
         }
-        return http_1.default.request(url, Object.assign(Object.assign({}, options), { agent: agent.http }));
+        return http_1.default.request(url.toString(), Object.assign(Object.assign({}, options), { agent: agent.http }));
     }
     /** @hidden */
     get nextRequest() {
@@ -102,11 +105,11 @@ class APIClient {
                         const responseData = yield this.execReqeust(requestData);
                         for (let queueIndex = 0; queue.length > queueIndex; queueIndex++) {
                             const otherEntry = queue[queueIndex];
-                            const { requestData: { path: otherPath, query: otherQuery } } = otherEntry;
+                            const { requestData: { path: otherPath, cache: otherCache, query: otherQuery }, resolve: otherResolve } = otherEntry;
                             const { path, query } = requestData;
-                            if (JSON.stringify([otherPath, otherQuery]) === JSON.stringify([path, query])) {
+                            if (otherCache && JSON.stringify([otherPath, otherQuery]) === JSON.stringify([path, query])) {
                                 queue.splice(queueIndex--, 1);
-                                resolve(responseData);
+                                otherResolve(responseData);
                             }
                         }
                         resolve(responseData);
@@ -137,7 +140,7 @@ class APIClient {
     constructURL(requestData) {
         const { client: { options: { host, baseUri, secure } } } = this;
         const { path, query } = requestData;
-        const url = new url_1.URL(`http${secure ? 's' : ''}://${host}${((path) => `${path.startsWith('/') ? '' : '/'}${path}`)(path_1.default.join(baseUri, path))}`);
+        const url = new URL(`http${secure ? 's' : ''}://${host}${((path) => `${path.startsWith('/') ? '' : '/'}${path}`)(isBrowser ? `${baseUri}/${path}` : path_1.default.join(baseUri, path))}`);
         const { searchParams } = url;
         if (query) {
             for (const queryKey in query) {
@@ -164,6 +167,24 @@ class APIClient {
             const { client: { options: { secure, requestTimeout, maxApiErrorRetry, retryOnApiError } }, cache } = this;
             const url = this.constructURL(requestData);
             const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true;
+            const processResponse = (responseData, resolve, reject) => {
+                if ([418, 200, 404].includes(responseData.status)) {
+                    if (cachingEnabled) {
+                        cache === null || cache === void 0 ? void 0 : cache.set(requestData, responseData);
+                    }
+                    resolve(responseData);
+                }
+                else if (responseData.status === 429) {
+                    reject(new APIError(Object.assign(responseData, {
+                        body: Object.assign(responseData.body, {
+                            error: 'Rate limited'
+                        })
+                    })));
+                }
+                else {
+                    reject(new APIError(responseData));
+                }
+            };
             const run = () => new Promise((resolve, reject) => {
                 if (cachingEnabled && (cache === null || cache === void 0 ? void 0 : cache.has(requestData))) {
                     return cache.get(requestData);
@@ -192,30 +213,37 @@ class APIClient {
                     }
                     const body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'));
                     const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body);
-                    if ([418, 200, 404].includes(responseData.status)) {
-                        if (cachingEnabled) {
-                            cache === null || cache === void 0 ? void 0 : cache.set(requestData, responseData);
-                        }
-                        resolve(responseData);
-                    }
-                    else if (responseData.status === 429) {
-                        reject(new APIError(Object.assign(responseData, {
-                            body: Object.assign(responseData.body, {
-                                error: 'Rate limited'
-                            })
-                        })));
-                    }
-                    else {
-                        reject(new APIError(responseData));
-                    }
+                    processResponse(responseData, resolve, reject);
                 }); });
                 request.end();
             });
-            return new Promise((resolve, reject) => {
+            const runBrowser = () => new Promise((resolve, reject) => {
+                this.lastRequest = Date.now();
+                this.debug(`HTTP GET ${url}`);
+                const request = new XMLHttpRequest();
+                request.open('GET', url);
+                request.timeout = requestTimeout;
+                request.onerror = () => { };
+                request.ontimeout = () => reject(new Error(`${requestTimeout} ms timeout`));
+                request.onloadend = () => {
+                    const body = JSON.parse(request.responseText);
+                    const responseData = new APIResponseData(Number(body.status || request.status), url, (() => {
+                        const data = {};
+                        for (const entry of request.getAllResponseHeaders().split('\n')) {
+                            const [name, ...value] = entry.trim().split(':');
+                            data[name.trim()] = value.join(':').trim();
+                        }
+                        return data;
+                    })(), body);
+                    processResponse(responseData, resolve, reject);
+                };
+                request.send(null);
+            });
+            return yield new Promise((resolve, reject) => {
                 let retry = 0;
                 const exec = () => tslib_1.__awaiter(this, void 0, void 0, function* () {
                     yield this.awaitNextRequest();
-                    yield run()
+                    yield (isBrowser ? runBrowser() : run())
                         .then(resolve)
                         .catch((error) => {
                         if (!(retryOnApiError &&

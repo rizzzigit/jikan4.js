@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Client = void 0;
+const tslib_1 = require("tslib");
 const path_1 = require("path");
+const eventemitter_1 = tslib_1.__importDefault(require("@rizzzi/eventemitter"));
 const api_1 = require("./api");
 const heartbeat_1 = require("./heartbeat");
 const anime_1 = require("../manager/anime");
@@ -14,7 +16,6 @@ const magazine_1 = require("../manager/magazine");
 const producer_1 = require("../manager/producer");
 const season_1 = require("../manager/season");
 const top_1 = require("../manager/top");
-const events_1 = require("events");
 const schedule_1 = require("../manager/schedule");
 const user_1 = require("../manager/user");
 class Client {
@@ -46,12 +47,20 @@ class Client {
         this.top = new top_1.TopManager(this);
         this.schedules = new schedule_1.ScheduleManager(this);
         this.heartbeat = new heartbeat_1.HeartBeatMonitor(this);
-        this.events = new events_1.EventEmitter();
+        this.events = new eventemitter_1.default();
+        const { on, once, emit, off } = this.events.bind();
+        this.on = on;
+        this.once = once;
+        this.emit = emit;
+        this.off = off;
     }
     /** @hidden */
     static setOptions(options) {
         const defaultOptions = {
-            dataPath: (0, path_1.join)(__dirname, '..', '..', '.Jikan'),
+            dataPath: (() => { try {
+                return (0, path_1.join)(__dirname, '..', '..', '.Jikan');
+            }
+            catch (_a) { } })(),
             host: 'api.jikan.moe',
             baseUri: 'v4',
             secure: true,
@@ -67,34 +76,6 @@ class Client {
             disableCaching: false
         };
         return Object.assign(defaultOptions, options);
-    }
-    /**
-     * Listen to client events.
-     *
-     * @example
-     * ```ts
-     * client.on('debug', console.log)
-     * ```
-    */
-    on(event, listener) {
-        this.events.on(event, listener);
-        return this;
-    }
-    /**
-     * Listen to client events once.
-     *
-     * @example
-     * ```ts
-     * client.once('debug', console.log)
-     * ```
-    */
-    once(event, listener) {
-        this.events.once(event, listener);
-        return this;
-    }
-    /** @hidden */
-    emit(event, ...args) {
-        return this.events.emit(event, ...args);
     }
     /** @hidden */
     debug(scope, message) {

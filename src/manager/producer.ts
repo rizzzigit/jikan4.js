@@ -1,4 +1,3 @@
-import { URL } from 'url'
 import { Producer, ProducerFull } from '../resource/producer'
 import { BaseManager } from './base'
 

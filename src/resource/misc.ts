@@ -1,5 +1,4 @@
 import { BaseClass } from './base'
-import { URL } from 'url'
 import { Client } from '../core/client'
 
 export class Image extends BaseClass {

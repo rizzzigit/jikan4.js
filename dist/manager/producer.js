@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProducerManager = void 0;
 const tslib_1 = require("tslib");
-const url_1 = require("url");
 const producer_1 = require("../resource/producer");
 const base_1 = require("./base");
 class ProducerManager extends base_1.BaseManager {
@@ -27,7 +26,7 @@ class ProducerManager extends base_1.BaseManager {
     getExternal(producerId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`producers/${producerId}/external`);
-            return rawData ? rawData.map((entry) => Object.assign(entry, { url: new url_1.URL(entry.url) })) : undefined;
+            return rawData ? rawData.map((entry) => Object.assign(entry, { url: new URL(entry.url) })) : undefined;
         });
     }
 }

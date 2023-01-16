@@ -1,6 +1,4 @@
-/// <reference types="node" />
 import { BaseClass } from './base';
-import { URL } from 'url';
 import { Client } from '../core/client';
 export declare class Image extends BaseClass {
     readonly small: URL | null;

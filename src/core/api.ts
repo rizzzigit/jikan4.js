@@ -3,9 +3,10 @@ import HTTPS from 'https'
 import Path from 'path'
 
 import { Client } from '../core/client'
-import { URL } from 'url'
 import { waitUntil } from '../utils'
 import { CacheManager } from './cache'
+
+const isBrowser = typeof window !== 'undefined'
 
 export interface APIRequestQuery {
   disableCaching?: string
@@ -82,21 +83,25 @@ export class APIClient {
   public constructor (client: Client) {
     this.client = client
     this.queue = []
-    this.cache = !client.options.disableCaching
+
+    const { options: { disableCaching, dataPath } } = client
+    this.cache = (!disableCaching) && (dataPath != null)
       ? new CacheManager(client)
       : undefined
 
     this.lastRequest = 0
     this.isQueueRunning = false
-    this.agent = (() => {
-      const { options: { keepAlive, keepAliveMsecs } } = client
-      const options = { keepAlive, keepAliveMsecs }
+    this.agent = isBrowser
+      ? {}
+      : (() => {
+          const { options: { keepAlive, keepAliveMsecs } } = client
+          const options = { keepAlive, keepAliveMsecs }
 
-      return {
-        http: new HTTP.Agent(options),
-        https: new HTTPS.Agent(options)
-      }
-    })()
+          return {
+            http: new HTTP.Agent(options),
+            https: new HTTPS.Agent(options)
+          }
+        })()
   }
 
   public readonly client: Client
@@ -109,8 +114,8 @@ export class APIClient {
 
   public readonly cache?: CacheManager
   public readonly agent: {
-    http: HTTP.Agent
-    https: HTTPS.Agent
+    http?: HTTP.Agent
+    https?: HTTPS.Agent
   }
 
   /** @hidden */
@@ -118,10 +123,10 @@ export class APIClient {
     const { agent } = this
 
     if (secure) {
-      return HTTPS.request(url, { ...options, agent: agent.https })
+      return HTTPS.request(url.toString(), { ...options, agent: agent.https })
     }
 
-    return HTTP.request(url, { ...options, agent: agent.http })
+    return HTTP.request(url.toString(), { ...options, agent: agent.http })
   }
 
   /** @hidden */
@@ -166,13 +171,13 @@ export class APIClient {
           const responseData = await this.execReqeust(requestData)
           for (let queueIndex = 0; queue.length > queueIndex; queueIndex++) {
             const otherEntry = queue[queueIndex]
-            const { requestData: { path: otherPath, query: otherQuery } } = otherEntry
+            const { requestData: { path: otherPath, cache: otherCache, query: otherQuery }, resolve: otherResolve } = otherEntry
             const { path, query } = requestData
 
-            if (JSON.stringify([otherPath, otherQuery]) === JSON.stringify([path, query])) {
+            if (otherCache && JSON.stringify([otherPath, otherQuery]) === JSON.stringify([path, query])) {
               queue.splice(queueIndex--, 1)
 
-              resolve(responseData)
+              otherResolve(responseData)
             }
           }
 
@@ -205,7 +210,7 @@ export class APIClient {
   public constructURL (requestData: APIRequestData) {
     const { client: { options: { host, baseUri, secure } } } = this
     const { path, query } = requestData
-    const url = new URL(`http${secure ? 's' : ''}://${host}${((path) => `${path.startsWith('/') ? '' : '/'}${path}`)(Path.join(baseUri, path))}`)
+    const url = new URL(`http${secure ? 's' : ''}://${host}${((path) => `${path.startsWith('/') ? '' : '/'}${path}`)(isBrowser ? `${baseUri}/${path}` : Path.join(baseUri, path))}`)
     const { searchParams } = url
 
     if (query) {
@@ -237,6 +242,24 @@ export class APIClient {
     const url = this.constructURL(requestData)
     const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true
 
+    const processResponse = (responseData: APIResponseData, resolve: (responseData: APIResponseData) => void, reject: (reason: any) => void) => {
+      if ([418, 200, 404].includes(responseData.status)) {
+        if (cachingEnabled) {
+          cache?.set(requestData, responseData)
+        }
+
+        resolve(responseData)
+      } else if (responseData.status === 429) {
+        reject(new APIError(Object.assign(responseData, {
+          body: Object.assign(responseData.body, {
+            error: 'Rate limited'
+          })
+        })))
+      } else {
+        reject(new APIError(responseData))
+      }
+    }
+
     const run = () => new Promise<APIResponseData>((resolve, reject) => {
       if (cachingEnabled && cache?.has(requestData)) {
         return cache.get(requestData)
@@ -258,31 +281,47 @@ export class APIClient {
         const body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'))
         const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body)
 
-        if ([418, 200, 404].includes(responseData.status)) {
-          if (cachingEnabled) {
-            cache?.set(requestData, responseData)
-          }
-
-          resolve(responseData)
-        } else if (responseData.status === 429) {
-          reject(new APIError(Object.assign(responseData, {
-            body: Object.assign(responseData.body, {
-              error: 'Rate limited'
-            })
-          })))
-        } else {
-          reject(new APIError(responseData))
-        }
+        processResponse(responseData, resolve, reject)
       })
 
       request.end()
     })
 
-    return new Promise<APIResponseData>((resolve, reject) => {
+    const runBrowser = () => new Promise<APIResponseData>((resolve, reject) => {
+      this.lastRequest = Date.now()
+      this.debug(`HTTP GET ${url}`)
+
+      const request = new XMLHttpRequest()
+
+      request.open('GET', url)
+      request.timeout = requestTimeout
+
+      request.onerror = () => {}
+      request.ontimeout = () => reject(new Error(`${requestTimeout} ms timeout`))
+      request.onloadend = () => {
+        const body = JSON.parse(request.responseText)
+        const responseData = new APIResponseData(Number(body.status || request.status), url, (() => {
+          const data: { [key: string]: string } = {}
+
+          for (const entry of request.getAllResponseHeaders().split('\n')) {
+            const [name, ...value] = entry.trim().split(':')
+            data[name.trim()] = value.join(':').trim()
+          }
+
+          return data
+        })(), body)
+
+        processResponse(responseData, resolve, reject)
+      }
+
+      request.send(null)
+    })
+
+    return await new Promise<APIResponseData>((resolve, reject) => {
       let retry: number = 0
       const exec = async () => {
         await this.awaitNextRequest()
-        await run()
+        await (isBrowser ? runBrowser() : run())
           .then(resolve)
           .catch((error) => {
             if (!(

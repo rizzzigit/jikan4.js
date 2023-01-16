@@ -1,7 +1,6 @@
 import { Client } from './client'
 import { dirname, join } from 'path'
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
-import { URL } from 'url'
 import { APIRequestData, APIRequestQuery, APIResponseData } from './api'
 
 export class CacheManager {
@@ -10,6 +9,10 @@ export class CacheManager {
   /** @hidden */
   private get cacheDir () {
     const { client: { options: { dataPath } } } = this
+
+    if (dataPath == null) {
+      throw new Error('client.options.dataPath is not set')
+    }
 
     return join(dataPath, 'cache')
   }

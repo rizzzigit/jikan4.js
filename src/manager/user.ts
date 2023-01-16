@@ -14,7 +14,6 @@ import { BaseManager } from './base'
 import { AnimeReview } from '../resource/content/anime'
 import { MangaReview } from '../resource/content/manga'
 import { ClubMeta } from '../resource/meta'
-import { URL } from 'url'
 import { Link } from '../Jikan'
 
 export interface UserSearchFilter {

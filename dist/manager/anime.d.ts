@@ -20,7 +20,7 @@ export interface AnimeSearchFilter {
 }
 export interface TopAnimeFilter {
     type: 'tv' | 'movie' | 'ova' | 'special' | 'ona' | 'music';
-    filter: 'publishing' | 'upcoming' | 'bypopularity' | 'favorite';
+    filter: 'airing' | 'upcoming' | 'bypopularity' | 'favorite';
 }
 export declare class AnimeManager extends BaseManager {
     search(searchString: string, filter?: Partial<AnimeSearchFilter>, offset?: number, maxCount?: number): Promise<Anime[]>;

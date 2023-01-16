@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheManager = void 0;
 const path_1 = require("path");
 const fs_1 = require("fs");
-const url_1 = require("url");
 class CacheManager {
     constructor(client) {
         this.client = client;
@@ -11,12 +10,15 @@ class CacheManager {
     /** @hidden */
     get cacheDir() {
         const { client: { options: { dataPath } } } = this;
+        if (dataPath == null) {
+            throw new Error('client.options.dataPath is not set');
+        }
         return (0, path_1.join)(dataPath, 'cache');
     }
     /** @hidden */
     file(path, query) {
         const pathArray = [this.cacheDir, path];
-        const url = new url_1.URL(`https://asd${path || '/'}`);
+        const url = new URL(`https://asd${path || '/'}`);
         const { searchParams } = url;
         if (query) {
             for (const queryKey in query) {

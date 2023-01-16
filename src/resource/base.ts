@@ -1,5 +1,4 @@
 import { Client } from '../core/client'
-import { URL } from 'url'
 
 export class BaseClass {
   public static parseDate<IsNullable extends boolean = false> (input: any, nullable: IsNullable = <any> false): IsNullable extends false ? Date : (Date | null) {

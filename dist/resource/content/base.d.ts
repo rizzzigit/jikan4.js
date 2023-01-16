@@ -1,8 +1,6 @@
-/// <reference types="node" />
 import { Client } from '../../core/client';
 import { BaseClass, BaseResource } from '../base';
 import { Image } from '../misc';
-import { URL } from 'url';
 export declare class ContentImage extends BaseClass {
     readonly jpg: Image;
     readonly webp: Image;
@@ -19,7 +17,7 @@ export declare class ContentTitle extends BaseClass {
     toString(): string;
     constructor(client: Client, data: any);
 }
-export type TitleArray = Array<{
+export declare type TitleArray = Array<{
     type: string;
     title: string;
 }>;
@@ -69,11 +67,15 @@ export declare class ContentUser extends BaseClass {
     readonly imageUrl: URL | null;
     constructor(client: Client, data: any);
 }
-export declare class ContentReviewScores extends BaseClass {
+export declare class ContentReactions extends BaseClass {
     readonly overall: number;
-    readonly story: number;
-    readonly character: number;
-    readonly enjoyment: number;
+    readonly nice: number;
+    readonly loveIt: number;
+    readonly funny: number;
+    readonly confusing: number;
+    readonly informative: number;
+    readonly wellWritten: number;
+    readonly creative: number;
     constructor(client: Client, data: any);
 }
 export declare class ContentReview extends BaseResource {
@@ -81,8 +83,11 @@ export declare class ContentReview extends BaseResource {
     readonly votes: number;
     readonly date: Date;
     readonly review: string;
-    readonly scores: ContentReviewScores;
+    readonly reactions: ContentReactions;
     readonly user: ContentUser;
+    readonly isSpoiler: boolean;
+    readonly isPreliminary: boolean;
+    readonly tags: Array<string>;
     constructor(client: Client, data: any);
 }
 export declare class ContentUserUpdate extends BaseClass {
@@ -92,7 +97,7 @@ export declare class ContentUserUpdate extends BaseClass {
     readonly date: Date;
     constructor(client: Client, data: any);
 }
-export type ContentRelationType = 'Adaptation' | 'SideStory' | 'Summary' | 'Sequel' | 'Prequel' | 'Character' | 'Other' | 'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory' | 'Unknown';
+export declare type ContentRelationType = 'Adaptation' | 'SideStory' | 'Summary' | 'Sequel' | 'Prequel' | 'Character' | 'Other' | 'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory' | 'Unknown';
 export declare class ContentRelationGroup<T extends ContentRelationType> extends BaseClass {
     /** @hidden */
     static parseRelation(data: any): ContentRelationType;

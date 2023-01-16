@@ -40,6 +40,12 @@ const run = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
         fullUserUpdate: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const user = yield client.users.getFull('fullbellydragon');
             return user === null || user === void 0 ? void 0 : user.updates;
+        }),
+        reviewUpdate: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const anime = yield client.anime.get(5);
+            const manga = yield client.manga.get(4);
+            console.log(yield (anime === null || anime === void 0 ? void 0 : anime.getReviews()));
+            console.log(yield (manga === null || manga === void 0 ? void 0 : manga.getReviews()));
         })
     };
     const funcKey = process.argv[2];

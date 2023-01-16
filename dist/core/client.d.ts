@@ -1,4 +1,4 @@
-/// <reference types="node" />
+import EventEmitter, { EventInterface } from '@rizzzi/eventemitter';
 import { APIClient } from './api';
 import { HeartBeatMonitor } from './heartbeat';
 import { AnimeManager } from '../manager/anime';
@@ -11,7 +11,6 @@ import { MagazineManager } from '../manager/magazine';
 import { ProducerManager } from '../manager/producer';
 import { SeasonManager } from '../manager/season';
 import { TopManager } from '../manager/top';
-import { EventEmitter } from 'events';
 import { ScheduleManager } from '../manager/schedule';
 import { UserManager } from '../manager/user';
 export interface ClientOptions {
@@ -98,12 +97,12 @@ export interface ClientOptions {
     /**
      * Where to store cache from Jikan API
     */
-    dataPath: string;
+    dataPath?: string;
 }
-export interface ClientEvents {
+export interface ClientEvents extends EventInterface {
     debug: [scope: string, message: string];
 }
-export type ClientEventNames = keyof ClientEvents;
+export declare type ClientEventNames = keyof ClientEvents;
 export declare class Client {
     /** @hidden */
     private static setOptions;
@@ -234,7 +233,7 @@ export declare class Client {
     */
     readonly heartbeat: HeartBeatMonitor;
     /** @hidden */
-    readonly events: EventEmitter;
+    readonly events: EventEmitter<ClientEvents>;
     /**
      * Listen to client events.
      *
@@ -243,7 +242,7 @@ export declare class Client {
      * client.on('debug', console.log)
      * ```
     */
-    on<T extends ClientEventNames>(event: T, listener: (...args: ClientEvents[T]) => void): Client;
+    on: EventEmitter<ClientEvents>['on'];
     /**
      * Listen to client events once.
      *
@@ -252,11 +251,20 @@ export declare class Client {
      * client.once('debug', console.log)
      * ```
     */
-    once<T extends ClientEventNames>(event: T, listener: (...args: ClientEvents[T]) => void): Client;
+    once: EventEmitter<ClientEvents>['on'];
+    /**
+     * Remove a listener.
+     *
+     * @example
+     * ```ts
+     * client.off('debug', console.log)
+     * ```
+    */
+    off: EventEmitter<ClientEvents>['off'];
     /** @hidden */
-    emit<T extends ClientEventNames>(event: T, ...args: ClientEvents[T]): boolean;
+    readonly emit: EventEmitter<ClientEvents>['emit'];
     /** @hidden */
-    debug(scope: string, message: string): boolean;
+    debug(scope: string, message: string): Promise<boolean>;
     /**
      * Instantiate new Jikan client
      *

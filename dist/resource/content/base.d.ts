@@ -17,7 +17,7 @@ export declare class ContentTitle extends BaseClass {
     toString(): string;
     constructor(client: Client, data: any);
 }
-export declare type TitleArray = Array<{
+export type TitleArray = Array<{
     type: string;
     title: string;
 }>;
@@ -97,7 +97,7 @@ export declare class ContentUserUpdate extends BaseClass {
     readonly date: Date;
     constructor(client: Client, data: any);
 }
-export declare type ContentRelationType = 'Adaptation' | 'SideStory' | 'Summary' | 'Sequel' | 'Prequel' | 'Character' | 'Other' | 'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory' | 'Unknown';
+export type ContentRelationType = 'Adaptation' | 'SideStory' | 'Summary' | 'Sequel' | 'Prequel' | 'Character' | 'Other' | 'AlternativeVersion' | 'AlternativeSetting' | 'SpinOff' | 'ParentStory' | 'FullStory' | 'Unknown';
 export declare class ContentRelationGroup<T extends ContentRelationType> extends BaseClass {
     /** @hidden */
     static parseRelation(data: any): ContentRelationType;

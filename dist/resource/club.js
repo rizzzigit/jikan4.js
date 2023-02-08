@@ -3,17 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClubMember = exports.ClubStaff = exports.Club = void 0;
 const base_1 = require("./base");
 class Club extends base_1.BaseResource {
-    constructor(client, data) {
-        var _a, _b, _c;
-        super(client, data);
-        this.imageUrl = Club.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
-        this.memberCount = data.members_count;
-        this.pictureCount = data.pictures_count;
-        this.category = Club.parseCategory(data.category);
-        this.created = Club.parseDate(data.created);
-        this.type = Club.parseType(data.type);
-        this.staff = ((_c = data.staff) === null || _c === void 0 ? void 0 : _c.map((staff) => new ClubStaff(client, staff))) || [];
-    }
     /** @hidden */
     static parseCategory(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
@@ -45,6 +34,17 @@ class Club extends base_1.BaseResource {
     }
     getMembers() {
         return this.client.clubs.getMembers(this.id);
+    }
+    constructor(client, data) {
+        var _a, _b, _c;
+        super(client, data);
+        this.imageUrl = Club.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
+        this.memberCount = data.members_count;
+        this.pictureCount = data.pictures_count;
+        this.category = Club.parseCategory(data.category);
+        this.created = Club.parseDate(data.created);
+        this.type = Club.parseType(data.type);
+        this.staff = ((_c = data.staff) === null || _c === void 0 ? void 0 : _c.map((staff) => new ClubStaff(client, staff))) || [];
     }
 }
 exports.Club = Club;

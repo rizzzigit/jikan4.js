@@ -1,6 +1,6 @@
 import { Anime } from '../resource/content/anime';
 import { BaseManager } from './base';
-export declare type ScheduleDay = 'monday' | 'tursday' | 'wednesday' | 'thursday' | 'friday' | 'sunday' | 'saturday';
+export type ScheduleDay = 'monday' | 'tursday' | 'wednesday' | 'thursday' | 'friday' | 'sunday' | 'saturday';
 export interface ScheduleFilter {
     sfw: boolean;
     kids: boolean;

@@ -9,6 +9,12 @@ const utils_1 = require("../utils");
 const cache_1 = require("./cache");
 const isBrowser = typeof window !== 'undefined';
 class APIResponseData {
+    static parsePagination(url, paginationData) {
+        const current = Number(url.searchParams.get('page')) || 1;
+        const last = (paginationData === null || paginationData === void 0 ? void 0 : paginationData.last_visible_page) || 1;
+        const hasNext = (paginationData === null || paginationData === void 0 ? void 0 : paginationData.has_next_page) || false;
+        return { current, last, hasNext };
+    }
     constructor(status, url, headers, body) {
         this.time = Date.now();
         this.url = `${url.href}`;
@@ -18,12 +24,6 @@ class APIResponseData {
         this.pagination = (body === null || body === void 0 ? void 0 : body.pagination)
             ? APIResponseData.parsePagination(url, body.pagination)
             : undefined;
-    }
-    static parsePagination(url, paginationData) {
-        const current = Number(url.searchParams.get('page')) || 1;
-        const last = (paginationData === null || paginationData === void 0 ? void 0 : paginationData.last_visible_page) || 1;
-        const hasNext = (paginationData === null || paginationData === void 0 ? void 0 : paginationData.has_next_page) || false;
-        return { current, last, hasNext };
     }
 }
 exports.APIResponseData = APIResponseData;
@@ -194,20 +194,27 @@ class APIClient {
                 const request = this.newRequestInstance(secure, url, { timeout: requestTimeout });
                 request.on('error', reject);
                 request.on('timeout', () => request.destroy(new Error(`${requestTimeout} ms timeout`)));
-                request.on('response', (response) => { var response_1, response_1_1; return tslib_1.__awaiter(this, void 0, void 0, function* () {
-                    var e_1, _a;
+                request.on('response', (response) => { var _a, response_1, response_1_1; return tslib_1.__awaiter(this, void 0, void 0, function* () {
+                    var _b, e_1, _c, _d;
                     response.on('error', reject);
                     const bufferSink = [];
                     try {
-                        for (response_1 = tslib_1.__asyncValues(response); response_1_1 = yield response_1.next(), !response_1_1.done;) {
-                            const buffer = response_1_1.value;
-                            bufferSink.push(buffer);
+                        for (_a = true, response_1 = tslib_1.__asyncValues(response); response_1_1 = yield response_1.next(), _b = response_1_1.done, !_b;) {
+                            _d = response_1_1.value;
+                            _a = false;
+                            try {
+                                const buffer = _d;
+                                bufferSink.push(buffer);
+                            }
+                            finally {
+                                _a = true;
+                            }
                         }
                     }
                     catch (e_1_1) { e_1 = { error: e_1_1 }; }
                     finally {
                         try {
-                            if (response_1_1 && !response_1_1.done && (_a = response_1.return)) yield _a.call(response_1);
+                            if (!_a && !_b && (_c = response_1.return)) yield _c.call(response_1);
                         }
                         finally { if (e_1) throw e_1.error; }
                     }

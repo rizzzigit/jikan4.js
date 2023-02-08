@@ -4,9 +4,6 @@ exports.CacheManager = void 0;
 const path_1 = require("path");
 const fs_1 = require("fs");
 class CacheManager {
-    constructor(client) {
-        this.client = client;
-    }
     /** @hidden */
     get cacheDir() {
         const { client: { options: { dataPath } } } = this;
@@ -95,6 +92,9 @@ class CacheManager {
             date: Date.now()
         };
         (0, fs_1.writeFileSync)(file, JSON.stringify(data, undefined, '  '));
+    }
+    constructor(client) {
+        this.client = client;
     }
 }
 exports.CacheManager = CacheManager;

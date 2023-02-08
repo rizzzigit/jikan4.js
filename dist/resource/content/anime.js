@@ -9,13 +9,6 @@ const meta_1 = require("../meta");
 const parse_duration_1 = tslib_1.__importDefault(require("parse-duration"));
 const genre_1 = require("../../manager/genre");
 class AnimeAirInformation extends base_2.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.status = AnimeAirInformation.parseStatus(data.status);
-        this.airing = !!data.airing;
-        this.airedFrom = AnimeAirInformation.parseDate(data.aired.from, true);
-        this.airedTo = AnimeAirInformation.parseDate(data.aired.to, true);
-    }
     /** @hidden */
     static parseStatus(input) {
         const status = input === null || input === void 0 ? void 0 : input.toLowerCase().trim();
@@ -26,29 +19,16 @@ class AnimeAirInformation extends base_2.BaseClass {
             default: return 'Unknown';
         }
     }
+    constructor(client, data) {
+        super(client);
+        this.status = AnimeAirInformation.parseStatus(data.status);
+        this.airing = !!data.airing;
+        this.airedFrom = AnimeAirInformation.parseDate(data.aired.from, true);
+        this.airedTo = AnimeAirInformation.parseDate(data.aired.to, true);
+    }
 }
 exports.AnimeAirInformation = AnimeAirInformation;
 class Anime extends base_1.Content {
-    constructor(client, data) {
-        var _a, _b, _c, _d, _e, _f, _g;
-        super(client, data);
-        this.trailer = data.trailer ? new misc_1.YoutubeVideo(client, data.trailer) : null;
-        this.type = Anime.parseType(data.type);
-        this.source = data.source || null;
-        this.episodes = data.episodes || null;
-        this.airInfo = new AnimeAirInformation(client, data);
-        this.duration = (0, parse_duration_1.default)(data.duration, 'millisecond') || null;
-        this.rating = Anime.parseRating(data.rating);
-        this.season = Anime.parseSeason(data.season);
-        this.year = data.year || null;
-        this.producers = ((_a = data.producers) === null || _a === void 0 ? void 0 : _a.map((producer) => new meta_1.ProducerMeta(this.client, producer))) || [];
-        this.licensors = ((_b = data.licensors) === null || _b === void 0 ? void 0 : _b.map((licensor) => new meta_1.ProducerMeta(this.client, licensor))) || [];
-        this.studios = ((_c = data.studios) === null || _c === void 0 ? void 0 : _c.map((studio) => new meta_1.ProducerMeta(this.client, studio))) || [];
-        this.genres = ((_d = data.genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'))) || [];
-        this.explicitGenres = ((_e = data.explicit_genres) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
-        this.demographics = ((_f = data.demographics) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
-        this.themes = ((_g = data.themes) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
-    }
     /** @hidden */
     static parseType(input) {
         switch (input === null || input === void 0 ? void 0 : input.toLowerCase().trim()) {
@@ -149,6 +129,26 @@ class Anime extends base_1.Content {
     getFull() {
         return this.client.anime.getFull(this.id);
     }
+    constructor(client, data) {
+        var _a, _b, _c, _d, _e, _f, _g;
+        super(client, data);
+        this.trailer = data.trailer ? new misc_1.YoutubeVideo(client, data.trailer) : null;
+        this.type = Anime.parseType(data.type);
+        this.source = data.source || null;
+        this.episodes = data.episodes || null;
+        this.airInfo = new AnimeAirInformation(client, data);
+        this.duration = (0, parse_duration_1.default)(data.duration, 'millisecond') || null;
+        this.rating = Anime.parseRating(data.rating);
+        this.season = Anime.parseSeason(data.season);
+        this.year = data.year || null;
+        this.producers = ((_a = data.producers) === null || _a === void 0 ? void 0 : _a.map((producer) => new meta_1.ProducerMeta(this.client, producer))) || [];
+        this.licensors = ((_b = data.licensors) === null || _b === void 0 ? void 0 : _b.map((licensor) => new meta_1.ProducerMeta(this.client, licensor))) || [];
+        this.studios = ((_c = data.studios) === null || _c === void 0 ? void 0 : _c.map((studio) => new meta_1.ProducerMeta(this.client, studio))) || [];
+        this.genres = ((_d = data.genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'))) || [];
+        this.explicitGenres = ((_e = data.explicit_genres) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
+        this.demographics = ((_f = data.demographics) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
+        this.themes = ((_g = data.themes) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
+    }
 }
 exports.Anime = Anime;
 class AnimeVoiceActorReference extends base_2.BaseClass {
@@ -178,14 +178,14 @@ class AnimeStaffReference extends base_2.BaseClass {
 }
 exports.AnimeStaffReference = AnimeStaffReference;
 class AnimeEpisodeTitle extends base_2.BaseClass {
+    toString() {
+        return this.default;
+    }
     constructor(client, data) {
         super(client);
         this.default = data.title;
         this.japanese = data.japanese || null;
         this.romanji = data.romanji || null;
-    }
-    toString() {
-        return this.default;
     }
 }
 exports.AnimeEpisodeTitle = AnimeEpisodeTitle;
@@ -205,13 +205,13 @@ class AnimeEpisode extends base_2.BaseClass {
 }
 exports.AnimeEpisode = AnimeEpisode;
 class AnimePartialEpisode extends AnimeEpisode {
+    getFullEpisode() {
+        return this.client.anime.getEpisode(this.animeId, this.episodeId);
+    }
     constructor(client, animeId, data) {
         super(client, animeId, data);
         this.synopsis = null;
         this.forumUrl = AnimePartialEpisode.parseURL(data.forum_url, true);
-    }
-    getFullEpisode() {
-        return this.client.anime.getEpisode(this.animeId, this.episodeId);
     }
 }
 exports.AnimePartialEpisode = AnimePartialEpisode;

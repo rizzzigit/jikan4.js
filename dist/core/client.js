@@ -19,6 +19,33 @@ const top_1 = require("../manager/top");
 const schedule_1 = require("../manager/schedule");
 const user_1 = require("../manager/user");
 class Client {
+    /** @hidden */
+    static setOptions(options) {
+        const defaultOptions = {
+            dataPath: (() => { try {
+                return (0, path_1.join)(__dirname, '..', '..', '.Jikan');
+            }
+            catch (_a) { } })(),
+            host: 'api.jikan.moe',
+            baseUri: 'v4',
+            secure: true,
+            dataRateLimit: 1200,
+            dataExpiry: 1000 * 60 * 60 * 24,
+            dataPaginationMaxSize: 25,
+            requestTimeout: 15000,
+            requestQueueLimit: 100,
+            maxApiErrorRetry: 5,
+            retryOnApiError: true,
+            keepAlive: true,
+            keepAliveMsecs: 60000,
+            disableCaching: false
+        };
+        return Object.assign(defaultOptions, options);
+    }
+    /** @hidden */
+    debug(scope, message) {
+        return this.emit('debug', scope, message);
+    }
     /**
      * Instantiate new Jikan client
      *
@@ -53,33 +80,6 @@ class Client {
         this.once = once;
         this.emit = emit;
         this.off = off;
-    }
-    /** @hidden */
-    static setOptions(options) {
-        const defaultOptions = {
-            dataPath: (() => { try {
-                return (0, path_1.join)(__dirname, '..', '..', '.Jikan');
-            }
-            catch (_a) { } })(),
-            host: 'api.jikan.moe',
-            baseUri: 'v4',
-            secure: true,
-            dataRateLimit: 1200,
-            dataExpiry: 1000 * 60 * 60 * 24,
-            dataPaginationMaxSize: 25,
-            requestTimeout: 15000,
-            requestQueueLimit: 100,
-            maxApiErrorRetry: 5,
-            retryOnApiError: true,
-            keepAlive: true,
-            keepAliveMsecs: 60000,
-            disableCaching: false
-        };
-        return Object.assign(defaultOptions, options);
-    }
-    /** @hidden */
-    debug(scope, message) {
-        return this.emit('debug', scope, message);
     }
 }
 exports.Client = Client;

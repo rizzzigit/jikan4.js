@@ -57,7 +57,7 @@
 
 ## Links
   - [Jikan4.js](https://www.npmjs.com/package/jikan4.js) ([source](https://github.com/rizzzigit/jikan4.js))
-    - [Documentation](https://rizzzigit.github.io/jikan4.js)
+    - [Documentation](https://rizzzigit.github.io/jikan4.js/classes/Client.html)
   - [Jikan](https://jikan.moe/) ([source](https://github.com/jikan-me/website))
     - [REST API Docs](https://jikan.docs.apiary.io/) ([source](https://github.com/jikan-me/jikan-rest))
     - [PHP API Docs](https://docs.jikan.moe) ([source](https://github.com/jikan-me/jikan))

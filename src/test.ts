@@ -1,4 +1,4 @@
-import { Client } from './Jikan'
+import { Anime, Client } from './Jikan'
 
 const client = new Client()
 client.on('debug', (scope, message) => console.log(`[${scope}] ${message}`))
@@ -36,8 +36,6 @@ const run = async () => {
       console.log(anime?.title)
     },
 
-    external: async () => await client.users.getFull('lamaw'),
-
     producer: async () => {
       const list = await client.producers.list(0, 10)
       const producer = await client.producers.getFull(1)
@@ -46,18 +44,32 @@ const run = async () => {
       return { list, producer, external }
     },
 
-    fullUserUpdate: async () => {
-      const user = await client.users.getFull('fullbellydragon')
-
-      return user?.updates
-    },
-
     reviewUpdate: async () => {
       const anime = await client.anime.get(5)
       const manga = await client.manga.get(4)
 
       console.log(await anime?.getReviews())
       console.log(await manga?.getReviews())
+    },
+
+    dupeReqs: async () => {
+      const promises: Array<Promise<Anime | undefined>> = []
+
+      let returned = 0
+      for (let count = 0; count < 100; count++) {
+        promises.push(client.anime.get(5).then((a) => {
+          returned++
+          console.log(returned)
+
+          return a
+        }))
+      }
+    },
+
+    searchExample: async () => {
+      const result = (await client.anime.search('naruto')).map(({ title: { default: _d }, year }) => ({ default: _d, year }))
+
+      console.table(result)
     }
   }
 

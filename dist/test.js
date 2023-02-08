@@ -30,22 +30,32 @@ const run = () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const anime = yield client.anime.get(20);
             console.log(anime === null || anime === void 0 ? void 0 : anime.title);
         }),
-        external: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () { return yield client.users.getFull('lamaw'); }),
         producer: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const list = yield client.producers.list(0, 10);
             const producer = yield client.producers.getFull(1);
             const external = yield client.producers.getExternal(1);
             return { list, producer, external };
         }),
-        fullUserUpdate: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-            const user = yield client.users.getFull('fullbellydragon');
-            return user === null || user === void 0 ? void 0 : user.updates;
-        }),
         reviewUpdate: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
             const anime = yield client.anime.get(5);
             const manga = yield client.manga.get(4);
             console.log(yield (anime === null || anime === void 0 ? void 0 : anime.getReviews()));
             console.log(yield (manga === null || manga === void 0 ? void 0 : manga.getReviews()));
+        }),
+        dupeReqs: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const promises = [];
+            let returned = 0;
+            for (let count = 0; count < 100; count++) {
+                promises.push(client.anime.get(5).then((a) => {
+                    returned++;
+                    console.log(returned);
+                    return a;
+                }));
+            }
+        }),
+        searchExample: () => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+            const result = (yield client.anime.search('naruto')).map(({ title: { default: _d }, year }) => ({ default: _d, year }));
+            console.table(result);
         })
     };
     const funcKey = process.argv[2];

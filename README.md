@@ -13,7 +13,7 @@
 
 ## Usage
   This is how to import the module. It depends on the type of your project.
- 
+
   **ESModule import**
   ```javascript
   import Jikan from 'jikan4.js'
@@ -36,6 +36,23 @@
 
   printAnime(4)
   printAnime(5)
+  ```
+
+  Search for anime.
+  ```javascript
+  const client = new Jikan.Client()
+  async function printSearch (searchString) {
+    const result = (await client.anime.search(searchString)).map((anime) => {
+      return {
+        title: anime.title.default,
+        year: anime.year
+      }
+    })
+
+    console.table(result)
+  }
+
+  printSearch('naruto')
   ```
 
 ## Links

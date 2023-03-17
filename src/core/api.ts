@@ -169,12 +169,16 @@ export class APIClient {
 
         try {
           const responseData = await this.execReqeust(requestData)
+          const { path, query } = requestData
+
           for (let queueIndex = 0; queue.length > queueIndex; queueIndex++) {
             const otherEntry = queue[queueIndex]
-            const { requestData: { path: otherPath, cache: otherCache, query: otherQuery }, resolve: otherResolve } = otherEntry
-            const { path, query } = requestData
+            if (!otherEntry.requestData.cache) {
+              continue
+            }
 
-            if (otherCache && JSON.stringify([otherPath, otherQuery]) === JSON.stringify([path, query])) {
+            const { requestData: { path: otherPath, query: otherQuery }, resolve: otherResolve } = otherEntry
+            if (JSON.stringify([otherPath, otherQuery]) === JSON.stringify([path, query])) {
               queue.splice(queueIndex--, 1)
 
               otherResolve(responseData)

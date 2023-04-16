@@ -1,6 +1,9 @@
-.Jikan
-node_modules
 *.js
 *.d.ts
-dist
-docs
+
+/.Jikan
+/node_modules
+/dist
+/docs
+
+/src/v4/v1

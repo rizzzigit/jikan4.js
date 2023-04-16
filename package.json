@@ -30,7 +30,7 @@
     ]
   },
   "scripts": {
-    "build-docs": "npx typedoc ./src/index.ts",
+    "build-docs": "npx typedoc ./src/docs/index.ts --readme README.md",
     "build": "npx rimraf ./dist; tsc",
     "lint": "npx eslint ./src/**/*.ts --fix",
     "test": "node dist/test"

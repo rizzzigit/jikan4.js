@@ -1,12 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeMusicVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
-const tslib_1 = require("tslib");
 const base_1 = require("./base");
 const base_2 = require("../base");
 const misc_1 = require("../misc");
 const meta_1 = require("../meta");
-const parse_duration_1 = tslib_1.__importDefault(require("parse-duration"));
+const parse_duration_1 = __importDefault(require("parse-duration"));
 const genre_1 = require("../../manager/genre");
 class AnimeAirInformation extends base_2.BaseClass {
     /** @hidden */

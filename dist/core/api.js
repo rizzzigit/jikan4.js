@@ -1,10 +1,28 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.APIClient = exports.APIError = exports.APIResponseData = void 0;
-const tslib_1 = require("tslib");
-const http_1 = tslib_1.__importDefault(require("http"));
-const https_1 = tslib_1.__importDefault(require("https"));
-const path_1 = tslib_1.__importDefault(require("path"));
+const http_1 = __importDefault(require("http"));
+const https_1 = __importDefault(require("https"));
+const path_1 = __importDefault(require("path"));
 const utils_1 = require("../utils");
 const cache_1 = require("./cache");
 const isBrowser = typeof window !== 'undefined';
@@ -80,7 +98,7 @@ class APIClient {
     }
     /** @hidden */
     awaitNextRequest() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const { nextRequest } = this;
             if (nextRequest > Date.now()) {
                 this.debug(`Wait ${nextRequest - Date.now()} ms before requesting`);
@@ -90,7 +108,7 @@ class APIClient {
     }
     /** @hidden */
     runQueue() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             if (this.isQueueRunning) {
                 return;
             }
@@ -156,7 +174,7 @@ class APIClient {
         return url;
     }
     request(requestData) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const { cache } = this;
             if ((requestData.cache !== undefined ? requestData.cache : true) && (cache === null || cache === void 0 ? void 0 : cache.has(requestData))) {
                 return cache.get(requestData);
@@ -166,7 +184,7 @@ class APIClient {
     }
     /** @hidden */
     execReqeust(requestData) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const { client: { options: { secure, requestTimeout, maxApiErrorRetry, retryOnApiError } }, cache } = this;
             const url = this.constructURL(requestData);
             const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true;
@@ -197,12 +215,12 @@ class APIClient {
                 const request = this.newRequestInstance(secure, url, { timeout: requestTimeout });
                 request.on('error', reject);
                 request.on('timeout', () => request.destroy(new Error(`${requestTimeout} ms timeout`)));
-                request.on('response', (response) => { var _a, response_1, response_1_1; return tslib_1.__awaiter(this, void 0, void 0, function* () {
+                request.on('response', (response) => { var _a, response_1, response_1_1; return __awaiter(this, void 0, void 0, function* () {
                     var _b, e_1, _c, _d;
                     response.on('error', reject);
                     const bufferSink = [];
                     try {
-                        for (_a = true, response_1 = tslib_1.__asyncValues(response); response_1_1 = yield response_1.next(), _b = response_1_1.done, !_b;) {
+                        for (_a = true, response_1 = __asyncValues(response); response_1_1 = yield response_1.next(), _b = response_1_1.done, !_b;) {
                             _d = response_1_1.value;
                             _a = false;
                             try {
@@ -251,7 +269,7 @@ class APIClient {
             });
             return yield new Promise((resolve, reject) => {
                 let retry = 0;
-                const exec = () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                const exec = () => __awaiter(this, void 0, void 0, function* () {
                     yield this.awaitNextRequest();
                     yield (isBrowser ? runBrowser() : run())
                         .then(resolve)

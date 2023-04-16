@@ -3,7 +3,7 @@ import { BaseManager } from './base';
 import { AnimeReview } from '../resource/content/anime';
 import { MangaReview } from '../resource/content/manga';
 import { ClubMeta } from '../resource/meta';
-import { Link } from '../Jikan';
+import { Link } from '..';
 export interface UserSearchFilter {
     gender: 'any' | 'male' | 'female' | 'nonbinary';
     location: string;

@@ -1,4 +1,4 @@
-import { Anime, Client } from './Jikan'
+import { Anime, Client } from './v4/v1'
 
 const client = new Client()
 client.on('debug', (scope, message) => console.log(`[${scope}] ${message}`))

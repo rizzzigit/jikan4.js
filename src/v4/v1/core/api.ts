@@ -247,7 +247,14 @@ export class APIClient {
     const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true
 
     const processResponse = (responseData: APIResponseData, resolve: (responseData: APIResponseData) => void, reject: (reason: any) => void) => {
-      if ([418, 200, 404].includes(responseData.status)) {
+      if (responseData.headers.location != null)
+      {
+        this.execReqeust({
+          cache: requestData.cache,
+          path: new URL(responseData.headers.location).pathname,
+          query: requestData.query
+        }).then(resolve, reject)
+      } else if ([418, 200, 404].includes(responseData.status)) {
         if (cachingEnabled) {
           cache?.set(requestData, responseData)
         }
@@ -282,7 +289,13 @@ export class APIClient {
           bufferSink.push(buffer)
         }
 
-        const body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'))
+        let body
+
+        try {
+          body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'))
+        } catch {
+          body = {}
+        }
         const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body)
 
         processResponse(responseData, resolve, reject)

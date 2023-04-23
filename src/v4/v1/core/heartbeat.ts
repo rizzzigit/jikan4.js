@@ -40,7 +40,7 @@ export class HeartBeatMonitor extends BaseClass {
     const { APIClient, client } = this
     const responseData = await APIClient.request({
       cache: false,
-      path: '/'
+      path: ''
     })
 
     if (responseData.status === 200) {

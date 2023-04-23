@@ -189,7 +189,14 @@ class APIClient {
             const url = this.constructURL(requestData);
             const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true;
             const processResponse = (responseData, resolve, reject) => {
-                if ([418, 200, 404].includes(responseData.status)) {
+                if (responseData.headers.location != null) {
+                    this.execReqeust({
+                        cache: requestData.cache,
+                        path: new URL(responseData.headers.location).pathname,
+                        query: requestData.query
+                    }).then(resolve, reject);
+                }
+                else if ([418, 200, 404].includes(responseData.status)) {
                     if (cachingEnabled) {
                         cache === null || cache === void 0 ? void 0 : cache.set(requestData, responseData);
                     }
@@ -239,7 +246,13 @@ class APIClient {
                         }
                         finally { if (e_1) throw e_1.error; }
                     }
-                    const body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'));
+                    let body;
+                    try {
+                        body = JSON.parse(Buffer.concat(bufferSink).toString('utf-8'));
+                    }
+                    catch (_e) {
+                        body = {};
+                    }
                     const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body);
                     processResponse(responseData, resolve, reject);
                 }); });

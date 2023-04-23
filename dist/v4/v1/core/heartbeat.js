@@ -35,7 +35,7 @@ class HeartBeatMonitor extends base_1.BaseClass {
             const { APIClient, client } = this;
             const responseData = yield APIClient.request({
                 cache: false,
-                path: '/'
+                path: ''
             });
             if (responseData.status === 200) {
                 const { body: { myanimelist_heartbeat: heartBeat } } = responseData;

@@ -28,5 +28,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.v4 = void 0;
 exports.v4 = __importStar(require("./v4"));
-exports.default = __importStar(require("./v4/v1"));
-__exportStar(require("./v4/v1"), exports);
+exports.default = __importStar(require("./v4"));
+__exportStar(require("./v4"), exports);

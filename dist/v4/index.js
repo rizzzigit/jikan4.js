@@ -10,23 +10,39 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
 }));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = exports.v1 = void 0;
-exports.v1 = __importStar(require("./v1"));
-exports.default = __importStar(require("./v1"));
-__exportStar(require("./v1"), exports);
+__exportStar(require("./core/api"), exports);
+__exportStar(require("./core/client"), exports);
+__exportStar(require("./core/heartbeat"), exports);
+__exportStar(require("./core/cache"), exports);
+__exportStar(require("./manager/base"), exports);
+__exportStar(require("./manager/anime"), exports);
+__exportStar(require("./manager/manga"), exports);
+__exportStar(require("./manager/character"), exports);
+__exportStar(require("./manager/club"), exports);
+__exportStar(require("./manager/person"), exports);
+__exportStar(require("./manager/manga"), exports);
+__exportStar(require("./manager/genre"), exports);
+__exportStar(require("./manager/magazine"), exports);
+__exportStar(require("./manager/producer"), exports);
+__exportStar(require("./manager/season"), exports);
+__exportStar(require("./manager/top"), exports);
+__exportStar(require("./manager/schedule"), exports);
+__exportStar(require("./manager/user"), exports);
+__exportStar(require("./resource/base"), exports);
+__exportStar(require("./resource/character"), exports);
+__exportStar(require("./resource/club"), exports);
+__exportStar(require("./resource/content/base"), exports);
+__exportStar(require("./resource/content/anime"), exports);
+__exportStar(require("./resource/content/manga"), exports);
+__exportStar(require("./resource/meta"), exports);
+__exportStar(require("./resource/misc"), exports);
+__exportStar(require("./resource/person"), exports);
+__exportStar(require("./resource/season"), exports);
+__exportStar(require("./resource/top"), exports);
+__exportStar(require("./resource/user"), exports);
+__exportStar(require("./resource/producer"), exports);
+__exportStar(require("./utils"), exports);

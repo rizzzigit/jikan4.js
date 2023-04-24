@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const v1_1 = require("./v4/v1");
-const client = new v1_1.Client();
-client.on('debug', (scope, message) => console.log(`[${scope}] ${message}`));
+const v4_1 = require("./v4");
+const client = new v4_1.Client();
+client.on('debug', (scope, message) => { console.log(`[${scope}] ${message}`); });
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const func = {
         streaming: () => __awaiter(void 0, void 0, void 0, function* () {
@@ -69,4 +69,6 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const funcKey = process.argv[2];
     return yield func[funcKey]();
 });
-run().then((data) => data !== undefined ? console.log(data) : undefined);
+void run().then((data) => { if (data != null) {
+    console.log(data);
+} });

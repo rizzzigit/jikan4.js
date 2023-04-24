@@ -20,13 +20,6 @@
         "require": "./dist/v4/index.js",
         "import": "./esm/v4.mjs"
       }
-    ],
-    "./v4/v1": [
-      {
-        "default": "./dist/v4/v1/index.js",
-        "require": "./dist/v4/v1/index.js",
-        "import": "./esm/v4/v1.mjs"
-      }
     ]
   },
   "scripts": {

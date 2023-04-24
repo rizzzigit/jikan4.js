@@ -1,9 +1,9 @@
-import { Anime, Client } from './v4/v1'
+import { type Anime, Client } from './v4'
 
 const client = new Client()
-client.on('debug', (scope, message) => console.log(`[${scope}] ${message}`))
+client.on('debug', (scope, message) => { console.log(`[${scope}] ${message}`) })
 
-const run = async () => {
+const run = async (): Promise<any> => {
   const func = {
     streaming: async () => {
       const streamingLinks = await client.anime.getStreamingLinks(1)
@@ -73,9 +73,9 @@ const run = async () => {
     }
   }
 
-  const funcKey = <keyof typeof func> process.argv[2]
+  const funcKey = process.argv[2] as keyof typeof func
 
   return await func[funcKey]()
 }
 
-run().then((data) => data !== undefined ? console.log(data) : undefined)
+void run().then((data) => { if (data != null) { console.log(data) } })

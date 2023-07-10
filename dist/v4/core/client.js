@@ -25,7 +25,7 @@ class Client {
     static setOptions(options) {
         const defaultOptions = {
             dataPath: (() => { try {
-                return (0, path_1.join)(__dirname, '..', '..', '..', '..', '.Jikan');
+                return (0, path_1.join)(__dirname, '..', '..', '..', '.Jikan');
             }
             catch (_a) { } })(),
             host: 'api.jikan.moe',

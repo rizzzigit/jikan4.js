@@ -16,7 +16,7 @@ import {
   AnimeFull,
   AnimeEpisodeVideo
 } from '../resource/content/anime'
-import { Image, Link } from '../resource/misc'
+import { ImageFormatCollection, Link } from '../resource/misc'
 import { translateObject } from '../utils'
 import { AnimeGenreMeta, ProducerMeta, GenreType } from '../resource/meta'
 
@@ -166,10 +166,10 @@ export class AnimeManager extends BaseManager {
     return rawData ? rawData.map((episode) => new AnimeEpisodeVideo(this.client, episode)) : undefined
   }
 
-  public async getPictures (animeId: number): Promise<Array<Image> | undefined> {
+  public async getPictures (animeId: number): Promise<Array<ImageFormatCollection> | undefined> {
     const rawData = await this.request(`anime/${animeId}/pictures`)
 
-    return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
+    return rawData ? rawData.map((picture: any) => new ImageFormatCollection(this.client, picture)) : undefined
   }
 
   public async getStatistics (animeId: number): Promise<AnimeStatistics | undefined> {

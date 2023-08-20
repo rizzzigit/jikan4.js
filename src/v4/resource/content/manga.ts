@@ -19,7 +19,7 @@ import {
   MangaMeta,
   AnimeMeta
 } from '../meta'
-import { Image } from '../misc'
+import { ImageFormatCollection } from '../misc'
 import { mangaExplicitGenres } from '../../manager/genre'
 
 export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown'
@@ -100,7 +100,7 @@ export class Manga extends Content {
   }
 
   public getPictures () {
-    return <Promise<Array<Image>>> this.client.manga.getPictures(this.id)
+    return <Promise<Array<ImageFormatCollection>>> this.client.manga.getPictures(this.id)
   }
 
   public getStatistics () {

@@ -1,18 +1,6 @@
 import { Client } from '../../core/client'
 import { BaseClass, BaseResource } from '../base'
-import { Image } from '../misc'
-
-export class ContentImage extends BaseClass {
-  public readonly jpg: Image
-  public readonly webp: Image
-
-  public constructor (client: Client, data: any) {
-    super(client)
-
-    this.jpg = new Image(client, data?.jpg)
-    this.webp = new Image(client, data?.webp)
-  }
-}
+import { ImageFormatCollection } from '../misc'
 
 export class ContentTitle extends BaseClass {
   public readonly default: string
@@ -82,7 +70,7 @@ export type TitleArray = Array<{
 }>
 
 export class Content extends BaseResource {
-  public readonly image: ContentImage
+  public readonly image: ImageFormatCollection
   public readonly title: ContentTitle
   public readonly titles: TitleArray
   public readonly score: number | null
@@ -98,7 +86,7 @@ export class Content extends BaseResource {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.image = new ContentImage(client, data.images)
+    this.image = new ImageFormatCollection(client, data.images)
     this.title = new ContentTitle(client, data.titles)
     this.titles = data.titles
     this.score = data.score || data.scored || null
@@ -151,7 +139,7 @@ export class ContentNews extends BaseResource {
   public readonly authorUsername: string
   public readonly authorURL: URL
   public readonly forumURL: URL
-  public readonly imageURL: URL | null
+  public readonly image: ImageFormatCollection | null
   public readonly comments: number
   public readonly excerpt: string
 
@@ -163,7 +151,7 @@ export class ContentNews extends BaseResource {
     this.authorUsername = data.author_username
     this.authorURL = ContentNews.parseURL(data.author_url)
     this.forumURL = ContentNews.parseURL(data.forum_url)
-    this.imageURL = ContentNews.parseURL(data.images?.jpg?.image_url, true)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
     this.comments = data.comments
     this.excerpt = data.excerpt
   }
@@ -172,14 +160,14 @@ export class ContentNews extends BaseResource {
 export class ContentUser extends BaseClass {
   public readonly username: string
   public readonly url: URL
-  public readonly imageUrl: URL | null
+  public readonly image: ImageFormatCollection | null
 
   public constructor (client: Client, data: any) {
     super(client)
 
     this.username = data.username
     this.url = ContentUser.parseURL(data.url)
-    this.imageUrl = ContentUser.parseURL(data.images?.jpg?.image_url, true)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
   }
 }
 

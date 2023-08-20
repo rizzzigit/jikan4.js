@@ -1,7 +1,7 @@
 import { Client } from '../core/client'
 import { BaseResource } from './base'
-import { ContentTitle, ContentImage, TitleArray } from './content/base'
-import { Link } from './misc'
+import { ContentTitle, TitleArray } from './content/base'
+import { ImageFormatCollection, Link } from './misc'
 
 export class Producer extends BaseResource {
   public constructor (client: Client, data: any) {
@@ -9,7 +9,7 @@ export class Producer extends BaseResource {
 
     this.title = new ContentTitle(client, data.titles)
     this.titles = data.titles
-    this.image = new ContentImage(client, data.images)
+    this.image = new ImageFormatCollection(client, data.images)
     this.favorites = data.favorites
     this.established = Producer.parseDate(data.established, true)
     this.about = data.about
@@ -18,7 +18,7 @@ export class Producer extends BaseResource {
 
   public readonly title: ContentTitle
   public readonly titles: TitleArray
-  public readonly image: ContentImage
+  public readonly image: ImageFormatCollection
   public readonly favorites: number
   public readonly established: Date | null
   public readonly about: string | null

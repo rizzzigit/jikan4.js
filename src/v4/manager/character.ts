@@ -1,6 +1,6 @@
 import { BaseManager } from '../manager/base'
 import { Character, CharacterAnimeReference, CharacterFull, CharacterMangaReference, CharacterVoiceActorReference } from '../resource/character'
-import { Image } from '../resource/misc'
+import { ImageFormatCollection } from '../resource/misc'
 import { translateObject } from '../utils'
 
 export interface CharacterSearchFilter {
@@ -71,9 +71,9 @@ export class CharacterManager extends BaseManager {
     return rawData ? rawData.map((voiceActorReference: any) => new CharacterVoiceActorReference(this.client, voiceActorReference)) : undefined
   }
 
-  public async getPictures (characterId: number): Promise<Array<Image> | undefined> {
+  public async getPictures (characterId: number): Promise<Array<ImageFormatCollection> | undefined> {
     const rawData = await this.request(`characters/${characterId}/pictures`)
 
-    return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
+    return rawData ? rawData.map((picture: any) => new ImageFormatCollection(this.client, picture)) : undefined
   }
 }

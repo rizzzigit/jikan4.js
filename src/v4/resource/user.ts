@@ -1,15 +1,14 @@
 import { Client } from '../core/client'
-import { ContentImage } from '../resource/content/base'
 import { BaseClass } from './base'
 import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta'
-import { Link } from './misc'
+import { ImageFormatCollection, Link } from './misc'
 
 export type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary'
 
 export class UserMeta extends BaseClass {
   public readonly username: string
   public readonly url: URL
-  public readonly imageUrl: URL | null
+  public readonly image: ImageFormatCollection | null
   public readonly lastOnline: Date | null
 
   public getUser () {
@@ -21,7 +20,7 @@ export class UserMeta extends BaseClass {
 
     this.username = data.username
     this.url = UserMeta.parseURL(data.url)
-    this.imageUrl = UserMeta.parseURL(data?.images?.jpg?.image_url, true)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
     this.lastOnline = UserMeta.parseDate(data.last_online)
   }
 }
@@ -39,7 +38,7 @@ export class User extends BaseClass {
 
   public readonly username: string
   public readonly url: URL
-  public readonly imageUrl: URL | null
+  public readonly image: ImageFormatCollection | null
   public readonly lastOnline: Date | null
   public readonly gender: UserGender
   public readonly birthday: Date | null
@@ -91,7 +90,7 @@ export class User extends BaseClass {
 
     this.username = data.username
     this.url = User.parseURL(data.url)
-    this.imageUrl = User.parseURL(data?.images?.jpg?.image_url, true)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
     this.lastOnline = User.parseDate(data.last_online, true)
     this.gender = User.parseGender(data.gender)
     this.birthday = User.parseDate(data.birthday, true)
@@ -160,18 +159,18 @@ export class UserStats extends BaseClass {
 }
 
 export class UserFavorites extends BaseClass {
-  public readonly anime: Array<AnimeMeta & { images: ContentImage }>
-  public readonly manga: Array<MangaMeta & { images: ContentImage }>
-  public readonly characters: Array<CharacterMeta & { images: ContentImage }>
-  public readonly people: Array<PersonMeta & { images: ContentImage }>
+  public readonly anime: Array<AnimeMeta & { images: ImageFormatCollection }>
+  public readonly manga: Array<MangaMeta & { images: ImageFormatCollection }>
+  public readonly characters: Array<CharacterMeta & { images: ImageFormatCollection }>
+  public readonly people: Array<PersonMeta & { images: ImageFormatCollection }>
 
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.anime = data.anime?.map((anime: any) => Object.assign(new AnimeMeta(client, anime), { images: new ContentImage(client, anime.images) })) || []
-    this.manga = data.manga?.map((manga: any) => Object.assign(new MangaMeta(client, manga), { images: new ContentImage(client, manga.images) })) || []
-    this.characters = data.characters?.map((character: any) => Object.assign(new CharacterMeta(client, character), { images: new ContentImage(client, character.images) })) || []
-    this.people = data.people?.map((person: any) => Object.assign(new PersonMeta(client, person), { images: new ContentImage(client, person.images) })) || []
+    this.anime = data.anime?.map((anime: any) => Object.assign(new AnimeMeta(client, anime), { images: new ImageFormatCollection(client, anime.images) })) || []
+    this.manga = data.manga?.map((manga: any) => Object.assign(new MangaMeta(client, manga), { images: new ImageFormatCollection(client, manga.images) })) || []
+    this.characters = data.characters?.map((character: any) => Object.assign(new CharacterMeta(client, character), { images: new ImageFormatCollection(client, character.images) })) || []
+    this.people = data.people?.map((person: any) => Object.assign(new PersonMeta(client, person), { images: new ImageFormatCollection(client, person.images) })) || []
   }
 }
 
@@ -264,7 +263,7 @@ export class UserMangaHistory extends BaseClass {
 export class UserFriend extends BaseClass {
   public readonly username: string
   public readonly url: URL
-  public readonly imageUrl: URL | null
+  public readonly image: ImageFormatCollection | null
   public readonly lastOnline: Date | null
   public readonly friendsSince: Date | null
 
@@ -277,7 +276,7 @@ export class UserFriend extends BaseClass {
 
     this.username = data.user.username
     this.url = UserFriend.parseURL(data.user.url)
-    this.imageUrl = UserFriend.parseURL(data.user.images?.jpg?.image_url, true)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
     this.lastOnline = UserFriend.parseDate(data.last_online, true)
     this.friendsSince = UserFriend.parseDate(data.friends_since, true)
   }
@@ -289,7 +288,7 @@ export class UserRecommendation extends BaseClass {
     username: string
   }
 
-  public readonly entries: Array<(AnimeMeta | MangaMeta) & { images: ContentImage }>
+  public readonly entries: Array<(AnimeMeta | MangaMeta) & { images: ImageFormatCollection }>
   public readonly content: string
 
   public constructor (client: Client, data: any) {
@@ -306,7 +305,7 @@ export class UserRecommendation extends BaseClass {
       } else {
         return new MangaMeta(client, entry)
       }
-    }) || [])(data.entry), { images: new ContentImage(client, data.entry.images) })
+    }) || [])(data.entry), { images: new ImageFormatCollection(client, data.entry.images) })
 
     this.content = data.content
   }

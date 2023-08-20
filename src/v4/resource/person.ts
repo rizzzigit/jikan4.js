@@ -1,7 +1,7 @@
 import { Client } from '../core/client'
 import { BaseClass, BaseResource } from './base'
 import { AnimeMeta, CharacterMeta, MangaMeta } from './meta'
-import { Image } from './misc'
+import { ImageFormatCollection } from './misc'
 
 export class PersonName extends BaseClass {
   public readonly name: string
@@ -25,7 +25,7 @@ export class PersonName extends BaseClass {
 
 export class Person extends BaseResource {
   public readonly websiteUrl: URL | null
-  public readonly image: Image
+  public readonly image: ImageFormatCollection | null
   public readonly name: PersonName
   public readonly birth: Date | null
   public readonly favorites: number
@@ -44,7 +44,7 @@ export class Person extends BaseResource {
   }
 
   public getPictures () {
-    return <Promise<Image[]>> this.client.people.getPictures(this.id)
+    return <Promise<ImageFormatCollection[]>> this.client.people.getPictures(this.id)
   }
 
   public getFull () {
@@ -55,7 +55,7 @@ export class Person extends BaseResource {
     super(client, data)
 
     this.websiteUrl = Person.parseURL(data.website_url, true)
-    this.image = new Image(client, data.images?.jpg)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
     this.name = new PersonName(client, data)
     this.birth = Person.parseDate(data.birthday, true)
     this.favorites = data.favorites

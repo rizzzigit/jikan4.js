@@ -4,7 +4,7 @@ import { Character } from './character'
 import { Anime } from './content/anime'
 import { Manga } from './content/manga'
 import { Person } from './person'
-import { Image } from './misc'
+import { ImageFormatCollection } from './misc'
 
 export type MetaType = 'Magazine' | 'Producer' | 'AnimeGenre' | 'MangaGenre' | 'Person' | 'Character' | 'Club'
 
@@ -25,14 +25,14 @@ export class Meta<T extends MetaType> extends BaseResource {
 export class ContentMeta<T extends ContentMetaType> extends BaseResource {
   public readonly type: T
   public readonly title: string
-  public readonly image: Image
+  public readonly image: ImageFormatCollection
 
   public constructor (client: Client, data: any, type: T) {
     super(client, data)
 
     this.type = type
     this.title = data.name || data.title
-    this.image = new Image(client, data.images?.jpg)
+    this.image = new ImageFormatCollection(client, data.images)
   }
 }
 

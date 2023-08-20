@@ -1,5 +1,6 @@
 import { Client } from '../core/client'
 import { BaseClass, BaseResource } from './base'
+import { ImageFormatCollection } from './misc'
 
 export type ClubCategory =
   | 'ActorsAndArtists'
@@ -57,7 +58,7 @@ export class Club extends BaseResource {
     }
   }
 
-  public readonly imageUrl: URL | null
+  public readonly image: ImageFormatCollection | null
   public readonly memberCount: number
   public readonly pictureCount: number
   public readonly category: ClubCategory
@@ -72,7 +73,7 @@ export class Club extends BaseResource {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.imageUrl = Club.parseURL(data.images?.jpg?.image_url, true)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
     this.memberCount = data.members_count
     this.pictureCount = data.pictures_count
     this.category = Club.parseCategory(data.category)

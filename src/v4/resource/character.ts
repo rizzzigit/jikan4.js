@@ -1,11 +1,10 @@
 import { Client } from '../core/client'
 import { BaseClass, BaseResource } from './base'
-import { ContentImage } from './content/base'
 import { MangaMeta, PersonMeta, AnimeMeta } from './meta'
-import { Image } from './misc'
+import { ImageFormatCollection } from './misc'
 
 export class Character extends BaseResource {
-  public readonly image: ContentImage
+  public readonly image: ImageFormatCollection
   public readonly name: string
   public readonly nameKanji: string | null
   public readonly nicknames: Array<string>
@@ -25,7 +24,7 @@ export class Character extends BaseResource {
   }
 
   public getPictures () {
-    return <Promise<Array<Image>>> this.client.characters.getPictures(this.id)
+    return <Promise<Array<ImageFormatCollection>>> this.client.characters.getPictures(this.id)
   }
 
   public getFull () {
@@ -35,7 +34,7 @@ export class Character extends BaseResource {
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.image = new ContentImage(client, data.images)
+    this.image = new ImageFormatCollection(client, data.images)
     this.name = data.name
     this.nameKanji = data.name_kanji || null
     this.nicknames = data.nicknames?.map((nickname: any) => nickname || null).filter((nickname: any) => !!nickname) || []

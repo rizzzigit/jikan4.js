@@ -10,7 +10,7 @@ import {
   MangaRelationGroup,
   MangaFull
 } from '../resource/content/manga'
-import { Image } from '../resource/misc'
+import { ImageFormatCollection } from '../resource/misc'
 import { translateObject } from '../utils'
 import { MangaGenreMeta, MagazineMeta, GenreType } from '../resource/meta'
 
@@ -121,10 +121,10 @@ export class MangaManager extends BaseManager {
     return rawData ? rawData.map((topic: any) => new MangaTopic(this.client, topic)) : undefined
   }
 
-  public async getPictures (mangaId: number): Promise<Array<Image> | undefined> {
+  public async getPictures (mangaId: number): Promise<Array<ImageFormatCollection> | undefined> {
     const rawData = await this.request(`manga/${mangaId}/pictures`)
 
-    return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
+    return rawData ? rawData.map((picture: any) => new ImageFormatCollection(this.client, picture)) : undefined
   }
 
   public async getStatistics (mangaId: number): Promise<MangaStatistics | undefined> {

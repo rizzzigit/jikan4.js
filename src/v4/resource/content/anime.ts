@@ -11,7 +11,7 @@ import {
   ContentExternal
 } from './base'
 import { BaseClass, BaseResource } from '../base'
-import { YoutubeVideo, Image, Link } from '../misc'
+import { YoutubeVideo, Link, ImageFormatCollection } from '../misc'
 import {
   ProducerMeta,
   AnimeGenreMeta,
@@ -160,7 +160,7 @@ export class Anime extends Content {
   }
 
   public getPictures () {
-    return <Promise<Array<Image>>> this.client.anime.getPictures(this.id)
+    return <Promise<Array<ImageFormatCollection>>> this.client.anime.getPictures(this.id)
   }
 
   public getStatistics () {
@@ -356,14 +356,14 @@ export class AnimePromo extends BaseClass {
 export class AnimeEpisodeVideo extends BaseResource {
   public readonly title: string
   public readonly episode: number
-  public readonly imageURL: URL | null
+  public readonly image: ImageFormatCollection | null
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
     this.title = data.title
     this.episode = typeof (data.episode) === 'string' ? Number(data.episode.toLowerCase().split('episode')[1]?.trim()) || 0 : 0
-    this.imageURL = AnimeEpisodeVideo.parseURL(data.images?.jpg?.image_url, true)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
   }
 }
 

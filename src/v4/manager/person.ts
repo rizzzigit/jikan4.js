@@ -1,4 +1,4 @@
-import { Image } from '../resource/misc'
+import { ImageFormatCollection } from '../resource/misc'
 import { Person, PersonAnimeReference, PersonVoiceActorReference, PersonMangaReference, PersonFull } from '../resource/person'
 import { BaseManager } from '../manager/base'
 import { translateObject } from '../utils'
@@ -72,9 +72,9 @@ export class PersonManager extends BaseManager {
     return rawData ? rawData.map((mangaReference: any) => new PersonMangaReference(this.client, mangaReference)) : undefined
   }
 
-  public async getPictures (personId: number): Promise<Array<Image> | undefined> {
+  public async getPictures (personId: number): Promise<Array<ImageFormatCollection> | undefined> {
     const rawData = await this.request(`people/${personId}/pictures`)
 
-    return rawData ? rawData.map((picture: any) => new Image(this.client, picture)) : undefined
+    return rawData ? rawData.map((picture: any) => new ImageFormatCollection(this.client, picture)) : undefined
   }
 }

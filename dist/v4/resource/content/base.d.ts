@@ -1,11 +1,6 @@
 import { Client } from '../../core/client';
 import { BaseClass, BaseResource } from '../base';
-import { Image } from '../misc';
-export declare class ContentImage extends BaseClass {
-    readonly jpg: Image;
-    readonly webp: Image;
-    constructor(client: Client, data: any);
-}
+import { ImageFormatCollection } from '../misc';
 export declare class ContentTitle extends BaseClass {
     readonly default: string;
     readonly english: string | null;
@@ -22,7 +17,7 @@ export type TitleArray = Array<{
     title: string;
 }>;
 export declare class Content extends BaseResource {
-    readonly image: ContentImage;
+    readonly image: ImageFormatCollection;
     readonly title: ContentTitle;
     readonly titles: TitleArray;
     readonly score: number | null;
@@ -56,7 +51,7 @@ export declare class ContentNews extends BaseResource {
     readonly authorUsername: string;
     readonly authorURL: URL;
     readonly forumURL: URL;
-    readonly imageURL: URL | null;
+    readonly image: ImageFormatCollection | null;
     readonly comments: number;
     readonly excerpt: string;
     constructor(client: Client, data: any);
@@ -64,7 +59,7 @@ export declare class ContentNews extends BaseResource {
 export declare class ContentUser extends BaseClass {
     readonly username: string;
     readonly url: URL;
-    readonly imageUrl: URL | null;
+    readonly image: ImageFormatCollection | null;
     constructor(client: Client, data: any);
 }
 export declare class ContentReactions extends BaseClass {

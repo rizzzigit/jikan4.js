@@ -13,11 +13,10 @@ class Meta extends base_1.BaseResource {
 exports.Meta = Meta;
 class ContentMeta extends base_1.BaseResource {
     constructor(client, data, type) {
-        var _a;
         super(client, data);
         this.type = type;
         this.title = data.name || data.title;
-        this.image = new misc_1.Image(client, (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
+        this.image = new misc_1.ImageFormatCollection(client, data.images);
     }
 }
 exports.ContentMeta = ContentMeta;

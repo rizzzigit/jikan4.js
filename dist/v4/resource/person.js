@@ -35,10 +35,9 @@ class Person extends base_1.BaseResource {
         return this.client.people.getFull(this.id);
     }
     constructor(client, data) {
-        var _a;
         super(client, data);
         this.websiteUrl = Person.parseURL(data.website_url, true);
-        this.image = new misc_1.Image(client, (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg);
+        this.image = data.images != null ? new misc_1.ImageFormatCollection(client, data.images) : null;
         this.name = new PersonName(client, data);
         this.birth = Person.parseDate(data.birthday, true);
         this.favorites = data.favorites;

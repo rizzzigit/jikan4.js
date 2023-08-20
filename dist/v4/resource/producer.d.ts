@@ -1,12 +1,12 @@
 import { Client } from '../core/client';
 import { BaseResource } from './base';
-import { ContentTitle, ContentImage, TitleArray } from './content/base';
-import { Link } from './misc';
+import { ContentTitle, TitleArray } from './content/base';
+import { ImageFormatCollection, Link } from './misc';
 export declare class Producer extends BaseResource {
     constructor(client: Client, data: any);
     readonly title: ContentTitle;
     readonly titles: TitleArray;
-    readonly image: ContentImage;
+    readonly image: ImageFormatCollection;
     readonly favorites: number;
     readonly established: Date | null;
     readonly about: string | null;

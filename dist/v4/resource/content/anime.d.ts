@@ -1,7 +1,7 @@
 import { Client } from '../../core/client';
 import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReactions, ContentReview, ContentExternal } from './base';
 import { BaseClass, BaseResource } from '../base';
-import { YoutubeVideo, Image, Link } from '../misc';
+import { YoutubeVideo, Link, ImageFormatCollection } from '../misc';
 import { ProducerMeta, AnimeGenreMeta, PersonMeta, CharacterMeta, AnimeMeta, MangaMeta } from '../meta';
 export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown';
 export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown';
@@ -48,7 +48,7 @@ export declare class Anime extends Content {
     getTopics(topic?: 'all' | 'episode' | 'other'): Promise<AnimeTopic[]>;
     getVideos(): Promise<AnimeVideo>;
     getVideosEpisodes(offset?: number, maxCount?: number): Promise<AnimeEpisodeVideo[]>;
-    getPictures(): Promise<Image[]>;
+    getPictures(): Promise<ImageFormatCollection[]>;
     getStatistics(): Promise<AnimeStatistics>;
     getMoreInfo(): Promise<string | null>;
     getRecommendations(): Promise<AnimeRecommendation[]>;
@@ -121,7 +121,7 @@ export declare class AnimePromo extends BaseClass {
 export declare class AnimeEpisodeVideo extends BaseResource {
     readonly title: string;
     readonly episode: number;
-    readonly imageURL: URL | null;
+    readonly image: ImageFormatCollection | null;
     constructor(client: Client, data: any);
 }
 export declare class AnimeMusicVideo extends BaseClass {

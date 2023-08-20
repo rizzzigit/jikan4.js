@@ -1,4 +1,4 @@
-import { Image } from '../resource/misc';
+import { ImageFormatCollection } from '../resource/misc';
 import { Person, PersonAnimeReference, PersonVoiceActorReference, PersonMangaReference, PersonFull } from '../resource/person';
 import { BaseManager } from '../manager/base';
 export interface PersonSearchFilter {
@@ -15,5 +15,5 @@ export declare class PersonManager extends BaseManager {
     getAnime(personId: number): Promise<Array<PersonAnimeReference> | undefined>;
     getVoiceActors(personId: number): Promise<Array<PersonVoiceActorReference> | undefined>;
     getManga(personId: number): Promise<Array<PersonMangaReference> | undefined>;
-    getPictures(personId: number): Promise<Array<Image> | undefined>;
+    getPictures(personId: number): Promise<Array<ImageFormatCollection> | undefined>;
 }

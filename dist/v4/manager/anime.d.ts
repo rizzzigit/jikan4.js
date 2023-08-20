@@ -1,7 +1,7 @@
 import { BaseManager } from '../manager/base';
 import { ContentExternal, ContentNews, ContentRelationType } from '../resource/content/base';
 import { Anime, AnimeCharacterReference, AnimeStaffReference, AnimePartialEpisode, AnimeEpisode, AnimeTopic, AnimeVideo, AnimeStatistics, AnimeRecommendation, AnimeUserUpdate, AnimeReview, AnimeRelationGroup, AnimeFull, AnimeEpisodeVideo } from '../resource/content/anime';
-import { Image, Link } from '../resource/misc';
+import { ImageFormatCollection, Link } from '../resource/misc';
 import { AnimeGenreMeta, ProducerMeta, GenreType } from '../resource/meta';
 export interface AnimeSearchFilter {
     type: 'tv' | 'movie' | 'ova' | 'special' | 'ona' | 'music';
@@ -39,7 +39,7 @@ export declare class AnimeManager extends BaseManager {
     getTopics(animeId: number, topic?: 'all' | 'episode' | 'other'): Promise<Array<AnimeTopic> | undefined>;
     getVideos(animeId: number): Promise<AnimeVideo | undefined>;
     getVideosEpisodes(animeId: number, offset?: number, maxCount?: number): Promise<Array<AnimeEpisodeVideo> | undefined>;
-    getPictures(animeId: number): Promise<Array<Image> | undefined>;
+    getPictures(animeId: number): Promise<Array<ImageFormatCollection> | undefined>;
     getStatistics(animeId: number): Promise<AnimeStatistics | undefined>;
     getMoreInfo(animeId: number): Promise<string | null | undefined>;
     getRecommendations(animeId: number): Promise<Array<AnimeRecommendation> | undefined>;

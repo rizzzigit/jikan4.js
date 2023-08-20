@@ -238,11 +238,11 @@ class AnimePromo extends base_2.BaseClass {
 exports.AnimePromo = AnimePromo;
 class AnimeEpisodeVideo extends base_2.BaseResource {
     constructor(client, data) {
-        var _a, _b, _c;
+        var _a;
         super(client, data);
         this.title = data.title;
         this.episode = typeof (data.episode) === 'string' ? Number((_a = data.episode.toLowerCase().split('episode')[1]) === null || _a === void 0 ? void 0 : _a.trim()) || 0 : 0;
-        this.imageURL = AnimeEpisodeVideo.parseURL((_c = (_b = data.images) === null || _b === void 0 ? void 0 : _b.jpg) === null || _c === void 0 ? void 0 : _c.image_url, true);
+        this.image = data.images != null ? new misc_1.ImageFormatCollection(client, data.images) : null;
     }
 }
 exports.AnimeEpisodeVideo = AnimeEpisodeVideo;

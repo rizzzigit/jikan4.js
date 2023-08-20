@@ -1,13 +1,12 @@
 import { Client } from '../core/client';
-import { ContentImage } from '../resource/content/base';
 import { BaseClass } from './base';
 import { AnimeMeta, CharacterMeta, ClubMeta, MangaMeta, PersonMeta } from './meta';
-import { Link } from './misc';
+import { ImageFormatCollection, Link } from './misc';
 export type UserGender = 'Any' | 'Male' | 'Female' | 'Non-binary';
 export declare class UserMeta extends BaseClass {
     readonly username: string;
     readonly url: URL;
-    readonly imageUrl: URL | null;
+    readonly image: ImageFormatCollection | null;
     readonly lastOnline: Date | null;
     getUser(): Promise<User>;
     constructor(client: Client, data: any);
@@ -16,7 +15,7 @@ export declare class User extends BaseClass {
     static parseGender(input: any): UserGender;
     readonly username: string;
     readonly url: URL;
-    readonly imageUrl: URL | null;
+    readonly image: ImageFormatCollection | null;
     readonly lastOnline: Date | null;
     readonly gender: UserGender;
     readonly birthday: Date | null;
@@ -64,16 +63,16 @@ export declare class UserStats extends BaseClass {
 }
 export declare class UserFavorites extends BaseClass {
     readonly anime: Array<AnimeMeta & {
-        images: ContentImage;
+        images: ImageFormatCollection;
     }>;
     readonly manga: Array<MangaMeta & {
-        images: ContentImage;
+        images: ImageFormatCollection;
     }>;
     readonly characters: Array<CharacterMeta & {
-        images: ContentImage;
+        images: ImageFormatCollection;
     }>;
     readonly people: Array<PersonMeta & {
-        images: ContentImage;
+        images: ImageFormatCollection;
     }>;
     constructor(client: Client, data: any);
 }
@@ -117,7 +116,7 @@ export declare class UserMangaHistory extends BaseClass {
 export declare class UserFriend extends BaseClass {
     readonly username: string;
     readonly url: URL;
-    readonly imageUrl: URL | null;
+    readonly image: ImageFormatCollection | null;
     readonly lastOnline: Date | null;
     readonly friendsSince: Date | null;
     getUser(): Promise<User>;
@@ -129,7 +128,7 @@ export declare class UserRecommendation extends BaseClass {
         username: string;
     };
     readonly entries: Array<(AnimeMeta | MangaMeta) & {
-        images: ContentImage;
+        images: ImageFormatCollection;
     }>;
     readonly content: string;
     constructor(client: Client, data: any);

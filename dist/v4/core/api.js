@@ -227,16 +227,11 @@ class APIClient {
                     response.on('error', reject);
                     const bufferSink = [];
                     try {
-                        for (_a = true, response_1 = __asyncValues(response); response_1_1 = yield response_1.next(), _b = response_1_1.done, !_b;) {
+                        for (_a = true, response_1 = __asyncValues(response); response_1_1 = yield response_1.next(), _b = response_1_1.done, !_b; _a = true) {
                             _d = response_1_1.value;
                             _a = false;
-                            try {
-                                const buffer = _d;
-                                bufferSink.push(buffer);
-                            }
-                            finally {
-                                _a = true;
-                            }
+                            const buffer = _d;
+                            bufferSink.push(buffer);
                         }
                     }
                     catch (e_1_1) { e_1 = { error: e_1_1 }; }

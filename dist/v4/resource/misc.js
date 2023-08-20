@@ -1,8 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.YoutubeVideo = exports.Image = void 0;
+exports.YoutubeVideo = exports.ImageFormatCollection = exports.Image = void 0;
 const base_1 = require("./base");
 class Image extends base_1.BaseClass {
+    getOrFallback(sizes) {
+        for (const sizeEntry of sizes) {
+            if (this[sizeEntry] != null) {
+                return this[sizeEntry];
+            }
+        }
+        return null;
+    }
     constructor(client, data) {
         super(client);
         this.small = Image.parseURL(data === null || data === void 0 ? void 0 : data.small_image_url, true);
@@ -13,6 +21,26 @@ class Image extends base_1.BaseClass {
     }
 }
 exports.Image = Image;
+class ImageFormatCollection extends base_1.BaseClass {
+    getOrFallback(formats, sizes) {
+        var _a, _b;
+        for (const formatEntry of formats) {
+            if (this[formatEntry] != null) {
+                if (sizes != null) {
+                    return (_b = (_a = this[formatEntry]) === null || _a === void 0 ? void 0 : _a.getOrFallback(sizes)) !== null && _b !== void 0 ? _b : null;
+                }
+                return this[formatEntry];
+            }
+        }
+        return null;
+    }
+    constructor(client, data) {
+        super(client);
+        this.jpg = data.jpg != null ? new Image(client, data.jpg) : null;
+        this.webp = data.webp != null ? new Image(client, data.webp) : null;
+    }
+}
+exports.ImageFormatCollection = ImageFormatCollection;
 class YoutubeVideo extends base_1.BaseClass {
     constructor(client, data) {
         super(client);

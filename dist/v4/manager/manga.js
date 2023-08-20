@@ -92,7 +92,7 @@ class MangaManager extends base_1.BaseManager {
     getPictures(mangaId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/pictures`);
-            return rawData ? rawData.map((picture) => new misc_1.Image(this.client, picture)) : undefined;
+            return rawData ? rawData.map((picture) => new misc_1.ImageFormatCollection(this.client, picture)) : undefined;
         });
     }
     getStatistics(mangaId) {

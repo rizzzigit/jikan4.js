@@ -1,10 +1,9 @@
 import { Client } from '../core/client';
 import { BaseClass, BaseResource } from './base';
-import { ContentImage } from './content/base';
 import { MangaMeta, PersonMeta, AnimeMeta } from './meta';
-import { Image } from './misc';
+import { ImageFormatCollection } from './misc';
 export declare class Character extends BaseResource {
-    readonly image: ContentImage;
+    readonly image: ImageFormatCollection;
     readonly name: string;
     readonly nameKanji: string | null;
     readonly nicknames: Array<string>;
@@ -13,7 +12,7 @@ export declare class Character extends BaseResource {
     getAnime(): Promise<CharacterAnimeReference[]>;
     getManga(): Promise<CharacterMangaReference[]>;
     getVoiceActors(): Promise<CharacterVoiceActorReference[]>;
-    getPictures(): Promise<Image[]>;
+    getPictures(): Promise<ImageFormatCollection[]>;
     getFull(): Promise<CharacterFull>;
     constructor(client: Client, data: any);
 }

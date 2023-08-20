@@ -1,7 +1,7 @@
 import { BaseManager } from './base';
 import { ContentExternal, ContentNews, ContentRelationType } from '../resource/content/base';
 import { Manga, MangaCharacterReference, MangaTopic, MangaStatistics, MangaUserUpdate, MangaReview, MangaRelationGroup, MangaFull } from '../resource/content/manga';
-import { Image } from '../resource/misc';
+import { ImageFormatCollection } from '../resource/misc';
 import { MangaGenreMeta, MagazineMeta, GenreType } from '../resource/meta';
 export interface MangaSearchFilter {
     type: 'manga' | 'novel' | 'lightnovel' | 'oneshot' | 'doujin' | 'manhwa' | 'manhua';
@@ -31,7 +31,7 @@ export declare class MangaManager extends BaseManager {
     getCharacters(mangaId: number): Promise<Array<MangaCharacterReference> | undefined>;
     getNews(mangaId: number, offset?: number, maxCount?: number): Promise<Array<ContentNews> | undefined>;
     getTopics(mangaId: number): Promise<Array<MangaTopic> | undefined>;
-    getPictures(mangaId: number): Promise<Array<Image> | undefined>;
+    getPictures(mangaId: number): Promise<Array<ImageFormatCollection> | undefined>;
     getStatistics(mangaId: number): Promise<MangaStatistics | undefined>;
     getMoreInfo(mangaId: number): Promise<string | null | undefined>;
     getUserUpdates(mangaId: number): Promise<Array<MangaUserUpdate> | undefined>;

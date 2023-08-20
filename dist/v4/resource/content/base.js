@@ -1,16 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContentExternal = exports.ContentRelationGroup = exports.ContentUserUpdate = exports.ContentReview = exports.ContentReactions = exports.ContentUser = exports.ContentNews = exports.ContentStatistics = exports.ContentStatisticsScore = exports.Content = exports.ContentTitle = exports.ContentImage = void 0;
+exports.ContentExternal = exports.ContentRelationGroup = exports.ContentUserUpdate = exports.ContentReview = exports.ContentReactions = exports.ContentUser = exports.ContentNews = exports.ContentStatistics = exports.ContentStatisticsScore = exports.Content = exports.ContentTitle = void 0;
 const base_1 = require("../base");
 const misc_1 = require("../misc");
-class ContentImage extends base_1.BaseClass {
-    constructor(client, data) {
-        super(client);
-        this.jpg = new misc_1.Image(client, data === null || data === void 0 ? void 0 : data.jpg);
-        this.webp = new misc_1.Image(client, data === null || data === void 0 ? void 0 : data.webp);
-    }
-}
-exports.ContentImage = ContentImage;
 class ContentTitle extends base_1.BaseClass {
     toString() {
         return this.default;
@@ -59,7 +51,7 @@ exports.ContentTitle = ContentTitle;
 class Content extends base_1.BaseResource {
     constructor(client, data) {
         super(client, data);
-        this.image = new ContentImage(client, data.images);
+        this.image = new misc_1.ImageFormatCollection(client, data.images);
         this.title = new ContentTitle(client, data.titles);
         this.titles = data.titles;
         this.score = data.score || data.scored || null;
@@ -97,14 +89,13 @@ class ContentStatistics extends base_1.BaseClass {
 exports.ContentStatistics = ContentStatistics;
 class ContentNews extends base_1.BaseResource {
     constructor(client, data) {
-        var _a, _b;
         super(client, data);
         this.title = data.title;
         this.date = new Date(data.date);
         this.authorUsername = data.author_username;
         this.authorURL = ContentNews.parseURL(data.author_url);
         this.forumURL = ContentNews.parseURL(data.forum_url);
-        this.imageURL = ContentNews.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
+        this.image = data.images != null ? new misc_1.ImageFormatCollection(client, data.images) : null;
         this.comments = data.comments;
         this.excerpt = data.excerpt;
     }
@@ -112,11 +103,10 @@ class ContentNews extends base_1.BaseResource {
 exports.ContentNews = ContentNews;
 class ContentUser extends base_1.BaseClass {
     constructor(client, data) {
-        var _a, _b;
         super(client);
         this.username = data.username;
         this.url = ContentUser.parseURL(data.url);
-        this.imageUrl = ContentUser.parseURL((_b = (_a = data.images) === null || _a === void 0 ? void 0 : _a.jpg) === null || _b === void 0 ? void 0 : _b.image_url, true);
+        this.image = data.images != null ? new misc_1.ImageFormatCollection(client, data.images) : null;
     }
 }
 exports.ContentUser = ContentUser;

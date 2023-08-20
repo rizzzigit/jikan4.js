@@ -1,7 +1,7 @@
 import { Client } from '../core/client';
 import { BaseClass, BaseResource } from './base';
 import { AnimeMeta, CharacterMeta, MangaMeta } from './meta';
-import { Image } from './misc';
+import { ImageFormatCollection } from './misc';
 export declare class PersonName extends BaseClass {
     readonly name: string;
     readonly given: string | null;
@@ -12,7 +12,7 @@ export declare class PersonName extends BaseClass {
 }
 export declare class Person extends BaseResource {
     readonly websiteUrl: URL | null;
-    readonly image: Image;
+    readonly image: ImageFormatCollection | null;
     readonly name: PersonName;
     readonly birth: Date | null;
     readonly favorites: number;
@@ -20,7 +20,7 @@ export declare class Person extends BaseResource {
     getAnime(): Promise<PersonAnimeReference[]>;
     getVoiceActors(): Promise<PersonVoiceActorReference[]>;
     getManga(): Promise<PersonMangaReference[]>;
-    getPictures(): Promise<Image[]>;
+    getPictures(): Promise<ImageFormatCollection[]>;
     getFull(): Promise<PersonFull>;
     constructor(client: Client, data: any);
 }

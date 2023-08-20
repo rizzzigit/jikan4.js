@@ -13,61 +13,27 @@ const v4_1 = require("./v4");
 const client = new v4_1.Client();
 client.on('debug', (scope, message) => { console.log(`[${scope}] ${message}`); });
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
+    const f = ['webp', 'jpg'];
+    const s = ['maximum', 'large', 'medium', 'default', 'small'];
     const func = {
-        streaming: () => __awaiter(void 0, void 0, void 0, function* () {
-            var _a;
-            const streamingLinks = yield client.anime.getStreamingLinks(1);
-            const anime = yield ((_a = (yield client.anime.get(1))) === null || _a === void 0 ? void 0 : _a.getStreamingLinks());
-            const animeFull = yield client.anime.getFull(1);
-            return { streamingLinks, anime, animeFull };
+        pictures: () => __awaiter(void 0, void 0, void 0, function* () {
+            var _a, _b, _c, _d, _e;
+            return {
+                character: (_a = (yield client.characters.getPictures(11))) === null || _a === void 0 ? void 0 : _a.map((e) => e.getOrFallback(f, s)),
+                anime: (_b = (yield client.anime.getPictures(5))) === null || _b === void 0 ? void 0 : _b.map((e) => e.getOrFallback(f, s)),
+                manga: (_c = (yield client.manga.getPictures(4))) === null || _c === void 0 ? void 0 : _c.map((e) => e.getOrFallback(f, s)),
+                person: (_e = (_d = (yield client.people.get(1))) === null || _d === void 0 ? void 0 : _d.image) === null || _e === void 0 ? void 0 : _e.getOrFallback(f, s)
+            };
         }),
-        musicVideo: () => __awaiter(void 0, void 0, void 0, function* () {
-            const videos = yield client.anime.getVideos(20);
-            // const data = await (await fetch('https://api.jikan.moe/v4/anime/20/videos')).json()
-            // const video = new AnimeVideo(client, data.data)
-            // console.log(video.musicVideos)
-            return videos;
-        }),
-        videosEpisodes: () => __awaiter(void 0, void 0, void 0, function* () {
-            var _b;
-            const anime = yield ((_b = (yield client.anime.get(20))) === null || _b === void 0 ? void 0 : _b.getVideosEpisodes(0, 0));
-            const videosEpisodes = yield client.anime.getVideosEpisodes(20, 0, 0);
-            return { anime, videosEpisodes };
-        }),
-        title: () => __awaiter(void 0, void 0, void 0, function* () {
-            const anime = yield client.anime.get(20);
-            console.log(anime === null || anime === void 0 ? void 0 : anime.title);
-        }),
-        producer: () => __awaiter(void 0, void 0, void 0, function* () {
-            const list = yield client.producers.list(0, 10);
-            const producer = yield client.producers.getFull(1);
-            const external = yield client.producers.getExternal(1);
-            return { list, producer, external };
-        }),
-        reviewUpdate: () => __awaiter(void 0, void 0, void 0, function* () {
-            const anime = yield client.anime.get(5);
-            const manga = yield client.manga.get(4);
-            console.log(yield (anime === null || anime === void 0 ? void 0 : anime.getReviews()));
-            console.log(yield (manga === null || manga === void 0 ? void 0 : manga.getReviews()));
-        }),
-        dupeReqs: () => __awaiter(void 0, void 0, void 0, function* () {
-            const promises = [];
-            let returned = 0;
-            for (let count = 0; count < 100; count++) {
-                promises.push(client.anime.get(5).then((a) => {
-                    returned++;
-                    console.log(returned);
-                    return a;
-                }));
-            }
-        }),
-        searchExample: () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = (yield client.anime.search('naruto')).map(({ title: { default: _d }, year }) => ({ default: _d, year }));
-            console.table(result);
-        })
+        anime: () => __awaiter(void 0, void 0, void 0, function* () { var _f; return (_f = (yield client.anime.get(5))) === null || _f === void 0 ? void 0 : _f.image; }),
+        manga: () => __awaiter(void 0, void 0, void 0, function* () { var _g; return (_g = (yield client.manga.get(4))) === null || _g === void 0 ? void 0 : _g.image; }),
+        character: () => __awaiter(void 0, void 0, void 0, function* () { var _h; return (_h = (yield client.characters.get(5))) === null || _h === void 0 ? void 0 : _h.image; }),
+        person: () => __awaiter(void 0, void 0, void 0, function* () { var _j; return (_j = (yield client.people.get(5))) === null || _j === void 0 ? void 0 : _j.image; }),
+        club: () => __awaiter(void 0, void 0, void 0, function* () { var _k; return (_k = (yield client.clubs.get(5))) === null || _k === void 0 ? void 0 : _k.image; }),
+        producer: () => __awaiter(void 0, void 0, void 0, function* () { var _l; return (_l = (yield client.producers.get(5))) === null || _l === void 0 ? void 0 : _l.image; }),
+        user: () => __awaiter(void 0, void 0, void 0, function* () { var _m; return (_m = (yield client.users.get('starfishx'))) === null || _m === void 0 ? void 0 : _m.image; })
     };
-    const funcKey = process.argv[2];
-    return yield func[funcKey]();
+    return yield func[process.argv[2]]();
 });
 void run().then((data) => { if (data != null) {
     console.log(data);

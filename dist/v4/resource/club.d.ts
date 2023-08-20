@@ -1,5 +1,6 @@
 import { Client } from '../core/client';
 import { BaseClass, BaseResource } from './base';
+import { ImageFormatCollection } from './misc';
 export type ClubCategory = 'ActorsAndArtists' | 'Anime' | 'Characters' | 'CitiesAndNeighborhoods' | 'Companies' | 'Conventions' | 'Games' | 'Japan' | 'Manga' | 'Music' | 'Others' | 'Schools' | 'None' | 'Unknown';
 export type ClubType = 'Public' | 'Private' | 'Secret' | 'Unknown';
 export declare class Club extends BaseResource {
@@ -7,7 +8,7 @@ export declare class Club extends BaseResource {
     static parseCategory(input: any): ClubCategory;
     /** @hidden */
     static parseType(input: any): ClubType;
-    readonly imageUrl: URL | null;
+    readonly image: ImageFormatCollection | null;
     readonly memberCount: number;
     readonly pictureCount: number;
     readonly category: ClubCategory;

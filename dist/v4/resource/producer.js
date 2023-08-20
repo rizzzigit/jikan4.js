@@ -12,12 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProducerFull = exports.Producer = void 0;
 const base_1 = require("./base");
 const base_2 = require("./content/base");
+const misc_1 = require("./misc");
 class Producer extends base_1.BaseResource {
     constructor(client, data) {
         super(client, data);
         this.title = new base_2.ContentTitle(client, data.titles);
         this.titles = data.titles;
-        this.image = new base_2.ContentImage(client, data.images);
+        this.image = new misc_1.ImageFormatCollection(client, data.images);
         this.favorites = data.favorites;
         this.established = Producer.parseDate(data.established, true);
         this.about = data.about;

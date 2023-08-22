@@ -7,6 +7,7 @@ tsconfig.json
 .eslintrc.json
 .gitignore
 .npmignore
+CODE_OF_CONDUCT.md
 
 dist/test.js
 dist/test.d.ts

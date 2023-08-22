@@ -31,7 +31,50 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         person: () => __awaiter(void 0, void 0, void 0, function* () { var _j; return (_j = (yield client.people.get(5))) === null || _j === void 0 ? void 0 : _j.image; }),
         club: () => __awaiter(void 0, void 0, void 0, function* () { var _k; return (_k = (yield client.clubs.get(5))) === null || _k === void 0 ? void 0 : _k.image; }),
         producer: () => __awaiter(void 0, void 0, void 0, function* () { var _l; return (_l = (yield client.producers.get(5))) === null || _l === void 0 ? void 0 : _l.image; }),
-        user: () => __awaiter(void 0, void 0, void 0, function* () { var _m; return (_m = (yield client.users.get('starfishx'))) === null || _m === void 0 ? void 0 : _m.image; })
+        user: () => __awaiter(void 0, void 0, void 0, function* () { var _m; return (_m = (yield client.users.get('starfishx'))) === null || _m === void 0 ? void 0 : _m.image; }),
+        metaImages: () => __awaiter(void 0, void 0, void 0, function* () {
+            let nulls = 0;
+            const getUrl = (meta) => {
+                var _a, _b, _c;
+                return (_c = (_b = (_a = meta.image) === null || _a === void 0 ? void 0 : _a.getOrFallback(f, s)) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : `null ${++nulls}`;
+            };
+            for (const anime of yield client.anime.list(0, 50)) {
+                console.log('ANIME');
+                for (const character of yield anime.getCharacters()) {
+                    console.log(`character ${character.character.name}: ${getUrl(character.character)}`);
+                    for (const person of character.voiceActors) {
+                        console.log(` voiceActor ${person.person.name}: ${getUrl(person.person)}`);
+                    }
+                }
+                for (const person of yield anime.getStaff()) {
+                    console.log(`person ${person.person.name}: ${getUrl(person.person)}`);
+                }
+                // for (const producer of [...anime.producers, ...anime.licensors, ...anime.studios]) {
+                //   console.log(`producer ${producer.name}: ${getUrl(producer)}`)
+                // }
+            }
+            for (const manga of yield client.manga.list(0, 50)) {
+                console.log('MANGA');
+                for (const character of yield manga.getCharacters()) {
+                    console.log(`character ${character.character.name}: ${getUrl(character.character)}`);
+                }
+            }
+            for (const person of yield client.people.list(0, 50)) {
+                console.log('PERSON');
+                for (const anime of yield person.getAnime()) {
+                    console.log(`anime ${anime.anime.title}: ${getUrl(anime.anime)}`);
+                }
+                for (const voice of yield person.getVoiceActors()) {
+                    console.log(` anime ${voice.anime.title}: ${getUrl(voice.anime)}`);
+                    console.log(`   character ${voice.character.name}: ${getUrl(voice.character)}`);
+                }
+                for (const manga of yield person.getManga()) {
+                    console.log(` manga ${manga.manga.title}: ${getUrl(manga.manga)}`);
+                }
+            }
+            console.log(nulls);
+            // Manga.authors[0].images is undefined
+        })
     };
     return yield func[process.argv[2]]();
 });

@@ -58,6 +58,7 @@ class PersonMeta extends Meta {
     }
     constructor(client, data) {
         super(client, data, 'Person');
+        this.image = data.images != null ? new misc_1.ImageFormatCollection(client, data.images) : null;
     }
 }
 exports.PersonMeta = PersonMeta;
@@ -67,6 +68,7 @@ class CharacterMeta extends Meta {
     }
     constructor(client, data) {
         super(client, data, 'Character');
+        this.image = new misc_1.ImageFormatCollection(client, data.images);
     }
 }
 exports.CharacterMeta = CharacterMeta;

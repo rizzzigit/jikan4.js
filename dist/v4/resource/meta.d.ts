@@ -37,10 +37,12 @@ export declare class MangaGenreMeta<T extends GenreType> extends Meta<'MangaGenr
     readonly genreType: T;
 }
 export declare class PersonMeta extends Meta<'Person'> {
+    readonly image: ImageFormatCollection | null;
     getFull(): Promise<Person>;
     constructor(client: Client, data: any);
 }
 export declare class CharacterMeta extends Meta<'Character'> {
+    readonly image: ImageFormatCollection;
     getFull(): Promise<Character>;
     constructor(client: Client, data: any);
 }

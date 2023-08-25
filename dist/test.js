@@ -16,6 +16,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     const f = ['webp', 'jpg'];
     const s = ['maximum', 'large', 'medium', 'default', 'small'];
     const func = {
+        userFull: () => __awaiter(void 0, void 0, void 0, function* () {
+            console.log(yield client.users.getFull('starfishx'));
+            console.log(yield client.users.getExternal('starfishx'));
+        }),
         pictures: () => __awaiter(void 0, void 0, void 0, function* () {
             var _a, _b, _c, _d, _e;
             return {

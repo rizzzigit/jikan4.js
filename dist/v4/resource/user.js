@@ -204,13 +204,13 @@ class UserRecommendation extends base_1.BaseClass {
 exports.UserRecommendation = UserRecommendation;
 class UserFull extends User {
     constructor(client, data) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e;
         super(client, data);
         this.statistics = new UserStats(client, data.statistics);
-        this.external = data.external.map((data) => Object.assign(data, { url: new URL(data.url) }));
+        this.external = ((_a = data.external) === null || _a === void 0 ? void 0 : _a.map((data) => Object.assign(data, { url: new URL(data.url) }))) || [];
         this.updates = {
-            manga: ((_b = (_a = data.updates) === null || _a === void 0 ? void 0 : _a.manga) === null || _b === void 0 ? void 0 : _b.map((update) => new UserMangaUpdate(client, update))) || [],
-            anime: ((_d = (_c = data.updates) === null || _c === void 0 ? void 0 : _c.anime) === null || _d === void 0 ? void 0 : _d.map((update) => new UserAnimeUpdate(client, update))) || []
+            manga: ((_c = (_b = data.updates) === null || _b === void 0 ? void 0 : _b.manga) === null || _c === void 0 ? void 0 : _c.map((update) => new UserMangaUpdate(client, update))) || [],
+            anime: ((_e = (_d = data.updates) === null || _d === void 0 ? void 0 : _d.anime) === null || _e === void 0 ? void 0 : _e.map((update) => new UserAnimeUpdate(client, update))) || []
         };
     }
 }

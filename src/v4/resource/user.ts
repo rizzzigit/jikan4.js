@@ -323,7 +323,7 @@ export class UserFull extends User {
     super(client, data)
 
     this.statistics = new UserStats(client, data.statistics)
-    this.external = data.external.map((data: any) => Object.assign(data, { url: new URL(data.url) }))
+    this.external = data.external?.map((data: any) => Object.assign(data, { url: new URL(data.url) })) || []
     this.updates = {
       manga: data.updates?.manga?.map((update: any) => new UserMangaUpdate(client, update)) || [],
       anime: data.updates?.anime?.map((update: any) => new UserAnimeUpdate(client, update)) || []

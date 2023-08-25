@@ -8,6 +8,11 @@ const run = async (): Promise<any> => {
   const s: ['maximum', 'large', 'medium', 'default', 'small'] = ['maximum', 'large', 'medium', 'default', 'small']
 
   const func: Record<string, () => Promise<any>> = {
+    userFull: async () => {
+      console.log(await client.users.getFull('starfishx'))
+      console.log(await client.users.getExternal('starfishx'))
+    },
+
     pictures: async () => {
       return {
         character: (await client.characters.getPictures(11))?.map((e) => e.getOrFallback(f, s)),

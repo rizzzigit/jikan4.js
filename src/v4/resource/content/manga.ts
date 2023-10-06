@@ -111,6 +111,10 @@ export class Manga extends Content {
     return <Promise<string | null>> this.client.manga.getMoreInfo(this.id)
   }
 
+  public getRecommendations() {
+    return <Promise<Array<MangaRecommendation>>>this.client.manga.getRecommendations(this.id)
+  }
+
   public getUserUpdates () {
     return <Promise<Array<MangaUserUpdate>>> this.client.manga.getUserUpdates(this.id)
   }

@@ -8,7 +8,8 @@ import {
   MangaUserUpdate,
   MangaReview,
   MangaRelationGroup,
-  MangaFull
+  MangaFull,
+  MangaRecommendation
 } from '../resource/content/manga'
 import { ImageFormatCollection } from '../resource/misc'
 import { translateObject } from '../utils'
@@ -137,6 +138,12 @@ export class MangaManager extends BaseManager {
     const rawData = await this.request(`manga/${mangaId}/moreinfo`)
 
     return rawData ? rawData.moreinfo || null : undefined
+  }
+
+  public async getRecommendations(mangaId: number): Promise<Array<MangaRecommendation> | undefined> {
+    const rawData = await this.request(`manga/${mangaId}/recommendations`)
+
+    return rawData ? rawData.map((recommendation: any) => new MangaRecommendation(this.client, recommendation)) : undefined
   }
 
   public async getUserUpdates (mangaId: number): Promise<Array<MangaUserUpdate> | undefined> {

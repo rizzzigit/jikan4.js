@@ -14,6 +14,7 @@ export type ScheduleDay =
 export interface ScheduleFilter {
   sfw: boolean
   kids: boolean
+  unapproved: boolean
 }
 
 export class ScheduleManager extends BaseManager {
@@ -43,6 +44,7 @@ export class ScheduleManager extends BaseManager {
         switch (key) {
           case 'kids':
           case 'sfw':
+          case 'unapproved':
             return value && [key, 'true']
         }
       })

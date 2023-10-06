@@ -197,7 +197,7 @@ export class ContentReactions extends BaseClass {
 
 export class ContentReview extends BaseResource {
   public readonly type: string
-  public readonly votes: number
+  public readonly score: number
   public readonly date: Date
   public readonly review: string
   public readonly reactions: ContentReactions
@@ -210,7 +210,7 @@ export class ContentReview extends BaseResource {
     super(client, data)
 
     this.type = data.type
-    this.votes = data.votes
+    this.score = data.score
     this.date = new Date(data.date)
     this.review = data.review
     this.reactions = new ContentReactions(client, data.reactions)

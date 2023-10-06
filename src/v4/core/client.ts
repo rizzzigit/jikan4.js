@@ -15,6 +15,7 @@ import { SeasonManager } from '../manager/season'
 import { TopManager } from '../manager/top'
 import { ScheduleManager } from '../manager/schedule'
 import { UserManager } from '../manager/user'
+import { RecommendationManager } from '../manager/recommendation'
 
 export interface ClientOptions {
   /**
@@ -262,6 +263,8 @@ export class Client {
   */
   public readonly producers: ProducerManager
 
+  public readonly recommendations: RecommendationManager
+
   public readonly users: UserManager
 
   /**
@@ -358,6 +361,7 @@ export class Client {
     this.genres = new GenreManager(this)
     this.magazines = new MagazineManager(this)
     this.producers = new ProducerManager(this)
+    this.recommendations = new RecommendationManager(this)
     this.users = new UserManager(this)
     this.seasons = new SeasonManager(this)
     this.top = new TopManager(this)

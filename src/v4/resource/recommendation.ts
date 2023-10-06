@@ -17,7 +17,7 @@ export class BaseRecommendation extends BaseClass {
   }
 }
 
-export class AnimeRecommendation extends BaseRecommendation {
+export class RecommendationAnime extends BaseRecommendation {
   public readonly entries: Array<AnimeMeta>
   public constructor(client: Client, data: any) {
     super(client, data)
@@ -26,7 +26,7 @@ export class AnimeRecommendation extends BaseRecommendation {
   }
 }
 
-export class MangaRecommendation extends BaseRecommendation {
+export class RecommendationManga extends BaseRecommendation {
   public readonly entries: Array<MangaMeta>
 
   public constructor(client: Client, data: any) {

@@ -8,11 +8,11 @@ export declare class BaseRecommendation extends BaseClass {
     readonly user: RecommendationUser;
     constructor(client: Client, data: any);
 }
-export declare class AnimeRecommendation extends BaseRecommendation {
+export declare class RecommendationAnime extends BaseRecommendation {
     readonly entries: Array<AnimeMeta>;
     constructor(client: Client, data: any);
 }
-export declare class MangaRecommendation extends BaseRecommendation {
+export declare class RecommendationManga extends BaseRecommendation {
     readonly entries: Array<MangaMeta>;
     constructor(client: Client, data: any);
 }

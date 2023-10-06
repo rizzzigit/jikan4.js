@@ -16,13 +16,13 @@ class RecommendationManager extends base_1.BaseManager {
     getAnimeRecommendations(offset = 0, maxCount = 100) {
         return __awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`recommendations/anime`, offset, maxCount);
-            return rawData ? rawData.map((recommendation) => new recommendation_1.AnimeRecommendation(this.client, recommendation)) : undefined;
+            return rawData ? rawData.map((recommendation) => new recommendation_1.RecommendationAnime(this.client, recommendation)) : undefined;
         });
     }
     getMangaRecommendations(offset = 0, maxCount = 100) {
         return __awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.requestPaginated(`recommendations/manga`, offset, maxCount);
-            return rawData ? rawData.map((recommendation) => new recommendation_1.MangaRecommendation(this.client, recommendation)) : undefined;
+            return rawData ? rawData.map((recommendation) => new recommendation_1.RecommendationManga(this.client, recommendation)) : undefined;
         });
     }
 }

@@ -1,10 +1,10 @@
 import { Client } from '../../core/client';
-import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReactions, ContentReview, ContentExternal } from './base';
+import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, ContentNews, ContentUserUpdate, ContentReview, ContentExternal } from './base';
 import { BaseClass, BaseResource } from '../base';
 import { YoutubeVideo, Link, ImageFormatCollection } from '../misc';
 import { ProducerMeta, AnimeGenreMeta, PersonMeta, CharacterMeta, AnimeMeta, MangaMeta } from '../meta';
 export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown';
-export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown';
+export type AnimeAirStatus = 'Finished Airing' | 'Airing' | 'Not Yet Aired' | 'Unknown';
 export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown';
 export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown';
 export declare class AnimeAirInformation extends BaseClass {
@@ -157,7 +157,6 @@ export declare class AnimeUserUpdate extends ContentUserUpdate {
 }
 export declare class AnimeReview extends ContentReview {
     readonly episodesWatched: number;
-    readonly reactions: ContentReactions;
     constructor(client: Client, data: any);
 }
 export declare class AnimeRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {

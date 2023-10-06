@@ -1,10 +1,10 @@
 import { Client } from '../../core/client';
 import { BaseClass, BaseResource } from '../base';
-import { Content, ContentRelationType, ContentRelationGroup, ContentNews, ContentStatistics, ContentUserUpdate, ContentReactions, ContentReview, ContentExternal } from './base';
+import { Content, ContentRelationType, ContentRelationGroup, ContentNews, ContentStatistics, ContentUserUpdate, ContentReview, ContentExternal } from './base';
 import { PersonMeta, MagazineMeta, MangaGenreMeta, CharacterMeta, MangaMeta, AnimeMeta } from '../meta';
 import { ImageFormatCollection } from '../misc';
-export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown';
-export type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished' | 'Unknown';
+export type MangaType = 'Manga' | 'Novel' | 'Light Novel' | 'One Shot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown';
+export type MangaPublishStatus = 'Finished' | 'Publishing' | 'On Hiatus' | 'Discontinued' | 'Not Yet Published' | 'Unknown';
 export declare class MangaPublishInformation extends BaseClass {
     /** @hidden */
     static parseMangaPublishStatus(input: any): MangaPublishStatus;
@@ -34,6 +34,7 @@ export declare class Manga extends Content {
     getPictures(): Promise<ImageFormatCollection[]>;
     getStatistics(): Promise<MangaStatistics>;
     getMoreInfo(): Promise<string | null>;
+    getRecommendations(): Promise<MangaRecommendation[]>;
     getUserUpdates(): Promise<MangaUserUpdate[]>;
     getReviews(): Promise<MangaReview[]>;
     getRelations(): Promise<MangaRelationGroup<ContentRelationType>[]>;
@@ -74,7 +75,6 @@ export declare class MangaUserUpdate extends ContentUserUpdate {
 }
 export declare class MangaReview extends ContentReview {
     readonly chaptersRead: number;
-    readonly reactions: ContentReactions;
     constructor(client: Client, data: any);
 }
 export declare class MangaRelationGroup<T extends ContentRelationType> extends ContentRelationGroup<T> {

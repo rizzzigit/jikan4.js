@@ -36,6 +36,7 @@ class ScheduleManager extends base_1.BaseManager {
                 switch (key) {
                     case 'kids':
                     case 'sfw':
+                    case 'unapproved':
                         return value && [key, 'true'];
                 }
             })));

@@ -4,6 +4,7 @@ export type ScheduleDay = 'monday' | 'tursday' | 'wednesday' | 'thursday' | 'fri
 export interface ScheduleFilter {
     sfw: boolean;
     kids: boolean;
+    unapproved: boolean;
 }
 export declare class ScheduleManager extends BaseManager {
     list(day?: ScheduleDay, offset?: number, maxCount?: number): Promise<Array<Anime>>;

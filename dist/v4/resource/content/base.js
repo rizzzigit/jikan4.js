@@ -128,7 +128,7 @@ class ContentReview extends base_1.BaseResource {
     constructor(client, data) {
         super(client, data);
         this.type = data.type;
-        this.votes = data.votes;
+        this.score = data.score;
         this.date = new Date(data.date);
         this.review = data.review;
         this.reactions = new ContentReactions(client, data.reactions);

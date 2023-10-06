@@ -15,9 +15,9 @@ class AnimeAirInformation extends base_2.BaseClass {
     static parseStatus(input) {
         const status = input === null || input === void 0 ? void 0 : input.toLowerCase().trim();
         switch (status) {
-            case 'finished airing': return 'FinishedAiring';
+            case 'finished airing': return 'Finished Airing';
             case 'currently airing': return 'Airing';
-            case 'not yet aired': return 'NotYetAired';
+            case 'not yet aired': return 'Not Yet Aired';
             default: return 'Unknown';
         }
     }
@@ -293,8 +293,7 @@ exports.AnimeUserUpdate = AnimeUserUpdate;
 class AnimeReview extends base_1.ContentReview {
     constructor(client, data) {
         super(client, data);
-        this.episodesWatched = data.episodes_watched;
-        this.reactions = new base_1.ContentReactions(client, data.reactions);
+        this.episodesWatched = data.episodes_watched || 0;
     }
 }
 exports.AnimeReview = AnimeReview;

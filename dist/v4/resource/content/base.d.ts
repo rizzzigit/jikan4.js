@@ -75,7 +75,7 @@ export declare class ContentReactions extends BaseClass {
 }
 export declare class ContentReview extends BaseResource {
     readonly type: string;
-    readonly votes: number;
+    readonly score: number;
     readonly date: Date;
     readonly review: string;
     readonly reactions: ContentReactions;

@@ -42,5 +42,17 @@ class ClubManager extends base_1.BaseManager {
             return rawData ? rawData.map((member) => new club_1.ClubMember(this.client, member)) : undefined;
         });
     }
+    getStaff(clubId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.requestPaginated(`clubs/${clubId}/staff`);
+            return rawData ? rawData.map((staff) => new club_1.ClubStaff(this.client, staff)) : undefined;
+        });
+    }
+    getRelations(clubId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.requestPaginated(`clubs/${clubId}/relations`);
+            return rawData ? new club_1.ClubRelations(this.client, rawData) : undefined;
+        });
+    }
 }
 exports.ClubManager = ClubManager;

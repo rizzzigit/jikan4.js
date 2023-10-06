@@ -78,6 +78,11 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             }
             console.log(nulls);
             // Manga.authors[0].images is undefined
+        }),
+        missingMethods: () => __awaiter(void 0, void 0, void 0, function* () {
+            const manga = yield client.manga.get(4);
+            const club = yield client.clubs.get(123);
+            console.log(yield client.reviews.getAnimeReviews());
         })
     };
     return yield func[process.argv[2]]();

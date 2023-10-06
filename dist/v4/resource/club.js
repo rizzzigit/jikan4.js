@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClubMember = exports.ClubStaff = exports.Club = void 0;
+exports.ClubRelations = exports.ClubMember = exports.ClubStaff = exports.Club = void 0;
 const base_1 = require("./base");
+const meta_1 = require("./meta");
 const misc_1 = require("./misc");
 class Club extends base_1.BaseResource {
     /** @hidden */
@@ -36,6 +37,12 @@ class Club extends base_1.BaseResource {
     getMembers() {
         return this.client.clubs.getMembers(this.id);
     }
+    getStaff() {
+        return this.client.clubs.getStaff(this.id);
+    }
+    getRelations() {
+        return this.client.clubs.getRelations(this.id);
+    }
     constructor(client, data) {
         var _a;
         super(client, data);
@@ -66,3 +73,12 @@ class ClubMember extends base_1.BaseClass {
     }
 }
 exports.ClubMember = ClubMember;
+class ClubRelations extends base_1.BaseClass {
+    constructor(client, data) {
+        super(client);
+        this.anime = data.map((anime) => new meta_1.AnimeMeta(client, anime));
+        this.manga = data.map((manga) => new meta_1.MangaMeta(client, manga));
+        this.characters = data.map((character) => new meta_1.CharacterMeta(client, character));
+    }
+}
+exports.ClubRelations = ClubRelations;

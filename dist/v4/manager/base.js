@@ -50,7 +50,7 @@ class BaseManager extends base_1.BaseClass {
                     lastPage = (pagination === null || pagination === void 0 ? void 0 : pagination.last) || 0;
                 }
                 const end = fetchEnd();
-                if (end && (data.length > end)) {
+                if (end && (data.length >= end)) {
                     break;
                 }
             } while (is200 && hasNext);

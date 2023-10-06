@@ -1,5 +1,6 @@
 import { Client } from '../core/client';
 import { BaseClass, BaseResource } from './base';
+import { AnimeMeta, CharacterMeta, MangaMeta } from './meta';
 import { ImageFormatCollection } from './misc';
 export type ClubCategory = 'ActorsAndArtists' | 'Anime' | 'Characters' | 'CitiesAndNeighborhoods' | 'Companies' | 'Conventions' | 'Games' | 'Japan' | 'Manga' | 'Music' | 'Others' | 'Schools' | 'None' | 'Unknown';
 export type ClubType = 'Public' | 'Private' | 'Secret' | 'Unknown';
@@ -16,6 +17,8 @@ export declare class Club extends BaseResource {
     readonly type: ClubType;
     readonly staff: Array<ClubStaff>;
     getMembers(): Promise<ClubMember[]>;
+    getStaff(): Promise<ClubStaff[]>;
+    getRelations(): Promise<ClubRelations>;
     constructor(client: Client, data: any);
 }
 export declare class ClubStaff extends BaseClass {
@@ -27,5 +30,11 @@ export declare class ClubMember extends BaseClass {
     readonly URL: URL;
     readonly username: string;
     readonly imageURL: URL | null;
+    constructor(client: Client, data: any);
+}
+export declare class ClubRelations extends BaseClass {
+    readonly anime: Array<AnimeMeta>;
+    readonly manga: Array<MangaMeta>;
+    readonly characters: Array<CharacterMeta>;
     constructor(client: Client, data: any);
 }

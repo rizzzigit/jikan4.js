@@ -13,6 +13,8 @@ import { SeasonManager } from '../manager/season';
 import { TopManager } from '../manager/top';
 import { ScheduleManager } from '../manager/schedule';
 import { UserManager } from '../manager/user';
+import { RecommendationManager } from '../manager/recommendation';
+import { ReviewManager } from '../manager/review';
 export interface ClientOptions {
     /**
      * The hostname of the server.
@@ -206,6 +208,8 @@ export declare class Client {
      * ```
     */
     readonly producers: ProducerManager;
+    readonly recommendations: RecommendationManager;
+    readonly reviews: ReviewManager;
     readonly users: UserManager;
     /**
      * Seasons resource context.

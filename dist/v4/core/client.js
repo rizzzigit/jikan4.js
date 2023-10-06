@@ -20,6 +20,8 @@ const season_1 = require("../manager/season");
 const top_1 = require("../manager/top");
 const schedule_1 = require("../manager/schedule");
 const user_1 = require("../manager/user");
+const recommendation_1 = require("../manager/recommendation");
+const review_1 = require("../manager/review");
 class Client {
     /** @hidden */
     static setOptions(options) {
@@ -71,6 +73,8 @@ class Client {
         this.genres = new genre_1.GenreManager(this);
         this.magazines = new magazine_1.MagazineManager(this);
         this.producers = new producer_1.ProducerManager(this);
+        this.recommendations = new recommendation_1.RecommendationManager(this);
+        this.reviews = new review_1.ReviewManager(this);
         this.users = new user_1.UserManager(this);
         this.seasons = new season_1.SeasonManager(this);
         this.top = new top_1.TopManager(this);

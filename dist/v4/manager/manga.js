@@ -107,6 +107,12 @@ class MangaManager extends base_1.BaseManager {
             return rawData ? rawData.moreinfo || null : undefined;
         });
     }
+    getRecommendations(mangaId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rawData = yield this.request(`manga/${mangaId}/recommendations`);
+            return rawData ? rawData.map((recommendation) => new manga_1.MangaRecommendation(this.client, recommendation)) : undefined;
+        });
+    }
     getUserUpdates(mangaId) {
         return __awaiter(this, void 0, void 0, function* () {
             const rawData = yield this.request(`manga/${mangaId}/userupdates`);

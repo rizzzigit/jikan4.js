@@ -438,13 +438,11 @@ export class AnimeUserUpdate extends ContentUserUpdate {
 
 export class AnimeReview extends ContentReview {
   public readonly episodesWatched: number
-  public readonly reactions: ContentReactions
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.episodesWatched = data.episodes_watched
-    this.reactions = new ContentReactions(client, data.reactions)
+    this.episodesWatched = data.episodes_watched || 0
   }
 }
 

@@ -225,13 +225,11 @@ export class MangaUserUpdate extends ContentUserUpdate {
 
 export class MangaReview extends ContentReview {
   public readonly chaptersRead: number
-  public readonly reactions: ContentReactions
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.chaptersRead = data.chapters_read
-    this.reactions = new ContentReactions(client, data.reactions)
+    this.chaptersRead = data.chapters_read || 0
   }
 }
 

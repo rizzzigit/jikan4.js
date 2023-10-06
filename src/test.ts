@@ -83,6 +83,13 @@ const run = async (): Promise<any> => {
 
       console.log(nulls)
       // Manga.authors[0].images is undefined
+    },
+
+    missingMethods: async () => {
+      const manga = await client.manga.get(4)
+      const club = await client.clubs.get(123)
+
+      console.log(await client.reviews.getAnimeReviews())
     }
   }
 

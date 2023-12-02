@@ -16,7 +16,7 @@ class ContentMeta extends base_1.BaseResource {
         super(client, data);
         this.type = type;
         this.title = data.name || data.title;
-        this.image = new misc_1.ImageFormatCollection(client, data.images);
+        this.image = data.images != null ? new misc_1.ImageFormatCollection(client, data.images) : null;
     }
 }
 exports.ContentMeta = ContentMeta;

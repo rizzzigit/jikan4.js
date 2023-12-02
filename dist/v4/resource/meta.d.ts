@@ -15,7 +15,7 @@ export declare class Meta<T extends MetaType> extends BaseResource {
 export declare class ContentMeta<T extends ContentMetaType> extends BaseResource {
     readonly type: T;
     readonly title: string;
-    readonly image: ImageFormatCollection;
+    readonly image: ImageFormatCollection | null;
     constructor(client: Client, data: any, type: T);
 }
 export declare class MagazineMeta extends Meta<'Magazine'> {

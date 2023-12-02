@@ -1,4 +1,7 @@
 "use strict";
+/*
+  eslint-disable @typescript-eslint/no-non-null-assertion
+*/
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -80,9 +83,74 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             // Manga.authors[0].images is undefined
         }),
         missingMethods: () => __awaiter(void 0, void 0, void 0, function* () {
-            const manga = yield client.manga.get(4);
-            const club = yield client.clubs.get(123);
+            // const manga = await client.manga.get(4)
+            // const club = await client.clubs.get(123)
             console.log(yield client.reviews.getAnimeReviews());
+        }),
+        nullableImageCollection: () => __awaiter(void 0, void 0, void 0, function* () {
+            const log = (image) => {
+                console.log(image);
+            };
+            void (() => __awaiter(void 0, void 0, void 0, function* () {
+                for (const anime of yield client.anime.list(0, 0)) {
+                    log(anime.image);
+                    for (const relation of yield anime.getRelations()) {
+                        for (const picture of relation.items) {
+                            log(picture.image);
+                        }
+                    }
+                    for (const picture of yield anime.getPictures()) {
+                        log(picture);
+                    }
+                }
+            }))();
+            void (() => __awaiter(void 0, void 0, void 0, function* () {
+                for (const manga of yield client.manga.list(0, 0)) {
+                    log(manga.image);
+                    for (const picture of yield manga.getPictures()) {
+                        log(picture);
+                    }
+                    for (const relation of yield manga.getRelations()) {
+                        for (const picture of relation.items) {
+                            log(picture.image);
+                        }
+                    }
+                }
+            }))();
+            void (() => __awaiter(void 0, void 0, void 0, function* () {
+                for (const character of yield client.characters.list(0, 0)) {
+                    log(character.image);
+                    for (const picture of yield character.getPictures()) {
+                        log(picture);
+                    }
+                    for (const anime of yield character.getAnime()) {
+                        log(anime.anime.image);
+                    }
+                    for (const anime of yield character.getManga()) {
+                        log(anime.manga.image);
+                    }
+                }
+            }));
+            void (() => __awaiter(void 0, void 0, void 0, function* () {
+                for (const person of yield client.people.list(0, 0)) {
+                    log(person.image);
+                    for (const picture of yield person.getPictures()) {
+                        log(picture);
+                    }
+                    for (const anime of yield person.getAnime()) {
+                        log(anime.anime.image);
+                    }
+                }
+            }))();
+            // return [
+            //   await (await client.anime.get(5))!.getPictures(),
+            //   await (await client.anime.get(5))!.getRelations(),
+            //   await (await client.characters.get(1))!.getPictures(),
+            //   await (await client.manga.get(4))!.getPictures(),
+            //   await (await client.people.get(1))!.getPictures(),
+            //   [(await client.clubs.get(100))!.image],
+            //   [(await client.users.get('starfishx'))!.image]
+            // ]
         })
     };
     return yield func[process.argv[2]]();

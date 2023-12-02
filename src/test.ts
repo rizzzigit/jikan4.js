@@ -1,3 +1,7 @@
+/*
+  eslint-disable @typescript-eslint/no-non-null-assertion
+*/
+
 import { Client, type ImageFormatCollection, type ContentMeta, type ContentMetaType, type Meta, type MetaType } from './v4'
 
 const client = new Client()
@@ -86,10 +90,84 @@ const run = async (): Promise<any> => {
     },
 
     missingMethods: async () => {
-      const manga = await client.manga.get(4)
-      const club = await client.clubs.get(123)
+      // const manga = await client.manga.get(4)
+      // const club = await client.clubs.get(123)
 
       console.log(await client.reviews.getAnimeReviews())
+    },
+
+    nullableImageCollection: async () => {
+      const log = (image?: ImageFormatCollection | null): void => {
+        console.log(image)
+      }
+
+      void (async () => {
+        for (const anime of await client.anime.list(0, 0)) {
+          log(anime.image)
+          for (const relation of await anime.getRelations()) {
+            for (const picture of relation.items) {
+              log(picture.image)
+            }
+          }
+          for (const picture of await anime.getPictures()) {
+            log(picture)
+          }
+        }
+      })()
+
+      void (async () => {
+        for (const manga of await client.manga.list(0, 0)) {
+          log(manga.image)
+          for (const picture of await manga.getPictures()) {
+            log(picture)
+          }
+          for (const relation of await manga.getRelations()) {
+            for (const picture of relation.items) {
+              log(picture.image)
+            }
+          }
+        }
+      })()
+
+      void (async () => {
+        for (const character of await client.characters.list(0, 0)) {
+          log(character.image)
+          for (const picture of await character.getPictures()) {
+            log(picture)
+          }
+
+          for (const anime of await character.getAnime()) {
+            log(anime.anime.image)
+          }
+
+          for (const anime of await character.getManga()) {
+            log(anime.manga.image)
+          }
+        }
+      })
+
+      void (async () => {
+        for (const person of await client.people.list(0, 0)) {
+          log(person.image)
+          for (const picture of await person.getPictures()) {
+            log(picture)
+          }
+
+          for (const anime of await person.getAnime()) {
+            log(anime.anime.image)
+          }
+        }
+      })()
+
+      // return [
+      //   await (await client.anime.get(5))!.getPictures(),
+      //   await (await client.anime.get(5))!.getRelations(),
+      //   await (await client.characters.get(1))!.getPictures(),
+      //   await (await client.manga.get(4))!.getPictures(),
+      //   await (await client.people.get(1))!.getPictures(),
+      //   [(await client.clubs.get(100))!.image],
+      //   [(await client.users.get('starfishx'))!.image]
+      // ]
     }
   }
 

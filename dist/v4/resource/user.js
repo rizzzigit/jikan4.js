@@ -106,10 +106,10 @@ class UserFavorites extends base_1.BaseClass {
     constructor(client, data) {
         var _a, _b, _c, _d;
         super(client);
-        this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => Object.assign(new meta_1.AnimeMeta(client, anime), { images: new misc_1.ImageFormatCollection(client, anime.images) }))) || [];
-        this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => Object.assign(new meta_1.MangaMeta(client, manga), { images: new misc_1.ImageFormatCollection(client, manga.images) }))) || [];
-        this.characters = ((_c = data.characters) === null || _c === void 0 ? void 0 : _c.map((character) => Object.assign(new meta_1.CharacterMeta(client, character), { images: new misc_1.ImageFormatCollection(client, character.images) }))) || [];
-        this.people = ((_d = data.people) === null || _d === void 0 ? void 0 : _d.map((person) => Object.assign(new meta_1.PersonMeta(client, person), { images: new misc_1.ImageFormatCollection(client, person.images) }))) || [];
+        this.anime = ((_a = data.anime) === null || _a === void 0 ? void 0 : _a.map((anime) => new meta_1.AnimeMeta(client, anime))) || [];
+        this.manga = ((_b = data.manga) === null || _b === void 0 ? void 0 : _b.map((manga) => new meta_1.MangaMeta(client, manga))) || [];
+        this.characters = ((_c = data.characters) === null || _c === void 0 ? void 0 : _c.map((character) => new meta_1.CharacterMeta(client, character))) || [];
+        this.people = ((_d = data.people) === null || _d === void 0 ? void 0 : _d.map((person) => new meta_1.PersonMeta(client, person))) || [];
     }
 }
 exports.UserFavorites = UserFavorites;
@@ -185,19 +185,20 @@ class UserFriend extends base_1.BaseClass {
 exports.UserFriend = UserFriend;
 class UserRecommendation extends base_1.BaseClass {
     constructor(client, data) {
+        var _a;
         super(client);
         this.user = {
             url: UserRecommendation.parseURL(data.user.url),
             username: data.user.username
         };
-        this.entries = Object.assign(((entry) => (entry === null || entry === void 0 ? void 0 : entry.map((entry) => {
+        this.entries = ((_a = data === null || data === void 0 ? void 0 : data.entry) === null || _a === void 0 ? void 0 : _a.map((entry) => {
             if (entry.url.split('/')[3] === 'anime') {
                 return new meta_1.AnimeMeta(client, entry);
             }
             else {
                 return new meta_1.MangaMeta(client, entry);
             }
-        })) || [])(data.entry), { images: new misc_1.ImageFormatCollection(client, data.entry.images) });
+        })) || [];
         this.content = data.content;
     }
 }

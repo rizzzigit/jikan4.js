@@ -159,18 +159,18 @@ export class UserStats extends BaseClass {
 }
 
 export class UserFavorites extends BaseClass {
-  public readonly anime: Array<AnimeMeta & { images: ImageFormatCollection }>
-  public readonly manga: Array<MangaMeta & { images: ImageFormatCollection }>
-  public readonly characters: Array<CharacterMeta & { images: ImageFormatCollection }>
-  public readonly people: Array<PersonMeta & { images: ImageFormatCollection }>
+  public readonly anime: Array<AnimeMeta>
+  public readonly manga: Array<MangaMeta>
+  public readonly characters: Array<CharacterMeta>
+  public readonly people: Array<PersonMeta>
 
   public constructor (client: Client, data: any) {
     super(client)
 
-    this.anime = data.anime?.map((anime: any) => Object.assign(new AnimeMeta(client, anime), { images: new ImageFormatCollection(client, anime.images) })) || []
-    this.manga = data.manga?.map((manga: any) => Object.assign(new MangaMeta(client, manga), { images: new ImageFormatCollection(client, manga.images) })) || []
-    this.characters = data.characters?.map((character: any) => Object.assign(new CharacterMeta(client, character), { images: new ImageFormatCollection(client, character.images) })) || []
-    this.people = data.people?.map((person: any) => Object.assign(new PersonMeta(client, person), { images: new ImageFormatCollection(client, person.images) })) || []
+    this.anime = data.anime?.map((anime: any) => new AnimeMeta(client, anime)) || []
+    this.manga = data.manga?.map((manga: any) => new MangaMeta(client, manga)) || []
+    this.characters = data.characters?.map((character: any) => new CharacterMeta(client, character)) || []
+    this.people = data.people?.map((person: any) => new PersonMeta(client, person)) || []
   }
 }
 
@@ -299,14 +299,13 @@ export class UserRecommendation extends BaseClass {
       username: data.user.username
     }
 
-    this.entries = Object.assign(((entry) => entry?.map((entry: any) => {
+    this.entries = data?.entry?.map((entry: any) => {
       if (entry.url.split('/')[3] === 'anime') {
         return new AnimeMeta(client, entry)
       } else {
         return new MangaMeta(client, entry)
       }
-    }) || [])(data.entry), { images: new ImageFormatCollection(client, data.entry.images) })
-
+    }) || []
     this.content = data.content
   }
 }

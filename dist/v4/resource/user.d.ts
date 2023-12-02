@@ -62,18 +62,10 @@ export declare class UserStats extends BaseClass {
     constructor(client: Client, data: any);
 }
 export declare class UserFavorites extends BaseClass {
-    readonly anime: Array<AnimeMeta & {
-        images: ImageFormatCollection;
-    }>;
-    readonly manga: Array<MangaMeta & {
-        images: ImageFormatCollection;
-    }>;
-    readonly characters: Array<CharacterMeta & {
-        images: ImageFormatCollection;
-    }>;
-    readonly people: Array<PersonMeta & {
-        images: ImageFormatCollection;
-    }>;
+    readonly anime: Array<AnimeMeta>;
+    readonly manga: Array<MangaMeta>;
+    readonly characters: Array<CharacterMeta>;
+    readonly people: Array<PersonMeta>;
     constructor(client: Client, data: any);
 }
 export declare class UserContentUpdate extends BaseClass {

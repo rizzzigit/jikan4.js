@@ -1,2 +1,3 @@
-.Jikan
-node_modules
+/.Jikan
+/node_modules
+/dist

@@ -33,7 +33,9 @@
     "build-docs": "npx typedoc ./src/docs/index.ts --readme README.md",
     "build": "npx rimraf ./dist; npx tsc",
     "lint": "npx eslint ./src/**/*.ts --fix",
-    "test": "node dist/test"
+    "test": "node dist/test",
+    "prepublishOnly": "npm run build",
+    "version": "npm run build-docs"
   },
   "repository": {
     "type": "git",

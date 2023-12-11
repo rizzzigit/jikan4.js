@@ -1,5 +1,6 @@
 import { Client } from '../core/client'
 import { BaseClass, BaseResource } from './base'
+import { AnimeMeta, CharacterMeta, MangaMeta } from './meta'
 import { ImageFormatCollection } from './misc'
 
 export type ClubCategory =
@@ -70,6 +71,14 @@ export class Club extends BaseResource {
     return <Promise<Array<ClubMember>>> this.client.clubs.getMembers(this.id)
   }
 
+  public getStaff () {
+    return <Promise<Array<ClubStaff>>> this.client.clubs.getStaff(this.id)
+  }
+
+  public getRelations () {
+    return <Promise<ClubRelations>> this.client.clubs.getRelations(this.id)
+  }
+
   public constructor (client: Client, data: any) {
     super(client, data)
 
@@ -106,5 +115,19 @@ export class ClubMember extends BaseClass {
     this.URL = ClubMember.parseURL(data.url)
     this.username = data.username
     this.imageURL = ClubMember.parseURL(data.image_url, true)
+  }
+}
+
+export class ClubRelations extends BaseClass {
+  public readonly anime: Array<AnimeMeta>
+  public readonly manga: Array<MangaMeta>
+  public readonly characters: Array<CharacterMeta>
+
+  public constructor (client: Client, data: any) {
+    super(client)
+
+    this.anime = data.map((anime: any) => new AnimeMeta(client, anime))
+    this.manga = data.map((manga: any) => new MangaMeta(client, manga))
+    this.characters = data.map((character: any) => new CharacterMeta(client, character))
   }
 }

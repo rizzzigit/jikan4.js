@@ -24,7 +24,7 @@ import ParseDuration from 'parse-duration'
 import { animeExplicitGenres } from '../../manager/genre'
 
 export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown'
-export type AnimeAirStatus = 'FinishedAiring' | 'Airing' | 'NotYetAired' | 'Unknown'
+export type AnimeAirStatus = 'Finished Airing' | 'Airing' | 'Not Yet Aired' | 'Unknown'
 export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown'
 export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown'
 
@@ -34,9 +34,9 @@ export class AnimeAirInformation extends BaseClass {
     const status = input?.toLowerCase().trim()
 
     switch (status) {
-      case 'finished airing': return 'FinishedAiring'
+      case 'finished airing': return 'Finished Airing'
       case 'currently airing': return 'Airing'
-      case 'not yet aired': return 'NotYetAired'
+      case 'not yet aired': return 'Not Yet Aired'
 
       default: return 'Unknown'
     }
@@ -438,13 +438,11 @@ export class AnimeUserUpdate extends ContentUserUpdate {
 
 export class AnimeReview extends ContentReview {
   public readonly episodesWatched: number
-  public readonly reactions: ContentReactions
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.episodesWatched = data.episodes_watched
-    this.reactions = new ContentReactions(client, data.reactions)
+    this.episodesWatched = data.episodes_watched || 0
   }
 }
 

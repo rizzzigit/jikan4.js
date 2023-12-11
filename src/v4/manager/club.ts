@@ -1,5 +1,5 @@
 import { BaseManager } from '../manager/base'
-import { Club, ClubMember } from '../resource/club'
+import { Club, ClubMember, ClubRelations, ClubStaff } from '../resource/club'
 import { translateObject } from '../utils'
 
 export interface ClubSearchFilter {
@@ -56,5 +56,17 @@ export class ClubManager extends BaseManager {
     const rawData = await this.requestPaginated(`clubs/${clubId}/members`)
 
     return rawData ? rawData.map((member: any) => new ClubMember(this.client, member)) : undefined
+  }
+
+  public async getStaff (clubId: number): Promise<Array<ClubStaff> | undefined> {
+    const rawData = await this.requestPaginated(`clubs/${clubId}/staff`)
+
+    return rawData ? rawData.map((staff: any) => new ClubStaff(this.client, staff)) : undefined
+  }
+
+  public async getRelations (clubId: number): Promise<ClubRelations | undefined> {
+    const rawData = await this.requestPaginated(`clubs/${clubId}/relations`)
+
+    return rawData ? new ClubRelations(this.client, rawData) : undefined
   }
 }

@@ -22,8 +22,8 @@ import {
 import { ImageFormatCollection } from '../misc'
 import { mangaExplicitGenres } from '../../manager/genre'
 
-export type MangaType = 'Manga' | 'Novel' | 'LightNovel' | 'OneShot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown'
-export type MangaPublishStatus = 'Finished' | 'Publishing' | 'OnHiatus' | 'Discontinued' | 'NotYetPublished' | 'Unknown'
+export type MangaType = 'Manga' | 'Novel' | 'Light Novel' | 'One Shot' | 'Doujinshi' | 'Manhua' | 'Manhwa' | 'OEL' | 'Unknown'
+export type MangaPublishStatus = 'Finished' | 'Publishing' | 'On Hiatus' | 'Discontinued' | 'Not Yet Published' | 'Unknown'
 
 export class MangaPublishInformation extends BaseClass {
   /** @hidden */
@@ -31,9 +31,9 @@ export class MangaPublishInformation extends BaseClass {
     switch (input?.toLowerCase().trim()) {
       case 'finished': return 'Finished'
       case 'publishing': return 'Publishing'
-      case 'on hiatus': return 'OnHiatus'
+      case 'on hiatus': return 'On Hiatus'
       case 'discontinued': return 'Discontinued'
-      case 'not yet published': return 'NotYetPublished'
+      case 'not yet published': return 'Not Yet Published'
 
       default: return 'Unknown'
     }
@@ -60,8 +60,8 @@ export class Manga extends Content {
     switch (input?.toLowerCase().trim()) {
       case 'manga': return 'Manga'
       case 'novel': return 'Novel'
-      case 'light novel': return 'LightNovel'
-      case 'one-shot': return 'OneShot'
+      case 'light novel': return 'Light Novel'
+      case 'one-shot': return 'One Shot'
       case 'doujinshi':
       case 'doujin': return 'Doujinshi'
       case 'manhua': return 'Manhua'
@@ -109,6 +109,10 @@ export class Manga extends Content {
 
   public getMoreInfo () {
     return <Promise<string | null>> this.client.manga.getMoreInfo(this.id)
+  }
+
+  public getRecommendations() {
+    return <Promise<Array<MangaRecommendation>>>this.client.manga.getRecommendations(this.id)
   }
 
   public getUserUpdates () {
@@ -221,13 +225,11 @@ export class MangaUserUpdate extends ContentUserUpdate {
 
 export class MangaReview extends ContentReview {
   public readonly chaptersRead: number
-  public readonly reactions: ContentReactions
 
   public constructor (client: Client, data: any) {
     super(client, data)
 
-    this.chaptersRead = data.chapters_read
-    this.reactions = new ContentReactions(client, data.reactions)
+    this.chaptersRead = data.chapters_read || 0
   }
 }
 

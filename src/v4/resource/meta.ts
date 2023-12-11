@@ -25,14 +25,14 @@ export class Meta<T extends MetaType> extends BaseResource {
 export class ContentMeta<T extends ContentMetaType> extends BaseResource {
   public readonly type: T
   public readonly title: string
-  public readonly image: ImageFormatCollection
+  public readonly image: ImageFormatCollection | null
 
   public constructor (client: Client, data: any, type: T) {
     super(client, data)
 
     this.type = type
     this.title = data.name || data.title
-    this.image = new ImageFormatCollection(client, data.images)
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
   }
 }
 
@@ -77,22 +77,30 @@ export class MangaGenreMeta<T extends GenreType> extends Meta<'MangaGenre'> {
 }
 
 export class PersonMeta extends Meta<'Person'> {
+  public readonly image: ImageFormatCollection | null
+
   public getFull () {
     return <Promise<Person>> this.client.people.get(this.id)
   }
 
   public constructor (client: Client, data: any) {
     super(client, data, 'Person')
+
+    this.image = data.images != null ? new ImageFormatCollection(client, data.images) : null
   }
 }
 
 export class CharacterMeta extends Meta<'Character'> {
+  public readonly image: ImageFormatCollection
+
   public getFull () {
     return <Promise<Character>> this.client.characters.get(this.id)
   }
 
   public constructor (client: Client, data: any) {
     super(client, data, 'Character')
+
+    this.image = new ImageFormatCollection(client, data.images)
   }
 }
 

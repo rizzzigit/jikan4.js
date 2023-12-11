@@ -58,7 +58,7 @@ export class BaseManager extends BaseClass {
 
       const end = fetchEnd()
 
-      if (end && (data.length > end)) {
+      if (end && (data.length >= end)) {
         break
       }
     } while (is200 && hasNext)

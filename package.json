@@ -20,6 +20,13 @@
         "import": "./esm/v4.mjs",
         "default": "./dist/v4/index.js"
       }
+    ],
+    "./next": [
+      {
+        "require": "./dist/next/index.js",
+        "import": "./esm/next.mjs",
+        "default": "./dist/next/index.js"
+      }
     ]
   },
   "scripts": {

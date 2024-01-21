@@ -176,8 +176,8 @@ class APIClient {
     request(requestData) {
         return __awaiter(this, void 0, void 0, function* () {
             const { cache } = this;
-            if ((requestData.cache !== undefined ? requestData.cache : true) && (cache === null || cache === void 0 ? void 0 : cache.has(requestData))) {
-                return cache.get(requestData);
+            if ((requestData.cache !== undefined ? requestData.cache : true) && (yield (cache === null || cache === void 0 ? void 0 : cache.has(requestData)))) {
+                return yield (cache === null || cache === void 0 ? void 0 : cache.get(requestData));
             }
             return yield new Promise((resolve, reject) => this.addQueue(requestData, resolve, reject));
         });
@@ -188,7 +188,7 @@ class APIClient {
             const { client: { options: { secure, requestTimeout, maxApiErrorRetry, retryOnApiError } }, cache } = this;
             const url = this.constructURL(requestData);
             const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true;
-            const processResponse = (responseData, resolve, reject) => {
+            const processResponse = (responseData, resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 if (responseData.headers.location != null) {
                     this.execReqeust({
                         cache: requestData.cache,
@@ -198,7 +198,7 @@ class APIClient {
                 }
                 else if ([418, 200, 404].includes(responseData.status)) {
                     if (cachingEnabled) {
-                        cache === null || cache === void 0 ? void 0 : cache.set(requestData, responseData);
+                        yield (cache === null || cache === void 0 ? void 0 : cache.set(requestData, responseData));
                     }
                     resolve(responseData);
                 }
@@ -212,10 +212,10 @@ class APIClient {
                 else {
                     reject(new APIError(responseData));
                 }
-            };
-            const run = () => new Promise((resolve, reject) => {
-                if (cachingEnabled && (cache === null || cache === void 0 ? void 0 : cache.has(requestData))) {
-                    return cache.get(requestData);
+            });
+            const run = () => new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                if (cachingEnabled && (yield (cache === null || cache === void 0 ? void 0 : cache.has(requestData)))) {
+                    return cache === null || cache === void 0 ? void 0 : cache.get(requestData);
                 }
                 this.lastRequest = Date.now();
                 this.debug(`HTTP GET ${url}`);
@@ -252,7 +252,7 @@ class APIClient {
                     processResponse(responseData, resolve, reject);
                 }); });
                 request.end();
-            });
+            }));
             const runBrowser = () => new Promise((resolve, reject) => {
                 this.lastRequest = Date.now();
                 this.debug(`HTTP GET ${url}`);

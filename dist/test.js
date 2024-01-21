@@ -90,8 +90,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         allAnimeEpisodes: () => __awaiter(void 0, void 0, void 0, function* () {
             var _o;
             const stats = {};
-            // const stats: Record<string, { count: number, most: number, avg: number }> = {}
-            // const totalEpisodes = 0
+            // const stats: Record<string, { count: number, most: number }> = {}
             for (const { type, episodes } of yield client.anime.list(0, 0)) {
                 const current = (_o = stats[type]) !== null && _o !== void 0 ? _o : (stats[type] = {
                     null: 0,
@@ -128,11 +127,9 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 // }
                 // const current = stats[anime.type] ??= {
                 //   count: 0,
-                //   most: anime.episodes,
-                //   avg: 0
+                //   most: anime.episodes
                 // }
                 // current.most = Math.max(current.most, anime.episodes)
-                // current.avg = (totalEpisodes += anime.episodes) / (++current.count)
             }
             console.log('Anime types with at least one episodes.');
             console.table(stats);

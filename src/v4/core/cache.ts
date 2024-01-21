@@ -1,10 +1,25 @@
 import { Client } from './client'
 import { dirname, join } from 'path'
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
+// import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
 import { APIRequestData, APIRequestQuery, APIResponseData } from './api'
 
 export class CacheManager {
   public readonly client: Client
+  #fs: typeof import('fs') | null | undefined
+
+  /** @hidden */
+  private async fs(): Promise<typeof import('fs') | null> {
+    if (this.#fs === undefined && typeof process !== 'undefined' && typeof window === 'undefined') {
+      try {
+        this.#fs = require('fs')
+      }
+      catch {
+        this.#fs = null
+      }
+    }
+
+    return this.#fs ?? null
+  }
 
   /** @hidden */
   private get cacheDir () {
@@ -48,20 +63,21 @@ export class CacheManager {
     return (date + options.dataExpiry) < Date.now()
   }
 
-  public get (requestData: APIRequestData) {
+  public async get (requestData: APIRequestData): Promise<APIResponseData | undefined> {
     const { path, query } = requestData
     const file = this.file(path, query)
 
-    if (existsSync(file)) {
-      const fileContents = JSON.parse(`${readFileSync(file)}`)
+    const fs = await this.fs()
+    if (fs && fs.existsSync(file)) {
+      const fileContents = JSON.parse(`${await fs.promises.readFile(file)}`)
 
       if (!this.isExpired(fileContents.date)) {
-        return <APIResponseData> fileContents.data
+        return <APIResponseData>fileContents.data
       }
     }
   }
 
-  public set (requestData: APIRequestData, rawData: APIResponseData) {
+  public async set(requestData: APIRequestData, rawData: APIResponseData): Promise<APIResponseData> {
     const { path, query } = requestData
     const file = this.file(path, query)
 
@@ -71,22 +87,28 @@ export class CacheManager {
         date: Date.now()
       }
 
-      const baseFile = dirname(file)
-      if (!existsSync(baseFile)) {
-        mkdirSync(baseFile, { recursive: true })
+      const fs = await this.fs()
+      if (fs) {
+        const baseFile = dirname(file)
+        if (!fs.existsSync(baseFile)) {
+          await fs.promises.mkdir(baseFile, { recursive: true })
+        }
+
+        await fs.promises.writeFile(file, JSON.stringify(data, undefined, '  '))
       }
-      writeFileSync(file, JSON.stringify(data, undefined, '  '))
+
     }
 
     return rawData
   }
 
-  public has (requestData: APIRequestData) {
+  public async has (requestData: APIRequestData): Promise<boolean> {
     const { path, query } = requestData
     const file = this.file(path, query)
 
-    if (existsSync(file)) {
-      const data = JSON.parse(`${readFileSync(file)}`)
+    const fs = await this.fs()
+    if (fs && fs.existsSync(file)) {
+      const data = JSON.parse(`${await fs.promises.readFile(file)}`)
 
       return !this.isExpired(data.date)
     }
@@ -94,33 +116,39 @@ export class CacheManager {
     return false
   }
 
-  public delete (requestData: APIRequestData) {
+  public async delete (requestData: APIRequestData): Promise<void> {
     const { path, query } = requestData
     const file = this.file(path, query)
 
-    if (existsSync(file)) {
-      unlinkSync(file)
+    const fs = await this.fs()
+    if (fs) {
+      if (fs.existsSync(file)) {
+        await fs.promises.unlink(file)
+      }
     }
   }
 
-  public default (requestData: APIRequestData, rawData: any) {
+  public async default (requestData: APIRequestData, rawData: any): Promise<void> {
     const { path, query } = requestData
     const file = this.file(path, query)
 
-    if (existsSync(file)) {
-      const data = JSON.parse(`${readFileSync(file)}`)
+    const fs = await this.fs()
+    if (fs) {
+      if (fs.existsSync(file)) {
+        const data = JSON.parse(`${fs.promises.readFile(file)}`)
 
-      if (!this.isExpired(data.date)) {
-        return data.data
+        if (!this.isExpired(data.date)) {
+          return data.data
+        }
       }
-    }
 
-    const data = {
-      data: rawData,
-      date: Date.now()
-    }
+      const data = {
+        data: rawData,
+        date: Date.now()
+      }
 
-    writeFileSync(file, JSON.stringify(data, undefined, '  '))
+      fs.promises.writeFile(file, JSON.stringify(data, undefined, '  '))
+    }
   }
 
   public constructor (client: Client) {

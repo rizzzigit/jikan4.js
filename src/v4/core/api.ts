@@ -233,8 +233,8 @@ export class APIClient {
   public async request (requestData: APIRequestData) {
     const { cache } = this
 
-    if ((requestData.cache !== undefined ? requestData.cache : true) && cache?.has(requestData)) {
-      return <APIResponseData> cache.get(requestData)
+    if ((requestData.cache !== undefined ? requestData.cache : true) && await cache?.has(requestData)) {
+      return <APIResponseData> await cache?.get(requestData)
     }
 
     return await new Promise<APIResponseData>((resolve, reject) => this.addQueue(requestData, resolve, reject))
@@ -246,7 +246,7 @@ export class APIClient {
     const url = this.constructURL(requestData)
     const cachingEnabled = requestData.cache !== undefined ? requestData.cache : true
 
-    const processResponse = (responseData: APIResponseData, resolve: (responseData: APIResponseData) => void, reject: (reason: any) => void) => {
+    const processResponse = async (responseData: APIResponseData, resolve: (responseData: APIResponseData) => void, reject: (reason: any) => void) => {
       if (responseData.headers.location != null)
       {
         this.execReqeust({
@@ -256,7 +256,7 @@ export class APIClient {
         }).then(resolve, reject)
       } else if ([418, 200, 404].includes(responseData.status)) {
         if (cachingEnabled) {
-          cache?.set(requestData, responseData)
+          await cache?.set(requestData, responseData)
         }
 
         resolve(responseData)
@@ -271,9 +271,9 @@ export class APIClient {
       }
     }
 
-    const run = () => new Promise<APIResponseData>((resolve, reject) => {
-      if (cachingEnabled && cache?.has(requestData)) {
-        return cache.get(requestData)
+    const run = () => new Promise<APIResponseData>(async (resolve, reject) => {
+      if (cachingEnabled && await cache?.has(requestData)) {
+        return cache?.get(requestData)
       }
 
       this.lastRequest = Date.now()

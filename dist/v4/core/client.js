@@ -33,8 +33,8 @@ class Client {
             host: 'api.jikan.moe',
             baseUri: 'v4',
             secure: true,
-            dataRateLimit: 1200,
-            dataExpiry: 1000 * 60 * 60 * 24,
+            dataRateLimit: 1200, // 50 API requests a minute
+            dataExpiry: 1000 * 60 * 60 * 24, // 1 day expiration
             dataPaginationMaxSize: 25,
             requestTimeout: 15000,
             requestQueueLimit: 100,

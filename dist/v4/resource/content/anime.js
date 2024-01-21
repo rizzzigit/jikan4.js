@@ -132,24 +132,24 @@ class Anime extends base_1.Content {
         return this.client.anime.getFull(this.id);
     }
     constructor(client, data) {
-        var _a, _b, _c, _d, _e, _f, _g;
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         super(client, data);
         this.trailer = data.trailer ? new misc_1.YoutubeVideo(client, data.trailer) : null;
         this.type = Anime.parseType(data.type);
         this.source = data.source || null;
-        this.episodes = data.episodes || null;
+        this.episodes = (_a = data.episodes) !== null && _a !== void 0 ? _a : null;
         this.airInfo = new AnimeAirInformation(client, data);
         this.duration = (0, parse_duration_1.default)(data.duration, 'millisecond') || null;
         this.rating = Anime.parseRating(data.rating);
         this.season = Anime.parseSeason(data.season);
         this.year = data.year || null;
-        this.producers = ((_a = data.producers) === null || _a === void 0 ? void 0 : _a.map((producer) => new meta_1.ProducerMeta(this.client, producer))) || [];
-        this.licensors = ((_b = data.licensors) === null || _b === void 0 ? void 0 : _b.map((licensor) => new meta_1.ProducerMeta(this.client, licensor))) || [];
-        this.studios = ((_c = data.studios) === null || _c === void 0 ? void 0 : _c.map((studio) => new meta_1.ProducerMeta(this.client, studio))) || [];
-        this.genres = ((_d = data.genres) === null || _d === void 0 ? void 0 : _d.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'))) || [];
-        this.explicitGenres = ((_e = data.explicit_genres) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
-        this.demographics = ((_f = data.demographics) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
-        this.themes = ((_g = data.themes) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
+        this.producers = ((_b = data.producers) === null || _b === void 0 ? void 0 : _b.map((producer) => new meta_1.ProducerMeta(this.client, producer))) || [];
+        this.licensors = ((_c = data.licensors) === null || _c === void 0 ? void 0 : _c.map((licensor) => new meta_1.ProducerMeta(this.client, licensor))) || [];
+        this.studios = ((_d = data.studios) === null || _d === void 0 ? void 0 : _d.map((studio) => new meta_1.ProducerMeta(this.client, studio))) || [];
+        this.genres = ((_e = data.genres) === null || _e === void 0 ? void 0 : _e.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Genre'))) || [];
+        this.explicitGenres = ((_f = data.explicit_genres) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
+        this.demographics = ((_g = data.demographics) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
+        this.themes = ((_h = data.themes) === null || _h === void 0 ? void 0 : _h.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
     }
 }
 exports.Anime = Anime;

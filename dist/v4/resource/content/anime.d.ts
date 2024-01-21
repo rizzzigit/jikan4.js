@@ -26,7 +26,7 @@ export declare class Anime extends Content {
     readonly trailer: YoutubeVideo | null;
     readonly type: AnimeType;
     readonly source: string | null;
-    readonly episodes: this['type'] extends 'TV' ? number : null;
+    readonly episodes: number | null;
     readonly airInfo: AnimeAirInformation;
     readonly duration: number | null;
     readonly rating: AnimeRating;

@@ -106,7 +106,7 @@ export class Anime extends Content {
   public readonly trailer: YoutubeVideo | null
   public readonly type: AnimeType
   public readonly source: string | null
-  public readonly episodes: this['type'] extends 'TV' ? number : null
+  public readonly episodes: number | null
   public readonly airInfo: AnimeAirInformation
   public readonly duration: number | null
   public readonly rating: AnimeRating
@@ -209,7 +209,7 @@ export class Anime extends Content {
     this.trailer = data.trailer ? new YoutubeVideo(client, data.trailer) : null
     this.type = Anime.parseType(data.type)
     this.source = data.source || null
-    this.episodes = data.episodes || null
+    this.episodes = data.episodes ?? null
     this.airInfo = new AnimeAirInformation(client, data)
     this.duration = ParseDuration(data.duration, 'millisecond') || null
     this.rating = Anime.parseRating(data.rating)

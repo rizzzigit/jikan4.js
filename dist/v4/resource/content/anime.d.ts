@@ -3,7 +3,7 @@ import { Content, ContentRelationType, ContentRelationGroup, ContentStatistics, 
 import { BaseClass, BaseResource } from '../base';
 import { YoutubeVideo, Link, ImageFormatCollection } from '../misc';
 import { ProducerMeta, AnimeGenreMeta, PersonMeta, CharacterMeta, AnimeMeta, MangaMeta } from '../meta';
-export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'Unknown';
+export type AnimeType = 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music' | 'CM' | 'PV' | 'TV Special' | 'Unknown';
 export type AnimeAirStatus = 'Finished Airing' | 'Airing' | 'Not Yet Aired' | 'Unknown';
 export type AnimeRating = 'None' | 'G' | 'PG' | 'PG-13+' | 'R-17+' | 'R+' | 'Rx' | 'Unknown';
 export type AnimeSeason = 'Summer' | 'Winter' | 'Spring' | 'Fall' | 'Unknown';

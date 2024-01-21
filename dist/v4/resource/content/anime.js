@@ -40,6 +40,9 @@ class Anime extends base_1.Content {
             case 'special': return 'Special';
             case 'ona': return 'ONA';
             case 'music': return 'Music';
+            case 'cm': return 'CM';
+            case 'pv': return 'PV';
+            case 'tv special': return 'TV Special';
             case 'unknow':
             case 'unknown':
             case '-':

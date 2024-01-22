@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeMusicVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.Anime = exports.AnimeAirInformation = void 0;
+exports.AnimeFull = exports.AnimeRelationGroup = exports.AnimeReview = exports.AnimeUserUpdate = exports.AnimeRecommendation = exports.AnimeStatistics = exports.AnimeVideo = exports.AnimeMusicVideo = exports.AnimeEpisodeVideo = exports.AnimePromo = exports.AnimeTopic = exports.AnimePartialEpisode = exports.AnimeEpisode = exports.AnimeEpisodeTitle = exports.AnimeStaffReference = exports.AnimeCharacterReference = exports.AnimeVoiceActorReference = exports.AnimeBroadcast = exports.Anime = exports.AnimeAirInformation = void 0;
 const base_1 = require("./base");
 const base_2 = require("../base");
 const misc_1 = require("../misc");
@@ -153,9 +153,20 @@ class Anime extends base_1.Content {
         this.explicitGenres = ((_f = data.explicit_genres) === null || _f === void 0 ? void 0 : _f.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Explicit'))) || [];
         this.demographics = ((_g = data.demographics) === null || _g === void 0 ? void 0 : _g.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Demographic'))) || [];
         this.themes = ((_h = data.themes) === null || _h === void 0 ? void 0 : _h.map((genre) => new meta_1.AnimeGenreMeta(this.client, genre, 'Theme'))) || [];
+        this.broadcast = new AnimeBroadcast(client, data.broadcast);
     }
 }
 exports.Anime = Anime;
+class AnimeBroadcast extends base_2.BaseClass {
+    constructor(client, data) {
+        super(client);
+        this.day = data.day;
+        this.time = data.time;
+        this.timezone = data.timezone;
+        this.string = data.string;
+    }
+}
+exports.AnimeBroadcast = AnimeBroadcast;
 class AnimeVoiceActorReference extends base_2.BaseClass {
     constructor(client, data) {
         super(client);

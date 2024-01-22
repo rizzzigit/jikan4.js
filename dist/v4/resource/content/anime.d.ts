@@ -39,6 +39,7 @@ export declare class Anime extends Content {
     readonly explicitGenres: Array<AnimeGenreMeta<'Explicit'>>;
     readonly themes: Array<AnimeGenreMeta<'Theme'>>;
     readonly demographics: Array<AnimeGenreMeta<'Demographic'>>;
+    readonly broadcast: AnimeBroadcast | null;
     get isExplicit(): boolean;
     getCharacters(): Promise<AnimeCharacterReference[]>;
     getStaff(): Promise<AnimeStaffReference[]>;
@@ -62,6 +63,13 @@ export declare class Anime extends Content {
     getExternal(): Promise<ContentExternal[]>;
     getStreamingLinks(): Promise<Link[]>;
     getFull(): Promise<AnimeFull>;
+    constructor(client: Client, data: any);
+}
+export declare class AnimeBroadcast extends BaseClass {
+    readonly day?: string;
+    readonly time?: string;
+    readonly timezone?: string;
+    readonly string?: string;
     constructor(client: Client, data: any);
 }
 export declare class AnimeVoiceActorReference extends BaseClass {

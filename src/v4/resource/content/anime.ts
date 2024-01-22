@@ -122,6 +122,7 @@ export class Anime extends Content {
   public readonly explicitGenres: Array<AnimeGenreMeta<'Explicit'>>
   public readonly themes: Array<AnimeGenreMeta<'Theme'>>
   public readonly demographics: Array<AnimeGenreMeta<'Demographic'>>
+  public readonly broadcast: AnimeBroadcast | null
 
   public get isExplicit (): boolean {
     return !!(
@@ -225,6 +226,23 @@ export class Anime extends Content {
     this.explicitGenres = data.explicit_genres?.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Explicit')) || []
     this.demographics = data.demographics?.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Demographic')) || []
     this.themes = data.themes?.map((genre: any) => new AnimeGenreMeta(this.client, genre, 'Theme')) || []
+    this.broadcast = new AnimeBroadcast(client, data.broadcast)
+  }
+}
+
+export class AnimeBroadcast extends BaseClass {
+  public readonly day?: string
+  public readonly time?: string
+  public readonly timezone?: string
+  public readonly string?: string
+
+  public constructor (client: Client, data: any) {
+    super(client)
+
+    this.day = data.day
+    this.time = data.time
+    this.timezone = data.timezone
+    this.string = data.string
   }
 }
 

@@ -222,7 +222,8 @@ class APIClient {
                 const request = this.newRequestInstance(secure, url, { timeout: requestTimeout });
                 request.on('error', reject);
                 request.on('timeout', () => request.destroy(new Error(`${requestTimeout} ms timeout`)));
-                request.on('response', (response) => { var _a, response_1, response_1_1; return __awaiter(this, void 0, void 0, function* () {
+                request.on('response', (response) => __awaiter(this, void 0, void 0, function* () {
+                    var _a, response_1, response_1_1;
                     var _b, e_1, _c, _d;
                     response.on('error', reject);
                     const bufferSink = [];
@@ -250,7 +251,7 @@ class APIClient {
                     }
                     const responseData = new APIResponseData(Number(body.status || response.statusCode), url, response.headers, body);
                     processResponse(responseData, resolve, reject);
-                }); });
+                }));
                 request.end();
             }));
             const runBrowser = () => new Promise((resolve, reject) => {

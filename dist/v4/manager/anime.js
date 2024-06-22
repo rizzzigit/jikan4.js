@@ -107,8 +107,8 @@ class AnimeManager extends base_1.BaseManager {
             return rawData ? rawData.map((news) => new base_2.ContentNews(this.client, news)) : undefined;
         });
     }
-    getTopics(animeId, topic = 'all') {
-        return __awaiter(this, void 0, void 0, function* () {
+    getTopics(animeId_1) {
+        return __awaiter(this, arguments, void 0, function* (animeId, topic = 'all') {
             const rawData = yield this.request(`anime/${animeId}/forum`, { topic });
             return rawData ? rawData.map((topic) => new anime_1.AnimeTopic(this.client, topic)) : undefined;
         });

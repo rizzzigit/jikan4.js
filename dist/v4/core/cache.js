@@ -26,8 +26,8 @@ const path_1 = require("path");
 class CacheManager {
     /** @hidden */
     fs() {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             if (__classPrivateFieldGet(this, _CacheManager_fs, "f") === undefined && typeof process !== 'undefined' && typeof window === 'undefined') {
                 try {
                     __classPrivateFieldSet(this, _CacheManager_fs, require('fs'), "f");

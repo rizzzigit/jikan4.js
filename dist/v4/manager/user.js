@@ -65,8 +65,8 @@ class UserManager extends base_1.BaseManager {
             return rawData ? rawData.about : undefined;
         });
     }
-    getHistory(username, type = 'all') {
-        return __awaiter(this, void 0, void 0, function* () {
+    getHistory(username_1) {
+        return __awaiter(this, arguments, void 0, function* (username, type = 'all') {
             const rawData = yield this.request(`users/${username}/history${type !== 'all' ? `/${type}` : ''}`);
             return rawData.map((data) => {
                 switch (data.entry.type) {

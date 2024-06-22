@@ -26,8 +26,8 @@ class SeasonManager extends base_1.BaseManager {
             return rawData.map((data) => new anime_1.Anime(this.client, data));
         });
     }
-    get(season, year = new Date().getFullYear(), offset, maxCount) {
-        return __awaiter(this, void 0, void 0, function* () {
+    get(season_2) {
+        return __awaiter(this, arguments, void 0, function* (season, year = new Date().getFullYear(), offset, maxCount) {
             const rawData = yield this.requestPaginated(`seasons/${year}/${season.toLowerCase()}`, offset, maxCount);
             return rawData.map((data) => new anime_1.Anime(this.client, data));
         });

@@ -29,8 +29,8 @@ class BaseManager extends base_1.BaseClass {
         });
     }
     /** @hidden */
-    requestPaginated(path, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query) {
-        return __awaiter(this, void 0, void 0, function* () {
+    requestPaginated(path_1) {
+        return __awaiter(this, arguments, void 0, function* (path, offset = 0, maxCount = this.client.options.dataPaginationMaxSize, query) {
             const data = [];
             const maxCountValid = maxCount > 0;
             const fetchEnd = () => maxCountValid ? offset + maxCount : undefined;

@@ -11,7 +11,7 @@ const isBrowser = typeof window !== 'undefined'
 export interface APIRequestQuery {
   disableCaching?: string
 
-  [key: string]: string | undefined
+  [key: string]: string | boolean | undefined
 }
 
 export interface APIRequestData {
@@ -221,8 +221,12 @@ export class APIClient {
       for (const queryKey in query) {
         const { [queryKey]: queryEntry } = query
 
-        if (queryEntry) {
-          searchParams.set(queryKey, queryEntry)
+        if (queryEntry != null) {
+          if (typeof (queryEntry) === 'boolean' && queryEntry) {
+            searchParams.set(queryKey, '')
+          } else {
+            searchParams.set(queryKey, `${queryEntry}`);
+          }
         }
       }
     }
@@ -271,6 +275,7 @@ export class APIClient {
       }
     }
 
+    // eslint-disable-next-line no-async-promise-executor
     const run = () => new Promise<APIResponseData>(async (resolve, reject) => {
       if (cachingEnabled && await cache?.has(requestData)) {
         return cache?.get(requestData)

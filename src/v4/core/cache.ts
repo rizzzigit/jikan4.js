@@ -43,7 +43,7 @@ export class CacheManager {
         const { [queryKey]: queryEntry } = query
 
         if (queryEntry) {
-          searchParams.set(queryKey, queryEntry)
+          searchParams.set(queryKey, `${queryEntry}`)
         }
       }
     }

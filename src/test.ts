@@ -1,28 +1,19 @@
-/*
-  eslint-disable @typescript-eslint/no-non-null-assertion
-*/
+import { Client } from "./v4";
 
-import { Client } from './v4'
+type TestFunction<T = unknown> = (cilent: Client) => Promise<T> | T;
 
-const client = new Client()
-client.on('debug', (scope, message) => {
-  console.log(`[${scope}] ${message}`)
-})
+const tests: Record<string, TestFunction> = {
+  test: (client) => client.seasons.get('Spring', 2024, {
+    continuing: true
+  }),
+};
 
-const run = async (): Promise<any> => {
-  const func: Record<string, () => Promise<any>> = {
-    relations: async () => {
-      const anime = (await client.anime.get(20))!
+const client = new Client();
 
-      console.log(await anime.getRelations())
-    }
-  }
+client.on("debug", (scope, message) => console.log(`[${scope}] ${message}`));
 
-  return await func[process.argv[2]]()
-}
-
-void run().then((data) => {
+void (async () => tests[process.argv[2]](client))().then((data) => {
   if (data != null) {
-    console.log(data)
+    console.log(data);
   }
-})
+});

@@ -166,8 +166,13 @@ class APIClient {
         if (query) {
             for (const queryKey in query) {
                 const { [queryKey]: queryEntry } = query;
-                if (queryEntry) {
-                    searchParams.set(queryKey, queryEntry);
+                if (queryEntry != null) {
+                    if (typeof (queryEntry) === 'boolean' && queryEntry) {
+                        searchParams.set(queryKey, '');
+                    }
+                    else {
+                        searchParams.set(queryKey, `${queryEntry}`);
+                    }
                 }
             }
         }
@@ -213,6 +218,7 @@ class APIClient {
                     reject(new APIError(responseData));
                 }
             });
+             
             const run = () => new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 if (cachingEnabled && (yield (cache === null || cache === void 0 ? void 0 : cache.has(requestData)))) {
                     return cache === null || cache === void 0 ? void 0 : cache.get(requestData);

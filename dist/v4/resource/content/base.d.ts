@@ -97,7 +97,7 @@ export declare class ContentRelationGroup<T extends ContentRelationType> extends
     /** @hidden */
     static parseRelation(data: any): ContentRelationType;
     readonly relation: T;
-    constructor(client: Client, relation: T, data: any);
+    constructor(client: Client, relation: T);
 }
 export declare class ContentExternal extends BaseClass {
     readonly name: string;

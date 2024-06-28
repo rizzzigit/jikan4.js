@@ -21,7 +21,8 @@ class BaseClass {
                 url = new URL(input);
             }
         }
-        catch (error) {
+        catch (_a) {
+            url = null;
         }
         if (!url) {
             if (nullable) {

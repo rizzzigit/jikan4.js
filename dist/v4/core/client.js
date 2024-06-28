@@ -26,6 +26,7 @@ class Client {
     /** @hidden */
     static setOptions(options) {
         const defaultOptions = {
+             
             dataPath: (() => { try {
                 return (0, path_1.join)(__dirname, '..', '..', '..', '.Jikan');
             }

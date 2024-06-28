@@ -153,7 +153,7 @@ exports.MangaReview = MangaReview;
 class MangaRelationGroup extends base_2.ContentRelationGroup {
     constructor(client, relation, data) {
         var _a;
-        super(client, relation, data);
+        super(client, relation);
         this.items = ((_a = data.entry) === null || _a === void 0 ? void 0 : _a.map((item) => new (this.relation === 'Adaptation' ? meta_1.AnimeMeta : meta_1.MangaMeta)(this.client, item))) || [];
     }
 }

@@ -56,7 +56,7 @@ class CacheManager {
             for (const queryKey in query) {
                 const { [queryKey]: queryEntry } = query;
                 if (queryEntry) {
-                    searchParams.set(queryKey, queryEntry);
+                    searchParams.set(queryKey, `${queryEntry}`);
                 }
             }
         }

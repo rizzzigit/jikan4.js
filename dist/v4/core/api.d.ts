@@ -6,7 +6,7 @@ import { Client } from '../core/client';
 import { CacheManager } from './cache';
 export interface APIRequestQuery {
     disableCaching?: string;
-    [key: string]: string | undefined;
+    [key: string]: string | boolean | undefined;
 }
 export interface APIRequestData {
     path: string;

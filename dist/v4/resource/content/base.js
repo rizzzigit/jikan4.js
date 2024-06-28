@@ -168,7 +168,7 @@ class ContentRelationGroup extends base_1.BaseClass {
             default: return 'Unknown';
         }
     }
-    constructor(client, relation, data) {
+    constructor(client, relation) {
         super(client);
         this.relation = relation;
     }

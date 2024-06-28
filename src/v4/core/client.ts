@@ -128,6 +128,7 @@ export class Client {
   /** @hidden */
   private static setOptions (options?: Partial<ClientOptions>): ClientOptions {
     const defaultOptions: ClientOptions = {
+      // eslint-disable-next-line no-empty
       dataPath: (() => { try { return join(__dirname, '..', '..', '..', '.Jikan') } catch {} })(),
 
       host: 'api.jikan.moe',

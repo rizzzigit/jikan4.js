@@ -264,7 +264,7 @@ export class ContentRelationGroup <T extends ContentRelationType> extends BaseCl
 
   public readonly relation: T
 
-  public constructor (client: Client, relation: T, data: any) {
+  public constructor (client: Client, relation: T) {
     super(client)
 
     this.relation = relation

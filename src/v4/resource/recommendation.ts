@@ -1,5 +1,5 @@
 import { Client } from "../core/client";
-import { BaseClass, BaseResource } from "./base";
+import { BaseClass } from "./base";
 import { AnimeMeta, MangaMeta } from "./meta";
 import { User } from "./user";
 

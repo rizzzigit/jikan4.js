@@ -23,6 +23,7 @@ export class BaseClass {
         url = new URL(input)
       }
     } catch (error) {
+      console.log(error)
     }
 
     if (!url) {

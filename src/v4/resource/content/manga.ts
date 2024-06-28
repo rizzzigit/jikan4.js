@@ -7,7 +7,6 @@ import {
   ContentNews,
   ContentStatistics,
   ContentUserUpdate,
-  ContentReactions,
   ContentReview,
   ContentExternal
 } from './base'
@@ -237,7 +236,7 @@ export class MangaRelationGroup<T extends ContentRelationType> extends ContentRe
   public readonly items: T extends 'Adaptation' ? Array<AnimeMeta> : Array<MangaMeta>
 
   public constructor (client: Client, relation: T, data: any) {
-    super(client, relation, data)
+    super(client, relation)
 
     this.items = data.entry?.map((item: any) => new (this.relation === 'Adaptation' ? AnimeMeta : MangaMeta)(this.client, item)) || []
   }

@@ -1,9 +1,0 @@
-*.js
-*.d.ts
-
-/.Jikan
-/node_modules
-/dist
-/docs
-
-/src/v4

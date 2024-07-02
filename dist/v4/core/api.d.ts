@@ -1,5 +1,3 @@
-/// <reference types="node" />
-/// <reference types="node" />
 import HTTP from 'http';
 import HTTPS from 'https';
 import { Client } from '../core/client';

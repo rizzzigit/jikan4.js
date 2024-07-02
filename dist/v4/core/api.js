@@ -218,7 +218,7 @@ class APIClient {
                     reject(new APIError(responseData));
                 }
             });
-             
+            // eslint-disable-next-line no-async-promise-executor
             const run = () => new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 if (cachingEnabled && (yield (cache === null || cache === void 0 ? void 0 : cache.has(requestData)))) {
                     return cache === null || cache === void 0 ? void 0 : cache.get(requestData);

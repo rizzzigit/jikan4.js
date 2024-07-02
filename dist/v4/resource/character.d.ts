@@ -9,10 +9,10 @@ export declare class Character extends BaseResource {
     readonly nicknames: Array<string>;
     readonly favorites: number;
     readonly about: string | null;
-    getAnime(): Promise<CharacterAnimeReference[]>;
-    getManga(): Promise<CharacterMangaReference[]>;
-    getVoiceActors(): Promise<CharacterVoiceActorReference[]>;
-    getPictures(): Promise<ImageFormatCollection[]>;
+    getAnime(): Promise<Array<CharacterAnimeReference>>;
+    getManga(): Promise<Array<CharacterMangaReference>>;
+    getVoiceActors(): Promise<Array<CharacterVoiceActorReference>>;
+    getPictures(): Promise<Array<ImageFormatCollection>>;
     getFull(): Promise<CharacterFull>;
     constructor(client: Client, data: any);
 }

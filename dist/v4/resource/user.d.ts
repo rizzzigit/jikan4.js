@@ -25,11 +25,11 @@ export declare class User extends BaseClass {
     getFavorites(): Promise<UserFavorites>;
     getUpdates(): Promise<UserContentUpdates>;
     getAbout(): Promise<string | null>;
-    getHistory(type?: 'anime' | 'manga' | 'all'): Promise<(UserMangaHistory | UserAnimeHistory)[]>;
-    getFriends(offset?: number, maxCount?: number): Promise<UserFriend[]>;
-    getRecommendations(offset?: number, maxCount?: number): Promise<UserRecommendation[]>;
-    getClubs(offset?: number, maxCount?: number): Promise<ClubMeta[]>;
-    getExternal(): Promise<Link[]>;
+    getHistory(type?: 'anime' | 'manga' | 'all'): Promise<Array<UserAnimeHistory | UserMangaHistory>>;
+    getFriends(offset?: number, maxCount?: number): Promise<Array<UserFriend>>;
+    getRecommendations(offset?: number, maxCount?: number): Promise<Array<UserRecommendation>>;
+    getClubs(offset?: number, maxCount?: number): Promise<Array<ClubMeta>>;
+    getExternal(): Promise<Array<Link>>;
     getFull(): Promise<UserFull>;
     constructor(client: Client, data: any);
 }

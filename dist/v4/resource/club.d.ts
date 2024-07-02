@@ -16,8 +16,8 @@ export declare class Club extends BaseResource {
     readonly created: Date;
     readonly type: ClubType;
     readonly staff: Array<ClubStaff>;
-    getMembers(): Promise<ClubMember[]>;
-    getStaff(): Promise<ClubStaff[]>;
+    getMembers(): Promise<Array<ClubMember>>;
+    getStaff(): Promise<Array<ClubStaff>>;
     getRelations(): Promise<ClubRelations>;
     constructor(client: Client, data: any);
 }

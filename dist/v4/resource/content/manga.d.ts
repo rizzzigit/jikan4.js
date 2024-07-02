@@ -28,17 +28,17 @@ export declare class Manga extends Content {
     readonly themes: Array<MangaGenreMeta<'Theme'>>;
     readonly demographics: Array<MangaGenreMeta<'Demographic'>>;
     get isExplicit(): boolean;
-    getCharacters(): Promise<MangaCharacterReference[]>;
-    getNews(offset?: number, maxCount?: number): Promise<ContentNews[]>;
-    getTopics(): Promise<MangaTopic[]>;
-    getPictures(): Promise<ImageFormatCollection[]>;
+    getCharacters(): Promise<Array<MangaCharacterReference>>;
+    getNews(offset?: number, maxCount?: number): Promise<Array<ContentNews>>;
+    getTopics(): Promise<Array<MangaTopic>>;
+    getPictures(): Promise<Array<ImageFormatCollection>>;
     getStatistics(): Promise<MangaStatistics>;
     getMoreInfo(): Promise<string | null>;
-    getRecommendations(): Promise<MangaRecommendation[]>;
-    getUserUpdates(): Promise<MangaUserUpdate[]>;
-    getReviews(): Promise<MangaReview[]>;
-    getRelations(): Promise<MangaRelationGroup<ContentRelationType>[]>;
-    getExternal(): Promise<ContentExternal[]>;
+    getRecommendations(): Promise<Array<MangaRecommendation>>;
+    getUserUpdates(): Promise<Array<MangaUserUpdate>>;
+    getReviews(): Promise<Array<MangaReview>>;
+    getRelations(): Promise<Array<MangaRelationGroup<ContentRelationType>>>;
+    getExternal(): Promise<Array<ContentExternal>>;
     getFull(): Promise<MangaFull>;
     constructor(client: Client, data: any);
 }

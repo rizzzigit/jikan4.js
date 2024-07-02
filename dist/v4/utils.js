@@ -9,11 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.translateObject = exports.waitUntil = exports.sleep = void 0;
+exports.sleep = sleep;
+exports.waitUntil = waitUntil;
+exports.translateObject = translateObject;
 function sleep(time) {
     return __awaiter(this, void 0, void 0, function* () { return yield new Promise((resolve) => setTimeout(resolve, time)); });
 }
-exports.sleep = sleep;
 function waitUntil(time) {
     return __awaiter(this, void 0, void 0, function* () {
         const now = Date.now();
@@ -22,7 +23,6 @@ function waitUntil(time) {
         }
     });
 }
-exports.waitUntil = waitUntil;
 function translateObject(obj, translator) {
     const newObj = {};
     for (const objKey in obj) {
@@ -33,4 +33,3 @@ function translateObject(obj, translator) {
     }
     return newObj;
 }
-exports.translateObject = translateObject;

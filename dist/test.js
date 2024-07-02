@@ -11,8 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const v4_1 = require("./v4");
 const tests = {
-    test: (client) => client.seasons.get('Spring', 2024, {
-        continuing: true
+    test: (client) => __awaiter(void 0, void 0, void 0, function* () {
+        const a = yield client.seasons.get('Spring', 2024, {
+            continuing: true
+        });
+        const b = yield client.seasons.get('Spring', 2024, {
+            continuing: false
+        });
+        const c = yield client.seasons.get('Spring', 2024);
+        const result = [a[0], b[0], c[0]];
+        return result.map((anime) => `${anime.title}`);
     }),
 };
 const client = new v4_1.Client();

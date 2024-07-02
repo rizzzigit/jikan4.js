@@ -21,8 +21,8 @@ class BaseClass {
                 url = new URL(input);
             }
         }
-        catch (_a) {
-            url = null;
+        catch (error) {
+            console.log(error);
         }
         if (!url) {
             if (nullable) {

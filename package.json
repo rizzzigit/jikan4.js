@@ -1,6 +1,6 @@
 {
   "name": "jikan4.js",
-  "version": "1.5.11",
+  "version": "1.6.0",
   "description": "A Node.js wrapper for Jikan API v4.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

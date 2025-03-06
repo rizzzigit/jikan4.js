@@ -288,7 +288,7 @@ export class APIClient {
       request.on('timeout', () => request.destroy(new Error(`${requestTimeout} ms timeout`)))
       request.on('response', async (response) => {
         response.on('error', reject)
-        const bufferSink: Array<Buffer> = []
+        const bufferSink: Array<Uint8Array> = []
 
         for await (const buffer of response) {
           bufferSink.push(buffer)

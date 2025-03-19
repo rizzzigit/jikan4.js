@@ -1,5 +1,4 @@
-import { join } from 'path'
-import EventEmitter, { EventInterface } from '@rizzzi/eventemitter'
+import { join } from "path";
 
 import { APIClient } from './api'
 import { HeartBeatMonitor } from './heartbeat'
@@ -18,6 +17,18 @@ import { UserManager } from '../manager/user'
 import { RecommendationManager } from '../manager/recommendation'
 import { ReviewManager } from '../manager/review'
 
+import EventEmitter from "events";
+
+export type TypedEventEmitter<T extends { [K in keyof T]: unknown[] }> = Omit<
+  EventEmitter,
+  "emit" | "on" | "off" | "once"
+> & {
+  emit: <K extends keyof T>(event: K, ...args: T[K]) => void;
+  on: <K extends keyof T>(event: K, handler: (...args: T[K]) => void) => void;
+  off: <K extends keyof T>(event: K, handler: (...args: T[K]) => void) => void;
+  once: <K extends keyof T>(event: K, handler: (...args: T[K]) => void) => void;
+};
+
 export interface ClientOptions {
   /**
    * The hostname of the server.
@@ -26,21 +37,21 @@ export interface ClientOptions {
    * of Jikan REST API.
    *
    * Default value: `api.jikan.moe`
-  */
+   */
   host: string
 
   /**
    * The base pathname of each request.
    *
    * Default value: `v4`
-  */
+   */
   baseUri: string
 
   /**
    * Whether to use HTTPS protocol instead of HTTP.
    *
    * Default value: `false`
-  */
+   */
   secure: boolean
 
   /**
@@ -48,7 +59,7 @@ export interface ClientOptions {
    * This is to avoid getting rate-limited by
    *
    * Default value: `1200` (50 requests per minute)
-  */
+   */
   dataRateLimit: number
 
   /**
@@ -63,14 +74,14 @@ export interface ClientOptions {
    * The number of items to be returned on each paginated request.
    *
    * Default value: `25`
-  */
+   */
   dataPaginationMaxSize: number
 
   /**
    * The number of miliseconds before giving up on a request.
    *
    * Default value: `15000` (15 seconds)
-  */
+   */
   requestTimeout: number
 
   /**
@@ -78,23 +89,23 @@ export interface ClientOptions {
    * prevent clogging the queue.
    *
    * Default value: `100`
-  */
+   */
   requestQueueLimit: number
 
   /**
    * Whether to disable cache or not. It's recommended that this option is disabled
    * to avoid sending multiple requests for the same content.
-  */
+   */
   disableCaching: boolean
 
   /**
    * The number of retries on HTTP 500 errors.
-  */
+   */
   maxApiErrorRetry: number
 
   /**
    * Whether to retry on HTTP 500 errors.
-  */
+   */
   retryOnApiError: boolean
 
   /**
@@ -109,16 +120,16 @@ export interface ClientOptions {
    * being kept alive. Only relevant if keepAlive is set to true.
    *
    * Default value: `60000`
-  */
+   */
   keepAliveMsecs: number
 
   /**
    * Where to store cache from Jikan API
-  */
+   */
   dataPath?: string
 }
 
-export interface ClientEvents extends EventInterface {
+export interface ClientEvents {
   debug: [scope: string, message: string]
 }
 
@@ -159,7 +170,7 @@ export class Client {
    * Current options of the client.
    *
    * You can change client options anytime.
-  */
+   */
   public readonly options: ClientOptions
 
   /** @hidden */
@@ -175,7 +186,7 @@ export class Client {
    *
    * console.log(anime, episodes)
    * ```
-  */
+   */
   public readonly anime: AnimeManager
 
   /**
@@ -188,7 +199,7 @@ export class Client {
    *
    * console.log(manga, characters)
    * ```
-  */
+   */
   public readonly manga: MangaManager
 
   /**
@@ -200,7 +211,7 @@ export class Client {
    *
    * console.log(club.mmeberCount)
    * ```
-  */
+   */
   public readonly clubs: ClubManager
 
   /**
@@ -213,7 +224,7 @@ export class Client {
    *
    * console.log(`${person.name}`, pictures)
    * ```
-  */
+   */
   public readonly people: PersonManager
 
   /**
@@ -226,7 +237,7 @@ export class Client {
    *
    * console.log(character, voiceActors)
    * ```
-  */
+   */
   public readonly characters: CharacterManager
 
   /**
@@ -238,7 +249,7 @@ export class Client {
    *
    * console.log(genres)
    * ```
-  */
+   */
   public readonly genres: GenreManager
 
   /**
@@ -250,7 +261,7 @@ export class Client {
    *
    * console.log(magazines)
    * ```
-  */
+   */
   public readonly magazines: MagazineManager
 
   /**
@@ -262,7 +273,7 @@ export class Client {
    *
    * console.log(producers)
    * ```
-  */
+   */
   public readonly producers: ProducerManager
 
   public readonly recommendations: RecommendationManager
@@ -280,7 +291,7 @@ export class Client {
    *
    * console.log(seasons)
    * ```
-  */
+   */
   public readonly seasons: SeasonManager
 
   public readonly top: TopManager
@@ -297,11 +308,11 @@ export class Client {
    * if (heartbeat.down)
    *   console.warn('MAL is down!')
    * ```
-  */
+   */
   public readonly heartbeat: HeartBeatMonitor
 
   /** @hidden */
-  public readonly events: EventEmitter<ClientEvents>
+  public readonly events: TypedEventEmitter<ClientEvents>
 
   /**
    * Listen to client events.
@@ -310,8 +321,8 @@ export class Client {
    * ```ts
    * client.on('debug', console.log)
    * ```
-  */
-  public on: EventEmitter<ClientEvents>['on']
+   */
+  public on: TypedEventEmitter<ClientEvents>["on"]
 
   /**
    * Listen to client events once.
@@ -320,8 +331,8 @@ export class Client {
    * ```ts
    * client.once('debug', console.log)
    * ```
-  */
-  public once: EventEmitter<ClientEvents>['on']
+   */
+  public once: TypedEventEmitter<ClientEvents>["on"]
 
   /**
    * Remove a listener.
@@ -330,11 +341,11 @@ export class Client {
    * ```ts
    * client.off('debug', console.log)
    * ```
-  */
-  public off: EventEmitter<ClientEvents>['off']
+   */
+  public off: TypedEventEmitter<ClientEvents>["off"]
 
   /** @hidden */
-  public readonly emit: EventEmitter<ClientEvents>['emit']
+  public readonly emit: TypedEventEmitter<ClientEvents>["emit"]
 
   /** @hidden */
   public debug (scope: string, message: string) {
@@ -352,7 +363,7 @@ export class Client {
    *
    *  console.log(await client.anime.get(5))
    * ```
-  */
+   */
   public constructor (options?: Partial<ClientOptions>) {
     this.options = Client.setOptions(options)
     this.APIClient = new APIClient(this)
@@ -372,13 +383,19 @@ export class Client {
     this.top = new TopManager(this)
     this.schedules = new ScheduleManager(this)
 
-    this.heartbeat = new HeartBeatMonitor(this)
+    this.heartbeat = new HeartBeatMonitor(this);
+    this.events = new EventEmitter() as never
 
-    this.events = new EventEmitter()
-    const { on, once, emit, off } = this.events.bind()
-    this.on = on
-    this.once = once
-    this.emit = emit
-    this.off = off
+    {
+      const {
+        events,
+        events: { on, once, emit, off },
+      } = this
+
+      this.on = on.bind(events)
+      this.once = once.bind(events)
+      this.emit = emit.bind(events)
+      this.off = off.bind(events)
+    }
   }
 }

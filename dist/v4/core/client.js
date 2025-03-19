@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Client = void 0;
 const path_1 = require("path");
-const eventemitter_1 = __importDefault(require("@rizzzi/eventemitter"));
 const api_1 = require("./api");
 const heartbeat_1 = require("./heartbeat");
 const anime_1 = require("../manager/anime");
@@ -22,6 +21,7 @@ const schedule_1 = require("../manager/schedule");
 const user_1 = require("../manager/user");
 const recommendation_1 = require("../manager/recommendation");
 const review_1 = require("../manager/review");
+const events_1 = __importDefault(require("events"));
 class Client {
     /** @hidden */
     static setOptions(options) {
@@ -62,7 +62,7 @@ class Client {
      *
      *  console.log(await client.anime.get(5))
      * ```
-    */
+     */
     constructor(options) {
         this.options = Client.setOptions(options);
         this.APIClient = new api_1.APIClient(this);
@@ -81,12 +81,14 @@ class Client {
         this.top = new top_1.TopManager(this);
         this.schedules = new schedule_1.ScheduleManager(this);
         this.heartbeat = new heartbeat_1.HeartBeatMonitor(this);
-        this.events = new eventemitter_1.default();
-        const { on, once, emit, off } = this.events.bind();
-        this.on = on;
-        this.once = once;
-        this.emit = emit;
-        this.off = off;
+        this.events = new events_1.default();
+        {
+            const { events, events: { on, once, emit, off }, } = this;
+            this.on = on.bind(events);
+            this.once = once.bind(events);
+            this.emit = emit.bind(events);
+            this.off = off.bind(events);
+        }
     }
 }
 exports.Client = Client;

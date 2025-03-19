@@ -1,4 +1,3 @@
-import EventEmitter, { EventInterface } from '@rizzzi/eventemitter';
 import { APIClient } from './api';
 import { HeartBeatMonitor } from './heartbeat';
 import { AnimeManager } from '../manager/anime';
@@ -15,6 +14,15 @@ import { ScheduleManager } from '../manager/schedule';
 import { UserManager } from '../manager/user';
 import { RecommendationManager } from '../manager/recommendation';
 import { ReviewManager } from '../manager/review';
+import EventEmitter from "events";
+export type TypedEventEmitter<T extends {
+    [K in keyof T]: unknown[];
+}> = Omit<EventEmitter, "emit" | "on" | "off" | "once"> & {
+    emit: <K extends keyof T>(event: K, ...args: T[K]) => void;
+    on: <K extends keyof T>(event: K, handler: (...args: T[K]) => void) => void;
+    off: <K extends keyof T>(event: K, handler: (...args: T[K]) => void) => void;
+    once: <K extends keyof T>(event: K, handler: (...args: T[K]) => void) => void;
+};
 export interface ClientOptions {
     /**
      * The hostname of the server.
@@ -23,26 +31,26 @@ export interface ClientOptions {
      * of Jikan REST API.
      *
      * Default value: `api.jikan.moe`
-    */
+     */
     host: string;
     /**
      * The base pathname of each request.
      *
      * Default value: `v4`
-    */
+     */
     baseUri: string;
     /**
      * Whether to use HTTPS protocol instead of HTTP.
      *
      * Default value: `false`
-    */
+     */
     secure: boolean;
     /**
      * The number of miliseconds to wait before creating another request.
      * This is to avoid getting rate-limited by
      *
      * Default value: `1200` (50 requests per minute)
-    */
+     */
     dataRateLimit: number;
     /**
      * The number of miliseconds before the cache is expired. This is an
@@ -55,33 +63,33 @@ export interface ClientOptions {
      * The number of items to be returned on each paginated request.
      *
      * Default value: `25`
-    */
+     */
     dataPaginationMaxSize: number;
     /**
      * The number of miliseconds before giving up on a request.
      *
      * Default value: `15000` (15 seconds)
-    */
+     */
     requestTimeout: number;
     /**
      * The maximum limit of requests in the queue. This is an effort to
      * prevent clogging the queue.
      *
      * Default value: `100`
-    */
+     */
     requestQueueLimit: number;
     /**
      * Whether to disable cache or not. It's recommended that this option is disabled
      * to avoid sending multiple requests for the same content.
-    */
+     */
     disableCaching: boolean;
     /**
      * The number of retries on HTTP 500 errors.
-    */
+     */
     maxApiErrorRetry: number;
     /**
      * Whether to retry on HTTP 500 errors.
-    */
+     */
     retryOnApiError: boolean;
     /**
      * Keep sockets around in a pool to be used by other requests in the future.
@@ -94,14 +102,14 @@ export interface ClientOptions {
      * being kept alive. Only relevant if keepAlive is set to true.
      *
      * Default value: `60000`
-    */
+     */
     keepAliveMsecs: number;
     /**
      * Where to store cache from Jikan API
-    */
+     */
     dataPath?: string;
 }
-export interface ClientEvents extends EventInterface {
+export interface ClientEvents {
     debug: [scope: string, message: string];
 }
 export type ClientEventNames = keyof ClientEvents;
@@ -112,7 +120,7 @@ export declare class Client {
      * Current options of the client.
      *
      * You can change client options anytime.
-    */
+     */
     readonly options: ClientOptions;
     /** @hidden */
     readonly APIClient: APIClient;
@@ -126,7 +134,7 @@ export declare class Client {
      *
      * console.log(anime, episodes)
      * ```
-    */
+     */
     readonly anime: AnimeManager;
     /**
      * Manga resource context.
@@ -138,7 +146,7 @@ export declare class Client {
      *
      * console.log(manga, characters)
      * ```
-    */
+     */
     readonly manga: MangaManager;
     /**
      * Clubs resource context.
@@ -149,7 +157,7 @@ export declare class Client {
      *
      * console.log(club.mmeberCount)
      * ```
-    */
+     */
     readonly clubs: ClubManager;
     /**
      * People resource context.
@@ -161,7 +169,7 @@ export declare class Client {
      *
      * console.log(`${person.name}`, pictures)
      * ```
-    */
+     */
     readonly people: PersonManager;
     /**
      * Characters resource context.
@@ -173,7 +181,7 @@ export declare class Client {
      *
      * console.log(character, voiceActors)
      * ```
-    */
+     */
     readonly characters: CharacterManager;
     /**
      * Genres resource context.
@@ -184,7 +192,7 @@ export declare class Client {
      *
      * console.log(genres)
      * ```
-    */
+     */
     readonly genres: GenreManager;
     /**
      * Magazines resource context.
@@ -195,7 +203,7 @@ export declare class Client {
      *
      * console.log(magazines)
      * ```
-    */
+     */
     readonly magazines: MagazineManager;
     /**
      * Producers resource context.
@@ -206,7 +214,7 @@ export declare class Client {
      *
      * console.log(producers)
      * ```
-    */
+     */
     readonly producers: ProducerManager;
     readonly recommendations: RecommendationManager;
     readonly reviews: ReviewManager;
@@ -220,7 +228,7 @@ export declare class Client {
      *
      * console.log(seasons)
      * ```
-    */
+     */
     readonly seasons: SeasonManager;
     readonly top: TopManager;
     readonly schedules: ScheduleManager;
@@ -234,10 +242,10 @@ export declare class Client {
      * if (heartbeat.down)
      *   console.warn('MAL is down!')
      * ```
-    */
+     */
     readonly heartbeat: HeartBeatMonitor;
     /** @hidden */
-    readonly events: EventEmitter<ClientEvents>;
+    readonly events: TypedEventEmitter<ClientEvents>;
     /**
      * Listen to client events.
      *
@@ -245,8 +253,8 @@ export declare class Client {
      * ```ts
      * client.on('debug', console.log)
      * ```
-    */
-    on: EventEmitter<ClientEvents>['on'];
+     */
+    on: TypedEventEmitter<ClientEvents>["on"];
     /**
      * Listen to client events once.
      *
@@ -254,8 +262,8 @@ export declare class Client {
      * ```ts
      * client.once('debug', console.log)
      * ```
-    */
-    once: EventEmitter<ClientEvents>['on'];
+     */
+    once: TypedEventEmitter<ClientEvents>["on"];
     /**
      * Remove a listener.
      *
@@ -263,12 +271,12 @@ export declare class Client {
      * ```ts
      * client.off('debug', console.log)
      * ```
-    */
-    off: EventEmitter<ClientEvents>['off'];
+     */
+    off: TypedEventEmitter<ClientEvents>["off"];
     /** @hidden */
-    readonly emit: EventEmitter<ClientEvents>['emit'];
+    readonly emit: TypedEventEmitter<ClientEvents>["emit"];
     /** @hidden */
-    debug(scope: string, message: string): Promise<boolean>;
+    debug(scope: string, message: string): void;
     /**
      * Instantiate new Jikan client
      *
@@ -280,6 +288,6 @@ export declare class Client {
      *
      *  console.log(await client.anime.get(5))
      * ```
-    */
+     */
     constructor(options?: Partial<ClientOptions>);
 }

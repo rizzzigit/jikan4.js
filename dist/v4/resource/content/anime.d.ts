@@ -174,7 +174,7 @@ export declare class AnimeRelationGroup<T extends ContentRelationType> extends C
 export declare class AnimeFull extends Anime {
     readonly relations: Array<AnimeRelationGroup<ContentRelationType>>;
     readonly themeSongs: {
-        optenings: Array<string>;
+        openings: Array<string>;
         endings: Array<string>;
     };
     readonly external: Array<ContentExternal>;

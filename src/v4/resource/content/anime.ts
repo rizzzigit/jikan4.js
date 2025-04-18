@@ -479,7 +479,7 @@ export class AnimeRelationGroup<T extends ContentRelationType> extends ContentRe
 export class AnimeFull extends Anime {
   public readonly relations: Array<AnimeRelationGroup<ContentRelationType>>
   public readonly themeSongs: {
-    optenings: Array<string>
+    openings: Array<string>
     endings: Array<string>
   }
 

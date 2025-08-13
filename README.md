@@ -1,6 +1,6 @@
 # Moved to Gitlab
 
-**Jikan4.js's new repository is moved to GitLab**
+**Jikan4.js's repository is moved to GitLab**
 
 **https://gitlab.com/rizzzi/jikan4.js**
 

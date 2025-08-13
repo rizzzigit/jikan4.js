@@ -1,3 +1,11 @@
+# Moved to Gitlab
+
+**Jikan4.js's new repository is moved to GitLab**
+
+**https://gitlab.com/rizzzi/jikan4.js**
+
+--------
+
 <p align="center"><img src="https://github.com/rizzzigit/jikan4.js/raw/main/Banner.png"/></p>
 
 # Jikan4.js
